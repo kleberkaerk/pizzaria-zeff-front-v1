@@ -1,0 +1,33 @@
+@font-face {
+    font-family: "content-font-light";
+    src: url("../../../assets/fonts/content-font/WorkSans-Light.ttf") format("truetype");
+}
+
+.footer {
+    background-color: var(--dark-red-color);
+
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+.address {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.information {
+    color: var(--light-yellow-color);
+    font-family: "content-font-light", sans-serif;
+}
+
+.link {
+    text-decoration: underline;
+    color: var(--light-yellow-color);
+    font-family: "content-font-light", sans-serif;
+}
+
+.link:hover {
+    color: var(--dark-yellow-color);
+}

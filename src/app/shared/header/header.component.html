@@ -3,7 +3,7 @@
     <ul class="flex header-options">
 
         <li class="flex slogan" *ngIf="!activateSearch">
-            <a routerLink="" class="slogan-link">
+            <a routerLink="" class="slogan-link" title="Página inicial Pizzaria Zeff">
                 <div class="flex slogan-box">
                     <p class="slogan-name">
                         Pizzaria Zeff
@@ -35,10 +35,10 @@
 
             <li class="flex user-account">
 
-                <!-- <a routerLink="" class="flex login-link" *ngIf="!activateSearch">Fazer
-                    login</a> -->
+                <a routerLink="" class="flex login-link" *ngIf="!activateSearch">Fazer
+                    login</a>
 
-                <div>
+                <!-- <div>
                     <button class="flex view-account-button" *ngIf="!activateSearch"
                         (click)="accountClickHandler($event, accountOptions)"
                         (touchstart)="accountClickHandler($event, accountOptions)">
@@ -68,7 +68,7 @@
                         </li>
                     </ul>
 
-                </div>
+                </div> -->
 
             </li>
 
@@ -96,6 +96,15 @@
 
         </div>
 
+    </ul>
+
+    <ul class="flex menu">
+        <li class="flex"><a routerLink="" class="option-link option-menu">Cardápio</a></li>
+        <li class="flex"><a routerLink="" class="option-link option-menu">Pizzas salgadas</a></li>
+        <li class="flex"><a routerLink="" class="option-link option-menu">Pizzas doces</a></li>
+        <li class="flex"><a routerLink="" class="option-link option-menu">Esfihas salgadas</a></li>
+        <li class="flex"><a routerLink="" class="option-link option-menu">Esfihas doces</a></li>
+        <li class="flex"><a routerLink="" class="option-link option-menu">Bebidas</a></li>
     </ul>
 
 </header>
