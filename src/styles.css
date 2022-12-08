@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+:root{
+    --dark-red-color: #971001;
+    --dark-red-background-hover: #801105;
+    --dark-yellow-color: #F0C618;
+    --light-yellow-color: #f0d360;
+    --transparent-yellow: #f0d3605d;
+    /* --light-red-color: #F00900; */
+    /* --green-color: #18F063; */
+    /* --blue-color: #0C12F0; */
+}
+
+*{
+    padding: 0px;
+    margin: 0px; 
+}
