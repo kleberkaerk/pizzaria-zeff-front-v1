@@ -8,9 +8,8 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HeaderComponent]
-    })
-      .compileComponents();
+      declarations: [HeaderComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
@@ -18,61 +17,61 @@ describe('HeaderComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component)
+      .toBeTruthy();
   });
 
-  it("accountClickHandler_updateActiveAccountOptionsToTrue_whenAccountOptionsDoesNotHaveAttributeDataToShow", () => {
+  it('accountClickHandler_updateActivateAccountOptionsToTrue_whenAccountOptionsDoesNotHaveAttributeDataToShow', () => {
 
-    const event = new MouseEvent("click");
+    component.logged = true;
+    fixture.autoDetectChanges();
+
+    const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
-    const accountOptions = compiled.querySelector(".account-options");
+    const accountOptions = compiled.querySelector('.account-options');
 
-    expect(component.activeAccountOptions)
+    expect(component.activateAccountOptions)
       .toBeFalse();
 
     if (accountOptions) {
-
       component.accountClickHandler(event, accountOptions);
     }
 
-    expect(component.activeAccountOptions)
+    expect(component.activateAccountOptions)
       .toBeTrue();
 
     fixture.detectChanges();
 
-    expect(accountOptions?.getAttribute("class"))
-      .toContain("block-account-options");
+    expect(accountOptions?.getAttribute('class'))
+      .toContain('block-account-options');
 
-    expect(accountOptions?.hasAttribute("data-to-show"))
+    expect(accountOptions?.hasAttribute('data-to-show'))
       .toBeTrue();
   });
 
-  it("accountClickHandler_notUpdatedActiveAccountOptionsToTrue_whenAccountOptionsHaveAttributeDataToShow", () => {
-
-    const event = new MouseEvent("click");
+  it('accountClickHandler_notUpdatedActivateAccountOptionsToTrue_whenAccountOptionsHaveAttributeDataToShow', () => {
+    const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
-    const accountOptions = compiled.querySelector(".account-options");
+    const accountOptions = compiled.querySelector('.account-options');
 
-    accountOptions?.setAttribute("data-to-show", "");
+    accountOptions?.setAttribute('data-to-show', '');
 
-    expect(component.activeAccountOptions)
+    expect(component.activateAccountOptions)
       .toBeFalse();
 
     if (accountOptions) {
-
       component.accountClickHandler(event, accountOptions);
     }
 
-    expect(component.activeAccountOptions)
+    expect(component.activateAccountOptions)
       .toBeFalse();
   });
 
-  it("handlerClickMobileMenu_updateActivateMobileMenuToTrue_whenMenuDoesNotHaveAttributeDataToShow", () => {
-
-    const event = new MouseEvent("click");
+  it('handlerClickMobileMenu_updateActivateMobileMenuToTrue_whenMenuDoesNotHaveAttributeDataToShow', () => {
+    const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
-    const menu = compiled.querySelector(".mobile-menu-options");
-    const menuMobileButton = compiled.querySelector(".mobile-menu-button");
+    const menu = compiled.querySelector('.mobile-menu-options');
+    const menuMobileButton = compiled.querySelector('.mobile-menu-button');
 
     expect(component.activateMobileMenu)
       .toBeFalse();
@@ -86,17 +85,16 @@ describe('HeaderComponent', () => {
 
     fixture.detectChanges();
 
-    expect(menuMobileButton?.getAttribute("class"))
-      .toContain("activate-mobile-menu");
+    expect(menuMobileButton?.getAttribute('class'))
+      .toContain('activate-mobile-menu');
   });
 
-  it("handlerClickMobileMenu_notUpdatedMenuToTrue_whenMenuHaveAttributeDataToShow", () => {
-
-    const event = new MouseEvent("click");
+  it('handlerClickMobileMenu_notUpdatedMenuToTrue_whenMenuHaveAttributeDataToShow', () => {
+    const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
-    const menu = compiled.querySelector(".mobile-menu-options");
+    const menu = compiled.querySelector('.mobile-menu-options');
 
-    menu?.setAttribute("data-to-show", "");
+    menu?.setAttribute('data-to-show', '');
 
     expect(component.activateMobileMenu)
       .toBeFalse();
@@ -109,12 +107,29 @@ describe('HeaderComponent', () => {
       .toBeFalse();
   });
 
-  it("searchClickHandler_updateActivateSearchToTrue_whenFormDoesNotHaveAttributeDataToShow", () => {
-
-    const event = new MouseEvent("click");
+  it('handlerClickMobileMenu_doesNothingAnything_whenActivateAccountOptionsIsTrue', () => {
+    const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector(".search-form");
-    const input = compiled.querySelector(".search-input");
+    const menu = compiled.querySelector('.mobile-menu-options');
+
+    component.activateAccountOptions = true;
+
+    expect(component.activateMobileMenu)
+      .toBeFalse();
+
+    if (menu) {
+      component.handlerClickMobileMenu(event, menu);
+    }
+
+    expect(component.activateMobileMenu)
+      .toBeFalse();
+  });
+
+  it('searchClickHandler_updateActivateSearchToTrue_whenFormDoesNotHaveAttributeDataToShow', () => {
+    const event = new MouseEvent('click');
+    const compiled = fixture.nativeElement as HTMLElement;
+    const form = compiled.querySelector('.search-form');
+    const input = compiled.querySelector('.search-input');
 
     expect(component.activateSearch)
       .toBeFalse();
@@ -128,18 +143,17 @@ describe('HeaderComponent', () => {
 
     fixture.detectChanges();
 
-    expect(form?.getAttribute("class"))
-      .toContain("activate-search-form");
+    expect(form?.getAttribute('class'))
+      .toContain('activate-search-form');
   });
 
-  it("searchClickHandler_notUpdateActivateSearchToTrue_whenFormHaveAttributeDataToShow", () => {
-
-    const event = new MouseEvent("click");
+  it('searchClickHandler_notUpdateActivateSearchToTrue_whenFormHaveAttributeDataToShow', () => {
+    const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector(".search-form");
-    const input = compiled.querySelector(".search-input");
+    const form = compiled.querySelector('.search-form');
+    const input = compiled.querySelector('.search-input');
 
-    form?.setAttribute("data-to-show", "");
+    form?.setAttribute('data-to-show', '');
 
     expect(component.activateSearch)
       .toBeFalse();
@@ -152,47 +166,52 @@ describe('HeaderComponent', () => {
       .toBeFalse();
   });
 
-  it("externalClickChecker_closeGivenDropdownAndRemoveClickEventInHtml_whenTheClickedElementIsNotPartOfTheDropdown", () => {
+  it('externalClickChecker_closeGivenDropdownAndRemoveClickEventInHtml_whenTheClickedElementIsNotPartOfTheDropdown', () => {
 
-    const event = new MouseEvent("click");
+    component.logged = true;
+    fixture.autoDetectChanges();
+
+    const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
-    const accountOptions = compiled.querySelector(".account-options");
+    const accountOptions = compiled.querySelector('.account-options');
 
-    expect(component.activeAccountOptions)
+    expect(component.activateAccountOptions)
       .toBeFalse();
 
     if (accountOptions) {
-
       component.accountClickHandler(event, accountOptions);
     }
 
     const htmlElement = document.documentElement;
     htmlElement.click();
 
-    expect(component.activeAccountOptions)
+    expect(component.activateAccountOptions)
       .toBeFalse();
 
     fixture.detectChanges();
 
-    expect(accountOptions?.getAttribute("class"))
-      .not.toContain("block-account-options");
+    expect(accountOptions?.getAttribute('class'))
+      .not.toContain('block-account-options');
 
-    expect(accountOptions?.hasAttribute("data-to-show"))
+    expect(accountOptions?.hasAttribute('data-to-show'))
       .toBeFalse();
   });
 
-  it("preventDefaultTouchStart_callsThePreventDefaultMethodOfTheEventObject_whenTheEventCanBeCanceledAndIsOfTypeTouchstart", () => {
-
-    const touchStartEvent = new TouchEvent("touchstart", { cancelable: true });
+  it('preventDefaultTouchStart_callsThePreventDefaultMethodOfTheEventObject_whenTheEventCanBeCanceledAndIsOfTypeTouchstart', () => {
+    const touchStartEvent = new TouchEvent('touchstart', { cancelable: true });
     const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector(".search-form");
-    const input = compiled.querySelector(".search-input");
+    const form = compiled.querySelector('.search-form');
+    const input = compiled.querySelector('.search-input');
 
     expect(component.activateSearch)
       .toBeFalse();
 
     if (form && input) {
-      component.searchClickHandler(touchStartEvent, form, input as HTMLInputElement);
+      component.searchClickHandler(
+        touchStartEvent,
+        form,
+        input as HTMLInputElement
+      );
     }
 
     expect(component.activateSearch)
@@ -200,8 +219,7 @@ describe('HeaderComponent', () => {
 
     fixture.detectChanges();
 
-    expect(form?.getAttribute("class"))
-      .toContain("activate-search-form");
+    expect(form?.getAttribute('class'))
+      .toContain('activate-search-form');
   });
-
 });

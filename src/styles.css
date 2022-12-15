@@ -4,6 +4,11 @@
     --dark-yellow-color: #F0C618;
     --light-yellow-color: #f0d360;
     --transparent-yellow: #f0d3605d;
+    --black-color: #000000;
+    --darkgrey-color: #cecece;
+
+    /* --green-color: #18F063; */
+    /* --blue-color: #0C12F0; */
 }
 
 *{

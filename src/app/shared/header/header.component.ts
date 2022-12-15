@@ -7,9 +7,11 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
-  public activeAccountOptions = false;
+  public activateAccountOptions = false;
   public activateMobileMenu = false;
   public activateSearch = false;
+  public logged = false;
+  public username = "Luffy"
 
   private preventDefaultTouchStart(e: Event) {
 
@@ -49,11 +51,15 @@ export class HeaderComponent {
   public accountClickHandler(e: Event, accountOptions: Element): void {
 
     this.handlerClickOutside(e, accountOptions, (value: boolean)=> {
-      this.activeAccountOptions = value;
+      this.activateAccountOptions = value;
     });
   }
 
   public handlerClickMobileMenu(e: Event, menu: Element) {
+
+    if (this.activateAccountOptions) {
+      return
+    };
 
       this.handlerClickOutside(e, menu, (value: boolean) => {
         this.activateMobileMenu = value;

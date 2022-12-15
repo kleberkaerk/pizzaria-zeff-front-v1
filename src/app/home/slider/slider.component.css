@@ -1,0 +1,144 @@
+@font-face {
+    font-family: "slider-font";
+    src: url("../../../assets/fonts/slider-font/DancingScript-Regular.ttf") format("truetype");
+}
+
+.slider {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.slides {
+    display: flex;
+    width: 400%;
+}
+
+.picker {
+    display: none;
+}
+
+.slide {
+    width: 25%;
+    transition: 1s;
+    position: relative;
+}
+
+.slide picture img {
+    height: 100%;
+    width: 100%;
+}
+
+.navigation {
+    position: absolute;
+    bottom: 10px;
+    left: 0px;
+    right: 0px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.picker-button {
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--light-yellow-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 1s;
+}
+
+#slide-1:checked~.navigation #label-slide-1,
+#slide-2:checked~.navigation #label-slide-2,
+#slide-3:checked~.navigation #label-slide-3,
+#slide-4:checked~.navigation #label-slide-4 {
+    background-color: var(--light-yellow-color);
+}
+
+#slide-1:checked~#mover {
+    margin-left: 0%;
+}
+
+#slide-2:checked~#mover {
+    margin-left: -25%;
+}
+
+#slide-3:checked~#mover {
+    margin-left: -50%;
+}
+
+#slide-4:checked~#mover {
+    margin-left: -75%;
+}
+
+.slide-message {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    color: var(--darkgrey-color);
+    font-family: "slider-font", serif;
+    font-size: 3rem;
+    font-weight: 100;
+    text-align: center;
+    text-shadow: 0px 4px 4px var(--black-color);
+}
+
+.welcome-message {
+    top: 220px;
+}
+
+.traditional-pizza-message {
+    bottom: 55px;
+}
+
+.cheff-message {
+    bottom: 50px
+}
+
+.client-message {
+    bottom: 35px;
+}
+
+@media (max-width: 1023px) {
+
+    .welcome-message {
+        top: 380px;
+    }
+
+    .traditional-pizza-message {
+        bottom: 100px;
+    }
+
+    .cheff-message {
+        bottom: 95px;
+    }
+
+    .client-message {
+        bottom: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .slide-message {
+        font-size: 2rem;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .welcome-message {
+        top: 240px;
+    }
+
+    .traditional-pizza-message {
+        bottom: 30px;
+    }
+
+    .cheff-message {
+        bottom: 35px;
+    }
+
+    .client-message {
+        bottom: 35px;
+    }
+}
