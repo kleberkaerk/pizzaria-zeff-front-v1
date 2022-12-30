@@ -475,7 +475,7 @@ describe('FeaturedProductsComponent', () => {
       .not.toContain("remove-expansion-button");
   });
 
-  it("seeMoreProducts_makesTheWrapTheSameHeightAsTheProductsElementAndAddsAClassToTheExpandButton_whenScreenWidthIsLessThan481AndWrapperHeightBecomesGreaterThanProductsElementHeight", () => {
+  it("seeMoreProducts_makesTheWrapGainAnAutomaticHeightAndAddsAClassToTheExpandButton_whenScreenWidthIsLessThan481AndWrapperHeightBecomesGreaterThanProductsElementHeight", () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
 
@@ -498,15 +498,8 @@ describe('FeaturedProductsComponent', () => {
 
     fixture.detectChanges();
 
-    let heightProducts = 0;
-
-    if (productsElement?.clientHeight) {
-
-      heightProducts = productsElement.clientHeight;
-    }
-
-    expect(wrapperElement.clientHeight)
-      .toEqual(heightProducts);
+    expect(wrapperElement.getAttribute("style"))
+    .toEqual("height: auto;");
 
     expect(buttonElement?.getAttribute("class"))
       .toContain("remove-expansion-button");
@@ -553,7 +546,7 @@ describe('FeaturedProductsComponent', () => {
       .not.toContain("remove-expansion-button");
   });
 
-  it("seeMoreProducts_makesTheWrapTheSameHeightAsTheProductsElementAndAddsAClassToTheExpandButton_whenScreenWidthIsGreaterThan480AndLessThan1024AndWrapperHeightBecomesGreaterThanProductsElementHeight", () => {
+  it("seeMoreProducts_makesTheWrapGainAnAutomaticHeightAndAddsAClassToTheExpandButton_whenScreenWidthIsGreaterThan480AndLessThan1024AndWrapperHeightBecomesGreaterThanProductsElementHeight", () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
 
@@ -576,15 +569,8 @@ describe('FeaturedProductsComponent', () => {
 
     fixture.detectChanges();
 
-    let heightProducts = 0;
-
-    if (productsElement?.clientHeight) {
-
-      heightProducts = productsElement.clientHeight;
-    }
-
-    expect(wrapperElement.clientHeight)
-      .toEqual(heightProducts);
+    expect(wrapperElement.getAttribute("style"))
+    .toEqual("height: auto;");
 
     expect(buttonElement?.getAttribute("class"))
       .toContain("remove-expansion-button");
@@ -654,15 +640,8 @@ describe('FeaturedProductsComponent', () => {
 
     fixture.detectChanges();
 
-    let heightProducts = 0;
-
-    if (productsElement?.clientHeight) {
-
-      heightProducts = productsElement.clientHeight;
-    }
-
-    expect(wrapperElement.clientHeight)
-      .toEqual(heightProducts);
+    expect(wrapperElement.getAttribute("style"))
+    .toEqual("height: auto;");
 
     expect(buttonElement?.getAttribute("class"))
       .toContain("remove-expansion-button");

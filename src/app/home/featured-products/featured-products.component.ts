@@ -133,11 +133,12 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
     if (wrapperHeight >= productsHeight) {
 
-      wrapperHeight = productsHeight;
       button.classList.add("remove-expansion-button");
+      wrapper.style.height = "auto";
+    } else {
+      
+      wrapper.style.height = wrapperHeight.toFixed(0) + "px";
     }
-
-    wrapper.style.height = wrapperHeight.toFixed(0) + "px";
   }
 
   public seeMoreProducts(wrapper: HTMLElement, products: Element, button: Element) {
