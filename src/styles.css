@@ -6,9 +6,12 @@
     --transparent-yellow: #f0d3605d;
     --black-color: #000000;
     --darkgrey-color: #cecece;
+    --white-color: #ffffff;
+    --blue-color: #0C12F0;
+    
 
-    /* --green-color: #18F063; */
-    /* --blue-color: #0C12F0; */
+    
+    --green-color: #18F063;
 }
 
 *{

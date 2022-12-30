@@ -1,1 +1,236 @@
 <app-slider></app-slider>
+
+<main>
+  <h1 class="promotions-title">Confira nossas promoções</h1>
+
+  <div *ngIf="getSaltyPizzas()" class="product-grouper">
+    <h2 class="product-type-title">Pizzas salgadas</h2>
+
+    <div id="wrapper-salty-pizza" class="wrapper" #wrapperSaltyPizza>
+      <ul class="products" #saltyPizzas>
+        <li class="product" *ngFor="let saltyPizza of getSaltyPizzas()">
+          <a routerLink="" class="link-image-name">
+            <img
+              [src]="'../../../assets/images/' + saltyPizza.getImage"
+              alt="foto-de-pizza"
+              class="product-image"
+            />
+            <p class="product-name">
+              <span>{{ saltyPizza.getName }}</span>
+            </p>
+          </a>
+          <div class="container-button-price">
+            <button type="button" class="add-to-cart-button">
+              Adicionar ao carrinho
+            </button>
+            <p class="product-price">
+              R${{ saltyPizza.getPrice | number : "1.2-2" : "br" }}
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <button
+      id="salty-pizza-button"
+      class="expand-more-button"
+      #saltyPizzasExpansionButton
+      (click)="
+        seeMoreProducts(
+          wrapperSaltyPizza,
+          saltyPizzas,
+          saltyPizzasExpansionButton
+        )
+      "
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+        <path d="M24 29.4 13.4 18.8l1.1-1.1 9.5 9.5 9.5-9.5 1.1 1.1Z" />
+      </svg>
+      <p class="text-see-more">Ver mais</p>
+    </button>
+  </div>
+
+  <div *ngIf="getSweetPizzas()" class="product-grouper">
+    <h2 class="product-type-title">Pizzas doces</h2>
+
+    <div id="wrapper-sweet-pizza" class="wrapper" #wrapperSweetPizza>
+      <ul class="products" #sweetPizzas>
+        <li class="product" *ngFor="let sweetPizza of getSweetPizzas()">
+          <a routerLink="" class="link-image-name">
+            <img
+              [src]="'../../../assets/images/' + sweetPizza.getImage"
+              alt="foto-de-pizza"
+              class="product-image"
+            />
+            <p class="product-name">
+              <span>{{ sweetPizza.getName }}</span>
+            </p>
+          </a>
+          <div class="container-button-price">
+            <button type="button" class="add-to-cart-button">
+              Adicionar ao carrinho
+            </button>
+            <p class="product-price">
+              R${{ sweetPizza.getPrice | number : "1.2-2" : "br" }}
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <button
+      id="sweet-pizza-button"
+      class="expand-more-button"
+      #sweetPizzasExpansionButton
+      (click)="
+        seeMoreProducts(
+          wrapperSweetPizza,
+          sweetPizzas,
+          sweetPizzasExpansionButton
+        )
+      "
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+        <path d="M24 29.4 13.4 18.8l1.1-1.1 9.5 9.5 9.5-9.5 1.1 1.1Z" />
+      </svg>
+      <p class="text-see-more">Ver mais</p>
+    </button>
+  </div>
+
+  <div *ngIf="getSaltyEsfihas()" class="product-grouper">
+    <h2 class="product-type-title">Esfihas salgadas</h2>
+
+    <div id="wrapper-salty-esfiha" class="wrapper" #wrapperSaltyEsfiha>
+      <ul class="products" #saltyEsfihas>
+        <li class="product" *ngFor="let saltyEsfiha of getSaltyEsfihas()">
+          <a routerLink="" class="link-image-name">
+            <img
+              [src]="'../../../assets/images/' + saltyEsfiha.getImage"
+              alt="foto-de-pizza"
+              class="product-image"
+            />
+            <p class="product-name">
+              <span>{{ saltyEsfiha.getName }}</span>
+            </p>
+          </a>
+          <div class="container-button-price">
+            <button type="button" class="add-to-cart-button">
+              Adicionar ao carrinho
+            </button>
+            <p class="product-price">
+              R${{ saltyEsfiha.getPrice | number : "1.2-2" : "br" }}
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <button
+      id="salty-esfiha-button"
+      class="expand-more-button"
+      #saltyEsfihasExpansionButton
+      (click)="
+        seeMoreProducts(
+          wrapperSaltyEsfiha,
+          saltyEsfihas,
+          saltyEsfihasExpansionButton
+        )
+      "
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+        <path d="M24 29.4 13.4 18.8l1.1-1.1 9.5 9.5 9.5-9.5 1.1 1.1Z" />
+      </svg>
+      <p class="text-see-more">Ver mais</p>
+    </button>
+  </div>
+
+  <div *ngIf="getSweetEsfihas()" class="product-grouper">
+    <h2 class="product-type-title">Esfihas doces</h2>
+
+    <div id="wrapper-sweet-esfiha" class="wrapper" #wrapperSweetEsfiha>
+      <ul class="products" #sweetEsfihas>
+        <li class="product" *ngFor="let sweetEsfiha of getSweetEsfihas()">
+          <a routerLink="" class="link-image-name">
+            <img
+              [src]="'../../../assets/images/' + sweetEsfiha.getImage"
+              alt="foto-de-pizza"
+              class="product-image"
+            />
+            <p class="product-name">
+              <span>{{ sweetEsfiha.getName }}</span>
+            </p>
+          </a>
+          <div class="container-button-price">
+            <button type="button" class="add-to-cart-button">
+              Adicionar ao carrinho
+            </button>
+            <p class="product-price">
+              R${{ sweetEsfiha.getPrice | number : "1.2-2" : "br" }}
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <button
+      id="sweet-esfiha-button"
+      class="expand-more-button"
+      #sweetEsfihasExpansionButton
+      (click)="
+        seeMoreProducts(
+          wrapperSweetEsfiha,
+          sweetEsfihas,
+          sweetEsfihasExpansionButton
+        )
+      "
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+        <path d="M24 29.4 13.4 18.8l1.1-1.1 9.5 9.5 9.5-9.5 1.1 1.1Z" />
+      </svg>
+      <p class="text-see-more">Ver mais</p>
+    </button>
+  </div>
+
+  <div *ngIf="getDrinks()" class="product-grouper">
+    <h2 class="product-type-title">Bebidas</h2>
+
+    <div id="wrapper-drink" class="wrapper" #wrapperDrink>
+      <ul class="products" #drinks>
+        <li class="product" *ngFor="let drink of getDrinks()">
+          <a routerLink="" class="link-image-name">
+            <img
+              [src]="'../../../assets/images/' + drink.getImage"
+              alt="foto-de-pizza"
+              class="product-image"
+            />
+            <p class="product-name">
+              <span>{{ drink.getName }}</span>
+            </p>
+          </a>
+          <div class="container-button-price">
+            <button type="button" class="add-to-cart-button">
+              Adicionar ao carrinho
+            </button>
+            <p class="product-price">
+              R${{ drink.getPrice | number : "1.2-2" : "br" }}
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <button
+      id="drink-button"
+      class="expand-more-button"
+      #drinksExpansionButton
+      (click)="seeMoreProducts(wrapperDrink, drinks, drinksExpansionButton)"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+        <path d="M24 29.4 13.4 18.8l1.1-1.1 9.5 9.5 9.5-9.5 1.1 1.1Z" />
+      </svg>
+      <p class="text-see-more">Ver mais</p>
+    </button>
+  </div>
+</main>
+
+<app-footer></app-footer>

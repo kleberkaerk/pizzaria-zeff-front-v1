@@ -1,12 +1,8 @@
-@font-face {
-    font-family: "content-font-light";
-    src: url("../../../assets/fonts/content-font/WorkSans-Light.ttf") format("truetype");
-}
-
 .footer {
     background-color: var(--dark-red-color);
     padding-top: 50px;
     padding-bottom: 50px;
+    margin-top: 50px;
 }
 
 .address {
@@ -19,7 +15,7 @@
 .information {
     color: var(--light-yellow-color);
     font-family: "content-font-light", sans-serif;
-    text-shadow: 0px 4px 5px var(--black-color);
+    text-shadow: 0px 4px 3px var(--black-color);
 }
 
 .link {
@@ -30,4 +26,12 @@
 
 .link:hover {
     color: var(--dark-yellow-color);
+}
+
+@media (max-width: 1023px) {
+
+    .link:hover,
+    .link:active {
+        color: var(--dark-yellow-color);
+    }
 }
