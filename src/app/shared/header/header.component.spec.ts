@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
-  
+
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
@@ -20,6 +20,19 @@ describe('HeaderComponent', () => {
   it('should create', () => {
     expect(component)
       .toBeTruthy();
+  });
+
+  it("clearSearchInput_clearsSearchEntryAndPutsFocusOnIt_wheneverCalled", () => {
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const searchInput = compiled.querySelector(".search-input") as HTMLInputElement;
+
+    searchInput.value = "test";
+
+    component.clearSearchInput(searchInput);
+
+    expect(searchInput.value)
+      .toEqual("");
   });
 
   it('accountClickHandler_updateActivateAccountOptionsToTrue_whenAccountOptionsDoesNotHaveAttributeDataToShow', () => {

@@ -87,7 +87,7 @@
     flex: 1;
     border: none;
     border-radius: 20px;
-    padding-left: 12px;
+    padding-left: 14px;
     font-size: 1rem;
     font-family: "content-font-light", sans-serif;
     font-weight: 600;
@@ -101,7 +101,6 @@
     appearance: none;
     width: 35px;
     height: 35px;
-    align-self: center;
     border: none;
     background-color: inherit;
     border-radius: 50%;

@@ -27,21 +27,22 @@
             type="search"
             class="search-input"
             placeholder="Pesquisar"
-            #input
+            #searchInput
           />
           <button
-            type="reset"
+            type="button"
             class="cancel-button"
             [ngClass]="{ 'invisible-mobile-cancel-button': !activateSearch }"
             aria-label="Limpar conteúdo de barra de pesquisa"
+            (click)="clearSearchInput(searchInput)"
           >
             X
           </button>
         </form>
         <button
           class="search-mobile-button"
-          (click)="searchClickHandler($event, formContainerSearch, input)"
-          (touchstart)="searchClickHandler($event, formContainerSearch, input)"
+          (click)="searchClickHandler($event, formContainerSearch, searchInput)"
+          (touchstart)="searchClickHandler($event, formContainerSearch, searchInput)"
           *ngIf="!activateSearch"
           aria-label="Abrir barra de pesquisa"
           aria-haspopup="true"

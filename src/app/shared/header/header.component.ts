@@ -11,7 +11,13 @@ export class HeaderComponent {
   public activateMobileMenu = false;
   public activateSearch = false;
   public logged = false;
-  public username = "Luffy"
+  public username = "Luffy";
+
+  public clearSearchInput(inputToBeCleaned: HTMLInputElement){
+
+    inputToBeCleaned.value = "";
+    inputToBeCleaned.focus();
+  }
 
   private preventDefaultTouchStart(e: Event) {
 
