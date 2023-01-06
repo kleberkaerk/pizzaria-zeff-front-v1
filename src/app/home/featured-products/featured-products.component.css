@@ -12,7 +12,7 @@
 
 .product-type-title {
     margin: 24px 0px;
-    font-family: "content-font-light", sans-serif;
+    font-family: 'content-font-medium', sans-serif;
     padding-left: 20px;
     font-weight: 100;
     color: var(--dark-red-color);
@@ -92,7 +92,7 @@
 }
 
 .product-name {
-    font-family: "content-font-light", sans-serif;
+    font-family: 'content-font-medium', sans-serif;
     color: var(--black-color);
     margin: 10px 3px 0px 3px;
     overflow: hidden;
@@ -152,7 +152,7 @@
 }
 
 .add-to-cart-button {
-    appearance: none;
+    font-family: 'content-font-medium', sans-serif;
     color: var(--blue-color);
     border: 1px solid var(--blue-color);
     background-color: inherit;
@@ -169,6 +169,7 @@
 }
 
 .product-price {
+    /* font-family: "number-font", sans-serif; */
     font-family: "content-font-medium", sans-serif;
     margin-right: 10px;
     font-weight: 600;
@@ -210,8 +211,12 @@
 
     .add-to-cart-button {
         margin-left: 0px;
-        color: var(--white-color);
-        background-color: var(--blue-color);
+    }
+
+    .add-to-cart-button:active,
+    .add-to-cart-button:hover {
+        background-color: var(--white-color);
+        color: var(--blue-color);
     }
 
     .product-price {

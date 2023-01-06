@@ -4,6 +4,8 @@ import { Type } from "../domain/type";
 import { PriceRating } from "../domain/price-rating";
 import { Product } from "../domain/product";
 
+// This test will not have complete coverage, because jasmine considers that a private constructor is the same thing as a method
+
 describe("MapperTest", () => {
 
     let productDTO: ProductDTO;

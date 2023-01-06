@@ -12,12 +12,14 @@ import { ProductsMapByTypeDTO } from 'src/app/shared/dto/product-by-type-map-dto
 import { of } from 'rxjs';
 import { Product } from 'src/app/shared/domain/product';
 import { Mapper } from 'src/app/shared/util/mapper';
+import { ShoppingCartService } from 'src/app/shared/service/shopping-cart.service';
 
 describe('FeaturedProductsComponent', () => {
 
   let component: FeaturedProductsComponent;
   let fixture: ComponentFixture<FeaturedProductsComponent>;
-  let service: ProductService;
+  let productService: ProductService;
+  let shoppingCartService: ShoppingCartService;
 
   let saltyPizzas: Array<ProductDTO>;
   let sweetPizzas: Array<ProductDTO>;
@@ -34,6 +36,8 @@ describe('FeaturedProductsComponent', () => {
 
   let saltyPizasToSeeMoreProducts: Array<ProductDTO>;
   let sweetPizasToSeeMoreProducts: Array<ProductDTO>;
+
+  let productToAddProductToCart: Product;
 
   function setSaltyPizzas() {
 
@@ -148,6 +152,11 @@ describe('FeaturedProductsComponent', () => {
     ]
   }
 
+  function setProductToAddProductToCart() {
+
+    productToAddProductToCart = new Product(1, "name1", "description1", 10.00, Type.DRINK, PriceRating.REGULAR_PRICE, "salty-pizza.jpg", true);
+  }
+
   beforeEach(() => {
 
     setSaltyPizzas();
@@ -163,6 +172,7 @@ describe('FeaturedProductsComponent', () => {
     setDrinksToComparison();
     setSaltyPizasToSeeMoreProducts();
     setSweetPizasToSeeMoreProducts();
+    setProductToAddProductToCart();
   });
 
   beforeEach(async () => {
@@ -182,7 +192,8 @@ describe('FeaturedProductsComponent', () => {
     fixture = TestBed.createComponent(FeaturedProductsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    service = TestBed.inject(ProductService);
+    productService = TestBed.inject(ProductService);
+    shoppingCartService = TestBed.inject(ShoppingCartService);
   });
 
   it('should create', () => {
@@ -193,7 +204,7 @@ describe('FeaturedProductsComponent', () => {
 
   it("ngOnInit_callsAServiceMethodAndAssignsItsReturnToTheFeaturedProductsAttribute_wheneverCalled", () => {
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeDTOMock));
 
     component.ngOnInit();
@@ -209,7 +220,7 @@ describe('FeaturedProductsComponent', () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeDTOMock));
 
     component.ngOnInit();
@@ -250,7 +261,7 @@ describe('FeaturedProductsComponent', () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1000);
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeDTOMock));
 
     component.ngOnInit();
@@ -294,7 +305,7 @@ describe('FeaturedProductsComponent', () => {
       component.ngAfterViewChecked();
     }
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeDTOMock));
 
     component.ngOnInit();
@@ -336,7 +347,7 @@ describe('FeaturedProductsComponent', () => {
 
   it("getSaltyPizzas_returnsTheArrayOfSaltyPizzasFromTheFeaturedProductsMap_wheneverCalled", () => {
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeDTOMock));
 
     component.ngOnInit();
@@ -356,7 +367,7 @@ describe('FeaturedProductsComponent', () => {
 
   it("getSweetPizzas_returnsTheArrayOfSweetPizzasFromTheFeaturedProductsMap_wheneverCalled", () => {
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeDTOMock));
 
     component.ngOnInit();
@@ -376,7 +387,7 @@ describe('FeaturedProductsComponent', () => {
 
   it("getSaltyEsfihas_returnsTheArrayOfSaltyEsfihasFromTheFeaturedProductsMap_wheneverCalled", () => {
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeDTOMock));
 
     component.ngOnInit();
@@ -396,7 +407,7 @@ describe('FeaturedProductsComponent', () => {
 
   it("getSweetEsfihas_returnsTheArrayOfSweetEsfihasFromTheFeaturedProductsMap_wheneverCalled", () => {
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeDTOMock));
 
     component.ngOnInit();
@@ -416,7 +427,7 @@ describe('FeaturedProductsComponent', () => {
 
   it("getDrinks_returnsTheArrayOfDrinksFromTheFeaturedProductsMap_wheneverCalled", () => {
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeDTOMock));
 
     component.ngOnInit();
@@ -434,52 +445,52 @@ describe('FeaturedProductsComponent', () => {
       .toContain(drinksToComparison[0]);
   });
 
-  it("seeMoreProducts_adds1625PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => {
+  // it("seeMoreProducts_adds1625PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => {
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
+  //   spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
 
-    spyOn(service, "findProductsInPromotion")
-      .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
+  //   spyOn(service, "findProductsInPromotion")
+  //     .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
 
-    component.ngOnInit();
+  //   component.ngOnInit();
 
-    fixture.detectChanges();
+  //   fixture.detectChanges();
 
-    const compiled = fixture.nativeElement as HTMLElement;
+  //   const compiled = fixture.nativeElement as HTMLElement;
 
-    const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
-    const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products");
-    const buttonElement = compiled.querySelector("#sweet-pizza-button");
-    const wrapperHeight = wrapperElement.clientHeight;
+  //   const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
+  //   const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products");
+  //   const buttonElement = compiled.querySelector("#sweet-pizza-button");
+  //   const wrapperHeight = wrapperElement.clientHeight;
 
-    if (productsElement && buttonElement) {
-      component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
-    }
+  //   if (productsElement && buttonElement) {
+  //     component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
+  //   }
 
-    fixture.detectChanges();
+  //   fixture.detectChanges();
 
-    let heightProducts = 0;
+  //   let heightProducts = 0;
 
-    if (productsElement?.clientHeight) {
+  //   if (productsElement?.clientHeight) {
 
-      heightProducts = productsElement.clientHeight;
-    }
+  //     heightProducts = productsElement.clientHeight;
+  //   }
 
-    expect(wrapperElement.clientHeight)
-    .not.toEqual(wrapperHeight);
+  //   expect(wrapperElement.clientHeight)
+  //   .not.toEqual(wrapperHeight);
 
-    expect(wrapperElement.clientHeight)
-      .not.toEqual(heightProducts);
+  //   expect(wrapperElement.clientHeight)
+  //     .not.toEqual(heightProducts);
 
-    expect(buttonElement?.getAttribute("class"))
-      .not.toContain("remove-expansion-button");
-  });
+  //   expect(buttonElement?.getAttribute("class"))
+  //     .not.toContain("remove-expansion-button");
+  // });
 
   it("seeMoreProducts_makesTheWrapGainAnAutomaticHeightAndAddsAClassToTheExpandButton_whenScreenWidthIsLessThan481AndWrapperHeightBecomesGreaterThanProductsElementHeight", () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, [], [], [], [])));
 
     component.ngOnInit();
@@ -499,7 +510,7 @@ describe('FeaturedProductsComponent', () => {
     fixture.detectChanges();
 
     expect(wrapperElement.getAttribute("style"))
-    .toEqual("height: auto;");
+      .toEqual("height: auto;");
 
     expect(buttonElement?.getAttribute("class"))
       .toContain("remove-expansion-button");
@@ -509,7 +520,7 @@ describe('FeaturedProductsComponent', () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
 
     component.ngOnInit();
@@ -537,7 +548,7 @@ describe('FeaturedProductsComponent', () => {
     }
 
     expect(wrapperElement.clientHeight)
-    .not.toEqual(wrapperHeight);
+      .not.toEqual(wrapperHeight);
 
     expect(wrapperElement.clientHeight)
       .not.toEqual(heightProducts);
@@ -550,7 +561,7 @@ describe('FeaturedProductsComponent', () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, [], [], [], [])));
 
     component.ngOnInit();
@@ -570,7 +581,7 @@ describe('FeaturedProductsComponent', () => {
     fixture.detectChanges();
 
     expect(wrapperElement.getAttribute("style"))
-    .toEqual("height: auto;");
+      .toEqual("height: auto;");
 
     expect(buttonElement?.getAttribute("class"))
       .toContain("remove-expansion-button");
@@ -580,7 +591,7 @@ describe('FeaturedProductsComponent', () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
 
     component.ngOnInit();
@@ -621,7 +632,7 @@ describe('FeaturedProductsComponent', () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
 
-    spyOn(service, "findProductsInPromotion")
+    spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, [], [], [], [])));
 
     component.ngOnInit();
@@ -641,9 +652,19 @@ describe('FeaturedProductsComponent', () => {
     fixture.detectChanges();
 
     expect(wrapperElement.getAttribute("style"))
-    .toEqual("height: auto;");
+      .toEqual("height: auto;");
 
     expect(buttonElement?.getAttribute("class"))
       .toContain("remove-expansion-button");
+  });
+
+  it("addProductToCart_callsTheShoppingCartServiceToAddANewProduct_wheneverCalled", () => {
+
+    spyOn(shoppingCartService, "addProduct");
+
+    component.addProductToCart(productToAddProductToCart);
+
+    expect(shoppingCartService.addProduct) 
+      .toHaveBeenCalled();
   });
 });

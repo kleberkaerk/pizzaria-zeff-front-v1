@@ -1,0 +1,82 @@
+<div>
+  <button
+    #shoppingCartButton
+    class="shopping-cart-button"
+    (click)="
+      displayProductsInShoppingCart(
+        $event,
+        shoppingCartButton,
+        wrapperProductsInTheShoppingCart
+      )
+    "
+    (touchstart)="
+      displayProductsInShoppingCart(
+        $event,
+        shoppingCartButton,
+        wrapperProductsInTheShoppingCart
+      )
+    "
+  >
+    <div class="wrapper-quantity-of-products">
+      <p class="quantity-of-products">{{ products.length }}</p>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
+      <path
+        d="M 12.292 35.208 C 11.625 35.208 11.063 34.972 10.604 34.5 C 10.146 34.028 9.917 33.459 9.917 32.792 C 9.917 32.125 10.146 31.563 10.604 31.104 C 11.063 30.646 11.639 30.417 12.333 30.417 C 13 30.417 13.562 30.646 14.021 31.104 C 14.479 31.563 14.708 32.125 14.708 32.792 C 14.708 33.459 14.479 34.028 14.021 34.5 C 13.562 34.972 12.986 35.208 12.292 35.208 Z M 28 35.208 C 27.333 35.208 26.771 34.972 26.312 34.5 C 25.854 34.028 25.625 33.459 25.625 32.792 C 25.625 32.125 25.854 31.563 26.312 31.104 C 26.771 30.646 27.333 30.417 28 30.417 C 28.667 30.417 29.236 30.646 29.708 31.104 C 30.181 31.563 30.417 32.125 30.417 32.792 C 30.417 33.459 30.181 34.028 29.708 34.5 C 29.236 34.972 28.667 35.208 28 35.208 Z M 28.472 16.281 C 28.194 16.281 28.454 16.347 28.273 16.152 C 28.093 15.957 28.207 16.183 28.207 15.933 C 28.207 15.656 28.012 15.875 28.192 15.694 C 28.373 15.513 28.235 15.423 28.513 15.423 C 28.791 15.423 28.776 15.228 28.957 15.409 C 29.137 15.59 29.023 15.493 29.023 15.77 C 29.023 16.048 28.974 15.992 28.794 16.173 C 28.613 16.354 28.75 16.281 28.472 16.281 Z M 19.129 19.55 L 19.129 19.037 L 19.649 18.997 L 19.69 19.59 L 19.129 19.55 Z M 12.292 26.792 C 11.347 26.792 10.653 26.403 10.208 25.625 C 9.764 24.847 9.764 24.055 10.208 23.25 L 12.792 18.625 L 6.583 5.583 L 3.625 5.583 L 3.625 4.167 L 7.5 4.167 L 14.333 18.583 L 26.125 18.583 L 32.292 7.542 L 33.5 8.208 L 27.667 18.75 C 27.444 19.167 27.153 19.479 26.792 19.688 C 26.431 19.896 26.028 20 25.583 20 L 13.625 20 L 11.375 24.083 C 11.208 24.333 11.208 24.611 11.375 24.917 C 11.542 25.222 11.778 25.375 12.083 25.375 L 30.417 25.375 L 30.417 26.792 L 12.292 26.792 Z"
+      />
+    </svg>
+  </button>
+
+  <div class="shopping-cart" #wrapperProductsInTheShoppingCart>
+    <div class="wrapper-shopping-cart">
+      <h2 class="title-shopping-cart">Carrinho de compras</h2>
+
+      <button
+        class="close-shopping-cart-button"
+        (click)="closeShoppingCart($event)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
+          <path
+            d="m10.458 31.458-1.916-1.916 9.5-9.542-9.5-9.542 1.916-1.916 9.542 9.5 9.542-9.5 1.916 1.916-9.5 9.542 9.5 9.542-1.916 1.916-9.542-9.5Z"
+          />
+        </svg>
+      </button>
+
+      <ul class="products">
+        <p *ngIf="products.length === 0" class="empty-cart-message">
+          Seu carrinho está vazio
+        </p>
+        <li *ngFor="let product of products; let i = index" class="product">
+          <p class="product-name">{{ product.getName }}</p>
+          <p class="product-price">
+            R$ {{ product.getPrice | number : "1.2-2" : "br" }}
+          </p>
+          <button
+            (click)="removeProduct($event, i)"
+            class="button-delete-product-from-shopping-cart"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+              <path
+                d="M7.625 20q-.675 0-1.15-.475Q6 19.05 6 18.375V6H5V5h4v-.775h6V5h4v1h-1v12.375q0 .7-.462 1.163-.463.462-1.163.462ZM17 6H7v12.375q0 .275.175.45t.45.175h8.75q.25 0 .437-.188.188-.187.188-.437ZM9.8 17h1V8h-1Zm3.4 0h1V8h-1ZM7 6v13-.625Z"
+              />
+            </svg>
+          </button>
+        </li>
+      </ul>
+
+      <div
+        class="container-of-total-price-and-finalization-button"
+        *ngIf="products.length > 0"
+      >
+        <p>
+          <sup class="total-text">Total: </sup>
+          <span class="total-price"
+            >R$ {{ amount | number : "1.2-2" : "br" }}</span
+          >
+        </p>
+        <button class="checkout-button">Finalizar pedido</button>
+      </div>
+    </div>
+  </div>
+</div>

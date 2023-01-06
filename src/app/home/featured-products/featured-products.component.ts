@@ -6,6 +6,7 @@ import { Type } from 'src/app/shared/domain/type';
 import { registerLocaleData } from '@angular/common';
 import { ProductService } from '../service/product.service';
 import { Mapper } from 'src/app/shared/util/mapper';
+import { ShoppingCartService } from 'src/app/shared/service/shopping-cart.service';
 
 registerLocaleData(localeBr, "br");
 
@@ -19,7 +20,10 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
   private featuredProducts: Map<Type, Array<Product>> = new Map();
   private limiterToAfterViewChecked = 0;
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService,
+    private shoppingCartService: ShoppingCartService
+  ) { }
 
   ngOnInit(): void {
 
@@ -136,7 +140,7 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
       button.classList.add("remove-expansion-button");
       wrapper.style.height = "auto";
     } else {
-      
+
       wrapper.style.height = wrapperHeight.toFixed(0) + "px";
     }
   }
@@ -156,5 +160,10 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
       this.showMoreProducts(wrapper, productsHeight, button, 325);
     }
+  }
+
+  public addProductToCart(product: Product) {
+
+    this.shoppingCartService.addProduct(product);
   }
 }

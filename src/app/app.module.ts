@@ -8,6 +8,7 @@ import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { SliderComponent } from './home/slider/slider.component';
 import { FeaturedProductsComponent } from './home/featured-products/featured-products.component';
+import { ShoppingCartComponent } from './shared/shopping-cart/shopping-cart.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { FeaturedProductsComponent } from './home/featured-products/featured-pro
     HeaderComponent,
     FooterComponent,
     SliderComponent,
-    FeaturedProductsComponent
+    FeaturedProductsComponent,
+    ShoppingCartComponent
   ],
   imports: [
     BrowserModule,
