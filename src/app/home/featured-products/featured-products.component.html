@@ -21,7 +21,8 @@
           </a>
           <div class="container-button-price">
             <button
-              (click)="addProductToCart(saltyPizza)"
+              (click)="addProductToCart($event, saltyPizza)"
+              (touchstart)="addProductToCart($event, saltyPizza)"
               class="add-to-cart-button"
             >
               Adicionar ao carrinho
@@ -40,11 +41,21 @@
       #saltyPizzasExpansionButton
       (click)="
         seeMoreProducts(
+          $event,
           wrapperSaltyPizza,
           saltyPizzas,
           saltyPizzasExpansionButton
         )
       "
+      (touchstart)="
+        seeMoreProducts(
+          $event,
+          wrapperSaltyPizza,
+          saltyPizzas,
+          saltyPizzasExpansionButton
+        )
+      "
+      aria-label="Ver mais pizzas salgadas"
     >
       <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
         <path d="M24 29.4 13.4 18.8l1.1-1.1 9.5 9.5 9.5-9.5 1.1 1.1Z" />
@@ -71,7 +82,8 @@
           </a>
           <div class="container-button-price">
             <button
-              (click)="addProductToCart(sweetPizza)"
+              (click)="addProductToCart($event, sweetPizza)"
+              (touchstart)="addProductToCart($event, sweetPizza)"
               class="add-to-cart-button"
             >
               Adicionar ao carrinho
@@ -90,11 +102,21 @@
       #sweetPizzasExpansionButton
       (click)="
         seeMoreProducts(
+          $event,
           wrapperSweetPizza,
           sweetPizzas,
           sweetPizzasExpansionButton
         )
       "
+      (touchstart)="
+        seeMoreProducts(
+          $event,
+          wrapperSweetPizza,
+          sweetPizzas,
+          sweetPizzasExpansionButton
+        )
+      "
+      aria-label="Ver mais pizzas doces"
     >
       <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
         <path d="M24 29.4 13.4 18.8l1.1-1.1 9.5 9.5 9.5-9.5 1.1 1.1Z" />
@@ -121,7 +143,8 @@
           </a>
           <div class="container-button-price">
             <button
-              (click)="addProductToCart(saltyEsfiha)"
+              (click)="addProductToCart($event, saltyEsfiha)"
+              (touchstart)="addProductToCart($event, saltyEsfiha)"
               class="add-to-cart-button"
             >
               Adicionar ao carrinho
@@ -140,11 +163,21 @@
       #saltyEsfihasExpansionButton
       (click)="
         seeMoreProducts(
+          $event,
           wrapperSaltyEsfiha,
           saltyEsfihas,
           saltyEsfihasExpansionButton
         )
       "
+      (touchstart)="
+        seeMoreProducts(
+          $event,
+          wrapperSaltyEsfiha,
+          saltyEsfihas,
+          saltyEsfihasExpansionButton
+        )
+      "
+      aria-label="Ver mais esfihas salgadas"
     >
       <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
         <path d="M24 29.4 13.4 18.8l1.1-1.1 9.5 9.5 9.5-9.5 1.1 1.1Z" />
@@ -171,7 +204,8 @@
           </a>
           <div class="container-button-price">
             <button
-              (click)="addProductToCart(sweetEsfiha)"
+              (click)="addProductToCart($event, sweetEsfiha)"
+              (touchstart)="addProductToCart($event, sweetEsfiha)"
               class="add-to-cart-button"
             >
               Adicionar ao carrinho
@@ -190,11 +224,21 @@
       #sweetEsfihasExpansionButton
       (click)="
         seeMoreProducts(
+          $event,
           wrapperSweetEsfiha,
           sweetEsfihas,
           sweetEsfihasExpansionButton
         )
       "
+      (touchstart)="
+        seeMoreProducts(
+          $event,
+          wrapperSweetEsfiha,
+          sweetEsfihas,
+          sweetEsfihasExpansionButton
+        )
+      "
+      aria-label="Ver mais esfihas doces"
     >
       <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
         <path d="M24 29.4 13.4 18.8l1.1-1.1 9.5 9.5 9.5-9.5 1.1 1.1Z" />
@@ -221,7 +265,8 @@
           </a>
           <div class="container-button-price">
             <button
-              (click)="addProductToCart(drink)"
+              (click)="addProductToCart($event, drink)"
+              (touchstart)="addProductToCart($event, drink)"
               class="add-to-cart-button"
             >
               Adicionar ao carrinho
@@ -238,7 +283,13 @@
       id="drink-button"
       class="expand-more-button"
       #drinksExpansionButton
-      (click)="seeMoreProducts(wrapperDrink, drinks, drinksExpansionButton)"
+      (click)="
+        seeMoreProducts($event, wrapperDrink, drinks, drinksExpansionButton)
+      "
+      (touchstart)="
+        seeMoreProducts($event, wrapperDrink, drinks, drinksExpansionButton)
+      "
+      aria-label="Ver mais bebidas"
     >
       <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
         <path d="M24 29.4 13.4 18.8l1.1-1.1 9.5 9.5 9.5-9.5 1.1 1.1Z" />

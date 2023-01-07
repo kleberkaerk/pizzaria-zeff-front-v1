@@ -124,6 +124,16 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     return this.featuredProducts.get(Type.DRINK);
   }
 
+  private preventDefaultTouchStart(e: Event) {
+
+    if (e.cancelable && e.type === "touchstart") {
+
+      console.log("Touch");
+
+      e.preventDefault();
+    }
+  }
+
   private showMoreProducts(
     wrapper: HTMLElement,
     productsHeight: number,
@@ -145,7 +155,9 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  public seeMoreProducts(wrapper: HTMLElement, products: Element, button: Element) {
+  public seeMoreProducts(e: Event, wrapper: HTMLElement, products: Element, button: Element) {
+
+    this.preventDefaultTouchStart(e);
 
     const clientWidth = document.documentElement.clientWidth;
     const productsHeight = products.scrollHeight;
@@ -162,7 +174,9 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  public addProductToCart(product: Product) {
+  public addProductToCart(e: Event, product: Product) {
+
+    this.preventDefaultTouchStart(e);
 
     this.shoppingCartService.addProduct(product);
   }

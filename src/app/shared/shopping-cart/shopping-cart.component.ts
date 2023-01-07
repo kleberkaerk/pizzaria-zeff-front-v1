@@ -83,6 +83,8 @@ export class ShoppingCartComponent implements OnInit {
 
     e.stopPropagation();
 
+    this.preventDefaultTouchStart(e);
+
     this.shoppingCartService.removeProduct(index);
   }
 }
