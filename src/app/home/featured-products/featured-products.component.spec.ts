@@ -445,48 +445,39 @@ describe('FeaturedProductsComponent', () => {
       .toContain(drinksToComparison[0]);
   });
 
-  // it("seeMoreProducts_adds1625PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => {
+  it("seeMoreProducts_adds1630PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => {
 
-  //   spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
+    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
 
-  //   spyOn(service, "findProductsInPromotion")
-  //     .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
+    spyOn(productService, "findProductsInPromotion")
+      .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
 
-  //   component.ngOnInit();
+    component.ngOnInit();
 
-  //   fixture.detectChanges();
+    fixture.detectChanges();
 
-  //   const compiled = fixture.nativeElement as HTMLElement;
+    const compiled = fixture.nativeElement as HTMLElement;
 
-  //   const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
-  //   const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products");
-  //   const buttonElement = compiled.querySelector("#sweet-pizza-button");
-  //   const wrapperHeight = wrapperElement.clientHeight;
+    const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
+    const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
+    const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
+    const wrapperHeight = wrapperElement.clientHeight;
 
-  //   if (productsElement && buttonElement) {
-  //     component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
-  //   }
+    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
 
-  //   fixture.detectChanges();
+    fixture.detectChanges();
 
-  //   let heightProducts = 0;
+    expect(wrapperElement.clientHeight)
+      .not.toEqual(wrapperHeight);
 
-  //   if (productsElement?.clientHeight) {
+    expect(wrapperElement.clientHeight)
+      .not.toEqual(productsElement.clientHeight);
 
-  //     heightProducts = productsElement.clientHeight;
-  //   }
+    expect(buttonElement?.getAttribute("class"))
+      .not.toContain("remove-expansion-button");
+  });
 
-  //   expect(wrapperElement.clientHeight)
-  //   .not.toEqual(wrapperHeight);
-
-  //   expect(wrapperElement.clientHeight)
-  //     .not.toEqual(heightProducts);
-
-  //   expect(buttonElement?.getAttribute("class"))
-  //     .not.toContain("remove-expansion-button");
-  // });
-
-  it("seeMoreProducts_makesTheWrapGainAnAutomaticHeightAndAddsAClassToTheExpandButton_whenScreenWidthIsLessThan481AndWrapperHeightBecomesGreaterThanProductsElementHeight", () => {
+  it("seeMoreProducts_makesTheWrapGainAnAutomaticHeightAndAddsAClassToTheExpandButton_whenScreenWidthIsLessThan481AndWrapperHeightBecomesGreaterThanOrEqualToTheHeightOfTheProductsElement", () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
 
@@ -500,17 +491,18 @@ describe('FeaturedProductsComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     const wrapperElement = compiled.querySelector("#wrapper-salty-pizza") as HTMLElement;
-    const productsElement = compiled.querySelector("#wrapper-salty-pizza .products");
-    const buttonElement = compiled.querySelector("#salty-pizza-button");
+    const productsElement = compiled.querySelector("#wrapper-salty-pizza .products") as Element;
+    const buttonElement = compiled.querySelector("#salty-pizza-button") as Element;
 
-    if (productsElement && buttonElement) {
-      component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
-    }
+    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
     expect(wrapperElement.getAttribute("style"))
       .toEqual("height: auto;");
+
+    expect(wrapperElement.clientHeight)
+      .toEqual(productsElement.clientHeight);
 
     expect(buttonElement?.getAttribute("class"))
       .toContain("remove-expansion-button");
@@ -530,28 +522,19 @@ describe('FeaturedProductsComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
-    const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products");
-    const buttonElement = compiled.querySelector("#sweet-pizza-button");
+    const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
+    const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
     const wrapperHeight = wrapperElement.clientHeight;
 
-    if (productsElement && buttonElement) {
-      component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
-    }
+    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
-
-    let heightProducts = 0;
-
-    if (productsElement?.clientHeight) {
-
-      heightProducts = productsElement.clientHeight;
-    }
 
     expect(wrapperElement.clientHeight)
       .not.toEqual(wrapperHeight);
 
     expect(wrapperElement.clientHeight)
-      .not.toEqual(heightProducts);
+      .not.toEqual(productsElement.clientHeight);
 
     expect(buttonElement?.getAttribute("class"))
       .not.toContain("remove-expansion-button");
@@ -571,17 +554,18 @@ describe('FeaturedProductsComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     const wrapperElement = compiled.querySelector("#wrapper-salty-pizza") as HTMLElement;
-    const productsElement = compiled.querySelector("#wrapper-salty-pizza .products");
-    const buttonElement = compiled.querySelector("#salty-pizza-button");
+    const productsElement = compiled.querySelector("#wrapper-salty-pizza .products") as Element;
+    const buttonElement = compiled.querySelector("#salty-pizza-button") as Element;
 
-    if (productsElement && buttonElement) {
-      component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
-    }
+    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
     expect(wrapperElement.getAttribute("style"))
       .toEqual("height: auto;");
+
+    expect(wrapperElement.clientHeight)
+      .toEqual(productsElement.clientHeight);
 
     expect(buttonElement?.getAttribute("class"))
       .toContain("remove-expansion-button");
@@ -601,28 +585,19 @@ describe('FeaturedProductsComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
-    const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products");
-    const buttonElement = compiled.querySelector("#sweet-pizza-button");
+    const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
+    const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
     const wrapperHeight = wrapperElement.clientHeight;
 
-    if (productsElement && buttonElement) {
-      component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
-    }
+    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
-
-    let heightProducts = 0;
-
-    if (productsElement?.clientHeight) {
-
-      heightProducts = productsElement.clientHeight;
-    }
 
     expect(wrapperElement.clientHeight)
       .not.toEqual(wrapperHeight);
 
     expect(wrapperElement.clientHeight)
-      .not.toEqual(heightProducts);
+      .not.toEqual(productsElement.clientHeight);
 
     expect(buttonElement?.getAttribute("class"))
       .not.toContain("remove-expansion-button");
@@ -642,17 +617,18 @@ describe('FeaturedProductsComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     const wrapperElement = compiled.querySelector("#wrapper-salty-pizza") as HTMLElement;
-    const productsElement = compiled.querySelector("#wrapper-salty-pizza .products");
-    const buttonElement = compiled.querySelector("#salty-pizza-button");
+    const productsElement = compiled.querySelector("#wrapper-salty-pizza .products") as Element;
+    const buttonElement = compiled.querySelector("#salty-pizza-button") as Element;
 
-    if (productsElement && buttonElement) {
-      component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
-    }
+    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
     expect(wrapperElement.getAttribute("style"))
       .toEqual("height: auto;");
+
+    expect(wrapperElement.clientHeight)
+      .toEqual(productsElement.clientHeight);
 
     expect(buttonElement?.getAttribute("class"))
       .toContain("remove-expansion-button");
@@ -664,7 +640,7 @@ describe('FeaturedProductsComponent', () => {
 
     component.addProductToCart(productToAddProductToCart);
 
-    expect(shoppingCartService.addProduct) 
+    expect(shoppingCartService.addProduct)
       .toHaveBeenCalled();
   });
 });

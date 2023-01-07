@@ -20,7 +20,7 @@
 
 .wrapper {
     overflow-y: hidden;
-    height: 335px;
+    height: 336px;
 }
 
 .auto-height-wrapper {
@@ -55,7 +55,7 @@
 }
 
 .expand-more-button:hover .text-see-more {
-    width: 64.95px;
+    width: 66.11px;
 }
 
 .products {
@@ -169,8 +169,7 @@
 }
 
 .product-price {
-    /* font-family: "number-font", sans-serif; */
-    font-family: "content-font-medium", sans-serif;
+    font-family: "number-font", sans-serif;
     margin-right: 10px;
     font-weight: 600;
 }
@@ -178,7 +177,7 @@
 @media (max-width: 1023px) {
 
     .wrapper {
-        height: 660px;
+        height: 650px;
     }
 
     .auto-height-wrapper {
@@ -186,7 +185,7 @@
     }
 
     .text-see-more {
-        width: 64.95px;
+        width: 66.11px;
     }
 
     .products {
@@ -227,7 +226,7 @@
 @media (max-width: 480px) {
 
     .wrapper {
-        height: 1635px;
+        height: 1640px;
     }
 
     .auto-height-wrapper {

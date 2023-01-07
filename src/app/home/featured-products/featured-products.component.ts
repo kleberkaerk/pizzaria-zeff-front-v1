@@ -152,13 +152,13 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
     if (clientWidth <= 480) {
 
-      this.showMoreProducts(wrapper, productsHeight, button, 1625);
+      this.showMoreProducts(wrapper, productsHeight, button, 1630);
     } else if (clientWidth <= 1023) {
 
-      this.showMoreProducts(wrapper, productsHeight, button, 650);
+      this.showMoreProducts(wrapper, productsHeight, button, 640);
     } else {
 
-      this.showMoreProducts(wrapper, productsHeight, button, 325);
+      this.showMoreProducts(wrapper, productsHeight, button, 326);
     }
   }
 
