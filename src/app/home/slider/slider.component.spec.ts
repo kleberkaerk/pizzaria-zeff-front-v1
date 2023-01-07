@@ -26,7 +26,7 @@ describe('SliderComponent', () => {
     jasmine.clock().install();
 
     component.ngOnInit();
-    jasmine.clock().tick(4000);
+    jasmine.clock().tick(8000);
 
     let slideButton = document.getElementById("slide-2") as HTMLInputElement;
 
@@ -43,7 +43,7 @@ describe('SliderComponent', () => {
     jasmine.clock().install();
 
     component.ngOnInit();
-    jasmine.clock().tick(16000);
+    jasmine.clock().tick(32000);
 
     let slideButton = document.getElementById("slide-1") as HTMLInputElement;
 

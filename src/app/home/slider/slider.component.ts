@@ -23,6 +23,6 @@ export class SliderComponent implements OnInit {
         i = 1
       }
 
-    }, 4000);
+    }, 8000);
   }
 }

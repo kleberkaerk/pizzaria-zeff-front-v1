@@ -128,8 +128,6 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
     if (e.cancelable && e.type === "touchstart") {
 
-      console.log("Touch");
-
       e.preventDefault();
     }
   }

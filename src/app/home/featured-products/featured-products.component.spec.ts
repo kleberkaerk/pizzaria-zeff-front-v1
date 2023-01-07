@@ -445,7 +445,7 @@ describe('FeaturedProductsComponent', () => {
       .toContain(drinksToComparison[0]);
   });
 
-  it("seeMoreProducts_adds1630PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => {
+  it("seeMoreProducts_adds1630PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => { 
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
 
@@ -458,12 +458,13 @@ describe('FeaturedProductsComponent', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
 
+    let event = new MouseEvent("click");
     const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
     const wrapperHeight = wrapperElement.clientHeight;
 
-    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
+    component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
@@ -490,11 +491,12 @@ describe('FeaturedProductsComponent', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
 
+    let event = new MouseEvent("click");
     const wrapperElement = compiled.querySelector("#wrapper-salty-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-salty-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#salty-pizza-button") as Element;
 
-    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
+    component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
@@ -521,12 +523,13 @@ describe('FeaturedProductsComponent', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
 
+    let event = new MouseEvent("click");
     const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
     const wrapperHeight = wrapperElement.clientHeight;
 
-    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
+    component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
@@ -553,11 +556,12 @@ describe('FeaturedProductsComponent', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
 
+    let event = new MouseEvent("click");
     const wrapperElement = compiled.querySelector("#wrapper-salty-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-salty-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#salty-pizza-button") as Element;
 
-    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
+    component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
@@ -584,12 +588,13 @@ describe('FeaturedProductsComponent', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
 
+    let event = new MouseEvent("click");
     const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
     const wrapperHeight = wrapperElement.clientHeight;
 
-    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
+    component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
@@ -616,11 +621,12 @@ describe('FeaturedProductsComponent', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
 
+    let event = new MouseEvent("click");
     const wrapperElement = compiled.querySelector("#wrapper-salty-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-salty-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#salty-pizza-button") as Element;
 
-    component.seeMoreProducts(wrapperElement, productsElement, buttonElement);
+    component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
@@ -636,9 +642,23 @@ describe('FeaturedProductsComponent', () => {
 
   it("addProductToCart_callsTheShoppingCartServiceToAddANewProduct_wheneverCalled", () => {
 
+    let event = new MouseEvent("click");
+
     spyOn(shoppingCartService, "addProduct");
 
-    component.addProductToCart(productToAddProductToCart);
+    component.addProductToCart(event, productToAddProductToCart);
+
+    expect(shoppingCartService.addProduct)
+      .toHaveBeenCalled();
+  });
+
+  it("addProductToCart_callsThePreventDefaultMethod_whenTheEventObjectIsACancelableTouchstart", () => {
+
+    let event = new TouchEvent("touchstart", { cancelable: true });
+
+    spyOn(shoppingCartService, "addProduct");
+
+    component.addProductToCart(event, productToAddProductToCart);
 
     expect(shoppingCartService.addProduct)
       .toHaveBeenCalled();
