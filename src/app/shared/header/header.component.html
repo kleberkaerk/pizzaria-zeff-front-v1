@@ -1,27 +1,25 @@
 <header class="header">
-  <ul class="flex header-options">
-    <li class="flex slogan" *ngIf="!activateSearch">
+  <ul class="header-options">
+    <li class="slogan" *ngIf="!activateSearch">
       <a
         routerLink="/"
         class="slogan-link"
         title="Página inicial Pizzaria Zeff"
         aria-label="Início"
       >
-        <div class="flex slogan-box">
-          <p class="slogan-name">Pizzaria Zeff</p>
-        </div>
+      Pizzaria Zeff
       </a>
     </li>
 
-    <div class="flex justify-content">
-      <li
-        class="flex search"
+    <li class="wrapper-of-the-search-and-account-and-mobile-menu">
+
+      <div
+        class="search"
         [ngClass]="{ 'stretch-search-bar': activateSearch }"
       >
         <form
-          class="flex search-form"
+          class="search-form"
           #formContainerSearch
-          [ngClass]="{ 'activate-search-form': activateSearch }"
         >
           <input
             type="search"
@@ -32,13 +30,14 @@
           <button
             type="button"
             class="cancel-button"
-            [ngClass]="{ 'invisible-mobile-cancel-button': !activateSearch }"
             aria-label="Limpar conteúdo de barra de pesquisa"
-            (click)="clearSearchInput(searchInput)"
+            (click)="clearSearchInput($event, searchInput)"
+            (touchstart)="clearSearchInput($event, searchInput)"
           >
             X
           </button>
         </form>
+
         <button
           class="search-mobile-button"
           (click)="searchClickHandler($event, formContainerSearch, searchInput)"
@@ -68,14 +67,14 @@
             </g>
           </svg>
         </button>
-      </li>
+      </div>
 
-      <li class="flex user-account" *ngIf="!activateSearch">
-        <a routerLink="" class="flex login-link" *ngIf="!logged">Fazer login</a>
+      <div class="account" *ngIf="!activateSearch">
+        <a routerLink="" class="login-link" *ngIf="!logged">Fazer login</a>
 
-        <div *ngIf="logged">
+        <div class="user-account" *ngIf="logged">
           <button
-            class="flex view-account-button"
+            class="view-account-button"
             (click)="accountClickHandler($event, accountOptions)"
             (touchstart)="accountClickHandler($event, accountOptions)"
             aria-label="Configurações de conta"
@@ -111,30 +110,30 @@
           </button>
 
           <ul
-            class="flex account-options"
+            class="account-options"
             [ngClass]="{
               'block-account-options': activateAccountOptions && !activateSearch
             }"
             #accountOptions
           >
-            <li class="option logged-in-username-mobile">
+            <li class="option-wrapper logged-in-username-mobile">
               <h2>{{ username }}</h2>
             </li>
-            <li class="option">
-              <a routerLink="" class="option-link">Minhas compras</a>
+            <li class="option-wrapper">
+              <a routerLink="" class="account-option">Minhas compras</a>
             </li>
-            <li class="option">
-              <a routerLink="" class="option-link">Meus endereços</a>
+            <li class="option-wrapper">
+              <a routerLink="" class="account-option">Meus endereços</a>
             </li>
-            <li class="option">
-              <a routerLink="" class="option-link">Sair</a>
+            <li class="option-wrapper">
+              <a routerLink="" class="account-option">Sair</a>
             </li>
           </ul>
         </div>
-      </li>
+      </div>
 
-      <li class="mobile-menu">
-        <nav class="mobile-nav">
+      <div class="mobile-menu">
+        <nav>
           <button
             class="mobile-menu-button"
             (click)="handlerClickMobileMenu($event, mobileMenu)"
@@ -151,42 +150,43 @@
           </button>
 
           <ul class="mobile-menu-options" #mobileMenu>
-            <li class="option">
-              <a routerLink="" class="option-link">Pizzas salgadas</a>
+            <li class="option-wrapper">
+              <a routerLink="" class="mobile-menu-option">Pizzas salgadas</a>
             </li>
-            <li class="option">
-              <a routerLink="" class="option-link">Pizzas doces</a>
+            <li class="option-wrapper">
+              <a routerLink="" class="mobile-menu-option">Pizzas doces</a>
             </li>
-            <li class="option">
-              <a routerLink="" class="option-link">Esfihas salgadas</a>
+            <li class="option-wrapper">
+              <a routerLink="" class="mobile-menu-option">Esfihas salgadas</a>
             </li>
-            <li class="option">
-              <a routerLink="" class="option-link">Esfihas doces</a>
+            <li class="option-wrapper">
+              <a routerLink="" class="mobile-menu-option">Esfihas doces</a>
             </li>
-            <li class="option">
-              <a routerLink="" class="option-link">Bebidas</a>
+            <li class="option-wrapper">
+              <a routerLink="" class="mobile-menu-option">Bebidas</a>
             </li>
           </ul>
         </nav>
-      </li>
-    </div>
+      </div>
+    
+    </li>
   </ul>
 
-  <ul class="flex menu">
-    <li class="flex">
-      <a routerLink="" class="option-link option-menu">Pizzas salgadas</a>
+  <ul class="menu" *ngIf="!activateAccountOptions">
+    <li>
+      <a routerLink="" class="menu-option">Pizzas salgadas</a>
     </li>
-    <li class="flex">
-      <a routerLink="" class="option-link option-menu">Pizzas doces</a>
+    <li>
+      <a routerLink="" class="menu-option">Pizzas doces</a>
     </li>
-    <li class="flex">
-      <a routerLink="" class="option-link option-menu">Esfihas salgadas</a>
+    <li>
+      <a routerLink="" class="menu-option">Esfihas salgadas</a>
     </li>
-    <li class="flex">
-      <a routerLink="" class="option-link option-menu">Esfihas doces</a>
+    <li>
+      <a routerLink="" class="menu-option">Esfihas doces</a>
     </li>
-    <li class="flex">
-      <a routerLink="" class="option-link option-menu">Bebidas</a>
+    <li>
+      <a routerLink="" class="menu-option">Bebidas</a>
     </li>
   </ul>
 </header>

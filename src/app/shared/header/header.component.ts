@@ -13,7 +13,9 @@ export class HeaderComponent {
   public logged = false;
   public username = "Luffy";
 
-  public clearSearchInput(inputToBeCleaned: HTMLInputElement){
+  public clearSearchInput(e: Event, inputToBeCleaned: HTMLInputElement) {
+
+    this.preventDefaultTouchStart(e);
 
     inputToBeCleaned.value = "";
     inputToBeCleaned.focus();
@@ -22,7 +24,7 @@ export class HeaderComponent {
   private preventDefaultTouchStart(e: Event) {
 
     if (e.cancelable && e.type === "touchstart") {
-      
+
       e.preventDefault();
     }
   }
@@ -56,7 +58,8 @@ export class HeaderComponent {
 
   public accountClickHandler(e: Event, accountOptions: Element): void {
 
-    this.handlerClickOutside(e, accountOptions, (value: boolean)=> {
+    this.handlerClickOutside(e, accountOptions, (value: boolean) => {
+
       this.activateAccountOptions = value;
     });
   }
@@ -64,24 +67,36 @@ export class HeaderComponent {
   public handlerClickMobileMenu(e: Event, menu: Element) {
 
     if (this.activateAccountOptions) {
+
       return
     };
 
-      this.handlerClickOutside(e, menu, (value: boolean) => {
-        this.activateMobileMenu = value;
-      });
+    this.handlerClickOutside(e, menu, (value: boolean) => {
+
+      this.activateMobileMenu = value;
+    });
   }
 
   public searchClickHandler(e: Event, form: Element, input: HTMLInputElement) {
 
-    this.handlerClickOutside(e, form, (value: boolean)=> {
-      
-      if(value) {
+    this.handlerClickOutside(e, form, (value: boolean) => {
+
+      /*
+      The focusable-search-input class was added with javascript, because the input needed to be made visible before receiving focus.
+
+      If this class was not added through javascript , it would not be possible to focus on the input
+      */
+
+      if (value) {
+
         this.activateSearch = true;
+        input.classList.add("focusable-search-input");
         input.focus();
       } else {
+
         this.activateSearch = false;
+        input.classList.remove("focusable-search-input");
       }
-    })
+    });
   }
 }

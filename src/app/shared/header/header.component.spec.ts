@@ -18,18 +18,20 @@ describe('HeaderComponent', () => {
   });
 
   it('should create', () => {
+
     expect(component)
       .toBeTruthy();
   });
 
   it("clearSearchInput_clearsSearchEntryAndPutsFocusOnIt_wheneverCalled", () => {
 
+    const event = new MouseEvent("click");
     const compiled = fixture.nativeElement as HTMLElement;
     const searchInput = compiled.querySelector(".search-input") as HTMLInputElement;
 
     searchInput.value = "test";
 
-    component.clearSearchInput(searchInput);
+    component.clearSearchInput(event, searchInput);
 
     expect(searchInput.value)
       .toEqual("");
@@ -64,6 +66,7 @@ describe('HeaderComponent', () => {
   });
 
   it('accountClickHandler_notUpdatedActivateAccountOptionsToTrue_whenAccountOptionsHaveAttributeDataToShow', () => {
+
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
     const accountOptions = compiled.querySelector('.account-options');
@@ -82,6 +85,7 @@ describe('HeaderComponent', () => {
   });
 
   it('handlerClickMobileMenu_updateActivateMobileMenuToTrue_whenMenuDoesNotHaveAttributeDataToShow', () => {
+
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
     const menu = compiled.querySelector('.mobile-menu-options');
@@ -104,6 +108,7 @@ describe('HeaderComponent', () => {
   });
 
   it('handlerClickMobileMenu_notUpdatedMenuToTrue_whenMenuHaveAttributeDataToShow', () => {
+
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
     const menu = compiled.querySelector('.mobile-menu-options');
@@ -122,6 +127,7 @@ describe('HeaderComponent', () => {
   });
 
   it('handlerClickMobileMenu_doesNothingAnything_whenActivateAccountOptionsIsTrue', () => {
+
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
     const menu = compiled.querySelector('.mobile-menu-options');
@@ -139,29 +145,29 @@ describe('HeaderComponent', () => {
       .toBeFalse();
   });
 
-  it('searchClickHandler_updateActivateSearchToTrue_whenFormDoesNotHaveAttributeDataToShow', () => {
+  it('searchClickHandler_updateActivateSearchToTrueAndAddAClassToTheInputElement_whenFormDoesNotHaveAttributeDataToShow', () => {
+
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector('.search-form');
-    const input = compiled.querySelector('.search-input');
+    const form = compiled.querySelector('.search-form') as Element;
+    const input = compiled.querySelector('.search-input') as HTMLElement;
 
     expect(component.activateSearch)
       .toBeFalse();
 
-    if (form && input) {
-      component.searchClickHandler(event, form, input as HTMLInputElement);
-    }
+    component.searchClickHandler(event, form, input as HTMLInputElement);
 
     expect(component.activateSearch)
       .toBeTrue();
 
-    fixture.detectChanges();
+    expect(input.getAttribute("class"))
+      .toContain("focusable-search-input");
 
-    expect(form?.getAttribute('class'))
-      .toContain('activate-search-form');
+    fixture.detectChanges();
   });
 
   it('searchClickHandler_notUpdateActivateSearchToTrue_whenFormHaveAttributeDataToShow', () => {
+
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
     const form = compiled.querySelector('.search-form');
@@ -180,7 +186,7 @@ describe('HeaderComponent', () => {
       .toBeFalse();
   });
 
-  it('externalClickChecker_closeGivenDropdownAndRemoveClickEventInHtml_whenTheClickedElementIsNotPartOfTheDropdown', () => {
+  it('handlerClickOutside_closeGivenDropdownAndRemoveClickEventInHtml_whenTheClickedElementIsNotPartOfTheDropdown', () => {
 
     component.logged = true;
     fixture.autoDetectChanges();
@@ -212,6 +218,7 @@ describe('HeaderComponent', () => {
   });
 
   it('preventDefaultTouchStart_callsThePreventDefaultMethodOfTheEventObject_whenTheEventCanBeCanceledAndIsOfTypeTouchstart', () => {
+
     const touchStartEvent = new TouchEvent('touchstart', { cancelable: true });
     const compiled = fixture.nativeElement as HTMLElement;
     const form = compiled.querySelector('.search-form');
@@ -233,7 +240,7 @@ describe('HeaderComponent', () => {
 
     fixture.detectChanges();
 
-    expect(form?.getAttribute('class'))
-      .toContain('activate-search-form');
+    expect(form?.hasAttribute("data-to-show"))
+      .toBeTrue();
   });
 });
