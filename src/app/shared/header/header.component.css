@@ -247,7 +247,7 @@
     transition: 0.2s;
 }
 
-.header:hover .menu {
+.header:hover nav .menu {
     height: 46px;
 }
 

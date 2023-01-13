@@ -7,20 +7,13 @@
         title="Página inicial Pizzaria Zeff"
         aria-label="Início"
       >
-      Pizzaria Zeff
+        Pizzaria Zeff
       </a>
     </li>
 
     <li class="wrapper-of-the-search-and-account-and-mobile-menu">
-
-      <div
-        class="search"
-        [ngClass]="{ 'stretch-search-bar': activateSearch }"
-      >
-        <form
-          class="search-form"
-          #formContainerSearch
-        >
+      <div class="search" [ngClass]="{ 'stretch-search-bar': activateSearch }">
+        <form class="search-form" #formContainerSearch>
           <input
             type="search"
             class="search-input"
@@ -41,7 +34,9 @@
         <button
           class="search-mobile-button"
           (click)="searchClickHandler($event, formContainerSearch, searchInput)"
-          (touchstart)="searchClickHandler($event, formContainerSearch, searchInput)"
+          (touchstart)="
+            searchClickHandler($event, formContainerSearch, searchInput)
+          "
           *ngIf="!activateSearch"
           aria-label="Abrir barra de pesquisa"
           aria-haspopup="true"
@@ -133,7 +128,7 @@
       </div>
 
       <div class="mobile-menu">
-        <nav>
+        <nav  aria-label="nav para celular">
           <button
             class="mobile-menu-button"
             (click)="handlerClickMobileMenu($event, mobileMenu)"
@@ -168,25 +163,26 @@
           </ul>
         </nav>
       </div>
-    
     </li>
   </ul>
 
-  <ul class="menu" *ngIf="!activateAccountOptions">
-    <li>
-      <a routerLink="" class="menu-option">Pizzas salgadas</a>
-    </li>
-    <li>
-      <a routerLink="" class="menu-option">Pizzas doces</a>
-    </li>
-    <li>
-      <a routerLink="" class="menu-option">Esfihas salgadas</a>
-    </li>
-    <li>
-      <a routerLink="" class="menu-option">Esfihas doces</a>
-    </li>
-    <li>
-      <a routerLink="" class="menu-option">Bebidas</a>
-    </li>
-  </ul>
+  <nav aria-label="nav para computador">
+    <ul class="menu" *ngIf="!activateAccountOptions">
+      <li>
+        <a routerLink="" class="menu-option">Pizzas salgadas</a>
+      </li>
+      <li>
+        <a routerLink="" class="menu-option">Pizzas doces</a>
+      </li>
+      <li>
+        <a routerLink="" class="menu-option">Esfihas salgadas</a>
+      </li>
+      <li>
+        <a routerLink="" class="menu-option">Esfihas doces</a>
+      </li>
+      <li>
+        <a routerLink="" class="menu-option">Bebidas</a>
+      </li>
+    </ul>
+  </nav>
 </header>
