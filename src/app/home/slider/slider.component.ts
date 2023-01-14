@@ -7,22 +7,40 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SliderComponent implements OnInit {
 
-  ngOnInit(): void {
+  private nextSlide = 2;
 
-    let i = 2;
+  ngOnInit(): void {
 
     setInterval(() => {
 
-      let slideButton = document.getElementById("slide-" + i) as HTMLInputElement;
+      let slideButton = document.getElementById("slide-" + this.nextSlide) as HTMLInputElement;
 
       slideButton.checked = true
 
-      i++;
+      this.nextSlide++;
 
-      if (i > 4) {
-        i = 1
+      if (this.nextSlide > 4) {
+        this.nextSlide = 1
       }
 
     }, 8000);
+  }
+
+  public setSlide(e: Event, currentSlide: number) {
+
+    if (e.cancelable && e.type === "touchstart") {
+
+      e.preventDefault();
+      const selectedSlide = document.getElementById("slide-" + currentSlide) as HTMLInputElement;
+      selectedSlide.checked = true;
+    }
+
+    if (currentSlide < 4) {
+
+      this.nextSlide = ++currentSlide;
+    } else {
+
+      this.nextSlide = 1;
+    }
   }
 }

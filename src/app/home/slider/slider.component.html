@@ -93,10 +93,42 @@
     </div>
 
     <div class="navigation">
-      <label for="slide-1" class="picker-button" id="label-slide-1" aria-disabled="true"> </label>
-      <label for="slide-2" class="picker-button" id="label-slide-2" aria-disabled="true"> </label>
-      <label for="slide-3" class="picker-button" id="label-slide-3" aria-disabled="true"> </label>
-      <label for="slide-4" class="picker-button" id="label-slide-4" aria-disabled="true"> </label>
+      <label
+        for="slide-1"
+        class="picker-button"
+        id="label-slide-1"
+        aria-disabled="true"
+        (click)="setSlide($event, 1)"
+        (touchstart)="setSlide($event, 1)"
+      >
+      </label>
+      <label
+        for="slide-2"
+        class="picker-button"
+        id="label-slide-2"
+        aria-disabled="true"
+        (click)="setSlide($event, 2)"
+        (touchstart)="setSlide($event, 2)"
+      >
+      </label>
+      <label
+        for="slide-3"
+        class="picker-button"
+        id="label-slide-3"
+        aria-disabled="true"
+        (click)="setSlide($event, 3)"
+        (touchstart)="setSlide($event, 3)"
+      >
+      </label>
+      <label
+        for="slide-4"
+        class="picker-button"
+        id="label-slide-4"
+        aria-disabled="true"
+        (click)="setSlide($event, 4)"
+        (touchstart)="setSlide($event, 4)"
+      >
+      </label>
     </div>
   </div>
 </div>

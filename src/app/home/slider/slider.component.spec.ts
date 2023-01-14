@@ -54,4 +54,61 @@ describe('SliderComponent', () => {
 
     jasmine.clock().uninstall();
   });
+
+  it("setSlide_setsTheNextSlideToBeDisplayed_whenItIsAClickEvent", () => {
+
+    const mouseEvent = new MouseEvent("click");
+
+    jasmine.clock().install();
+    component.ngOnInit();
+    component.setSlide(mouseEvent, 2);
+    jasmine.clock().tick(8000);
+
+    let nextSlide = document.getElementById("slide-3") as HTMLInputElement;
+
+    expect(nextSlide.checked)
+      .toBeTrue();
+
+    jasmine.clock().uninstall();
+  });
+
+  it("setSlide_definesTheCurrentSlideAndTheNextSlideToBeDisplayed_whenIsATouchstartEvent", () => {
+
+    const touchEvent = new TouchEvent("touchstart", { cancelable: true });
+
+    jasmine.clock().install();
+    component.ngOnInit();
+    component.setSlide(touchEvent, 2);
+
+    let currentSlide = document.getElementById("slide-2") as HTMLInputElement;
+
+    expect(currentSlide.checked)
+      .toBeTrue();
+
+    jasmine.clock().tick(8000);
+
+    let nextSlide = document.getElementById("slide-3") as HTMLInputElement;
+
+    expect(nextSlide.checked)
+      .toBeTrue();
+
+    jasmine.clock().uninstall();
+  });
+
+  it("setSlide_setsNextSlideAttributeToValueOne_ whenItReceivesTheLastSlideAsAnArgument", () => {
+
+    const mouseEvent = new MouseEvent("click");
+
+    jasmine.clock().install();
+    component.ngOnInit();
+    component.setSlide(mouseEvent, 4);
+    jasmine.clock().tick(8000);
+
+    let nextSlide = document.getElementById("slide-1") as HTMLInputElement;
+
+    expect(nextSlide.checked)
+    .toBeTrue();
+
+    jasmine.clock().uninstall();
+  });
 });
