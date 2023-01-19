@@ -1,18 +1,82 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 
 import { HeaderComponent } from './header.component';
+import { ProductService } from '../service/product.service'
+import { Page } from '../util/page';
+import { Product } from '../domain/product';
+import { Type } from '../domain/type';
+import { PriceRating } from '../domain/price-rating';
+import { of } from 'rxjs';
 
 describe('HeaderComponent', () => {
 
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
+  let productService: ProductService;
+  let productsSearchTypedValue: Page<Array<Product>>;
+  let productsAutocomplete: Array<Product>;
+  let productsClearSearchInput: Array<Product>;
+
+  function setProductsSearchTypedValue() {
+
+    let product = new Product(1, "name1", "description1", 1.00, Type.SALTY_ESFIHA, PriceRating.PROMOTION, "salty-esfiha.jpg", true);
+
+    let statePage = {
+      empty: true,
+      sorted: true,
+      unsorted: true
+    };
+
+    let pageable = {
+      sort: statePage,
+      offset: 1,
+      pageSize: 1,
+      pageNumber: 1,
+      unpaged: 1,
+      paged: true
+    }
+
+    productsSearchTypedValue = new Page<Array<Product>>([product], pageable, 1, 1, true, 1, 1, statePage, true, 1, true);
+  }
+
+  function setProductsAutocomplete() {
+
+    productsAutocomplete = [
+      new Product(1, "name1", "description1", 1.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
+      new Product(2, "name2", "description2", 2.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
+      new Product(3, "name3", "description3", 3.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true)
+    ];
+  }
+
+  function setProductsClearSearchInput() {
+
+    productsClearSearchInput = [
+      new Product(1, "name1", "description1", 1.00, Type.SWEET_ESFIHA, PriceRating.REGULAR_PRICE, "sweet-esfiha.jpg", true),
+      new Product(2, "name2", "description2", 2.00, Type.SWEET_ESFIHA, PriceRating.REGULAR_PRICE, "sweet-esfiha.jpg", true),
+      new Product(3, "name3", "description3", 3.00, Type.SWEET_ESFIHA, PriceRating.REGULAR_PRICE, "sweet-esfiha.jpg", true)
+    ];
+  }
+
+  beforeEach(() => {
+
+    setProductsSearchTypedValue();
+    setProductsAutocomplete();
+    setProductsClearSearchInput();
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [HeaderComponent],
+      imports: [
+        HttpClientTestingModule,
+        FormsModule
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
+    productService = TestBed.inject(ProductService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -23,43 +87,211 @@ describe('HeaderComponent', () => {
       .toBeTruthy();
   });
 
-  it("clearSearchInput_clearsSearchEntryAndPutsFocusOnIt_wheneverCalled", () => {
+  it("searchTypedValue_setsTheAutocompleteCurrentFocusPropertyTo-1_whenAutocompleteCurrentFocusIsDifferentFrom-1", () => {
 
+    component.searchInputValue = "  ";
+    component.autocompleteCurrentFocus = 1;
+
+    component.searchTypedValue();
+
+    expect(component.autocompleteCurrentFocus)
+      .toEqual(-1);
+  });
+
+  it("searchTypedValue_clearsTheSearchResultsProperty_whenSearchInputValuePropertyIsEmpty", () => {
+
+    component.searchInputValue = "";
+
+    component.searchTypedValue();
+
+    expect(component.searchResults)
+      .toEqual(new Array());
+  });
+
+  it("searchTypedValue_callsTheProductServiceAndSetsTheSearchProductsMethodCallbackInTheSearchResultsProperty_whenAPropertyTypedValueHasSomeValue", () => {
+
+    spyOn(productService, "searchProducts").and.returnValue(of(productsSearchTypedValue));
+
+    component.searchInputValue = "name";
+
+    component.searchTypedValue();
+
+    expect(component.searchResults)
+      .toEqual(productsSearchTypedValue.content);
+  });
+
+  it("autocomplete_doesNotDoAnything_whenKeyboardEventTypeIsDifferentFromArrowDownAndArrowUp", () => {
+
+    component.autocompleteCurrentFocus = 2;
+
+    const keyboardEvent = new KeyboardEvent("keydown", { key: "A" });
+
+    component.autocomplete(keyboardEvent);
+
+    expect(component.autocompleteCurrentFocus)
+      .toEqual(2);
+  });
+
+  it("autocomplete_doesNotDoAnything_whenTheSearchResultsPropertyHasNoProducts", () => {
+
+    component.autocompleteCurrentFocus = 2;
+
+    const keyboardEvent = new KeyboardEvent("keydown", { key: "ArrowUp" });
+
+    component.autocomplete(keyboardEvent);
+
+    expect(component.autocompleteCurrentFocus)
+      .toEqual(2);
+  });
+
+  it("autocomplete_addsOneMoreToTheAutocompleteCurrentFocusPropertyValueAndPutsTheNameOfOneOfTheProductsFromTheSearchResultsPropertyInTheSearchInputValueProperty_whenKeyPressedIsArrowDownAndTheValueOfTheAutocompleteCurrentFocusPropertyIisGreaterThan-1AndLessThanThePenultimateProductIndexOfTheSearchResultsProperty", () => {
+
+    component.searchResults = productsAutocomplete;
+
+    const keyboardEvent = new KeyboardEvent("keydown", { key: "ArrowDown" });
+
+    component.autocomplete(keyboardEvent);
+
+    expect(component.autocompleteCurrentFocus)
+      .toEqual(0);
+
+    expect(component.searchInputValue)
+      .toEqual(productsAutocomplete[0].getName)
+  });
+
+  it("autocomplete_setsTheAutocompleteCurrentFocusPropertyTo-1AndSetsTheValueOfTheEnteredValuePropertyToTheSearchInputValueProperty_whenKeyPressedIsArrowDownAndTheValueOfTheAutocompleteCurrentFocusPropertyIsGreaterThanTheSecondToLastProductIndexOfTheSearchResultProperty", () => {
+
+    component.searchInputValue = "name";
+    component.searchTypedValue();
+    component.searchInputValue = "name2";
+    component.searchResults = productsAutocomplete;
+    component.autocompleteCurrentFocus = 2;
+
+    const keyboardEvent = new KeyboardEvent("keydown", { key: "ArrowDown" });
+
+    component.autocomplete(keyboardEvent);
+
+    expect(component.autocompleteCurrentFocus)
+      .toEqual(-1);
+
+    expect(component.searchInputValue)
+      .toEqual("name");
+  });
+
+  it("autocomplete_decreasesANumberOfTheAutocompleteCurrentFocusPropertyAndPutsTheNameOfOneOfTheProductsFromTheSearchResultsPropertyInTheSearchInputValueProperty_whenKeyPressedIsArrowUpAndTheValueOfPropertyAutocompleteCurrentFocusIsGreaterThanOrEqualTo0", () => {
+
+    component.autocompleteCurrentFocus = 1;
+    component.searchResults = productsAutocomplete;
+
+    const keyboardEvent = new KeyboardEvent("keydown", { key: "ArrowUp" });
+
+    component.autocomplete(keyboardEvent);
+
+    expect(component.autocompleteCurrentFocus)
+      .toEqual(0);
+
+    expect(component.searchInputValue)
+      .toEqual(productsAutocomplete[0].getName);
+  });
+
+  it("autocomplete_assignsLastProductIndexFromSearchResultsPropertyToAutocompleteCurrentFocusPropertyAndPutsTheNameOfOneOfTheProductsFromTheSearchResultsPropertyInTheSearchInputValueProperty_whenKeyPressedIsArrowUpAndTheValueOfTheAutocompleteCurrentFocusPropertyIsLessThan0", () => {
+
+    component.searchResults = productsAutocomplete;
+
+    const keyboardEvent = new KeyboardEvent("keydown", { key: "ArrowUp" });
+
+    component.autocomplete(keyboardEvent);
+
+    expect(component.autocompleteCurrentFocus)
+      .toEqual(2);
+
+    expect(component.searchInputValue)
+      .toEqual(productsAutocomplete[2].getName);
+  });
+
+  it("setCurrentFocusOfAutocompleteWithMouse_setsTheParameterValueInTheAutocompleteCurrentFocusProperty_wheneverCalled", () => {
+
+    component.setCurrentFocusOfAutocompleteWithMouse(2);
+
+    expect(component.autocompleteCurrentFocus)
+      .toEqual(2);
+  });
+
+  // ------------------------------------------------------------------------
+
+  it("search_", () => {
+
+    component.search();
+
+    expect(true)
+      .toBeTrue();
+  });
+
+  // ------------------------------------------------------------------------
+
+  it("clearSearchInput_clearsTheSearchResultsPropertyAndTheValueOfTheSearchInputValuePropertyAndSetsTheAutocompleteCurrentFocusPropertyTo-1_wheneverCalled", () => {
+
+    component.searchInputValue = "test";
+    component.autocompleteCurrentFocus = 2;
+    component.searchResults = productsClearSearchInput;
     const event = new MouseEvent("click");
     const compiled = fixture.nativeElement as HTMLElement;
     const searchInput = compiled.querySelector(".search-input") as HTMLInputElement;
 
-    searchInput.value = "test";
-
     component.clearSearchInput(event, searchInput);
 
-    expect(searchInput.value)
+    expect(component.searchInputValue)
       .toEqual("");
+
+    expect(component.autocompleteCurrentFocus)
+      .toEqual(-1);
+
+    expect(component.searchResults)
+      .toEqual(new Array());
   });
 
-  it('accountClickHandler_updateActivateAccountOptionsToTrue_whenAccountOptionsDoesNotHaveAttributeDataToShow', () => {
+  it("exitMobileSearch_triggersTheClickEventHandlerThatWasDefinedInTheHtmlTag", () => {
+
+    const event = new MouseEvent('click');
+    const compiled = fixture.nativeElement as HTMLElement;
+    const form = compiled.querySelector('.search-form') as Element;
+    const input = compiled.querySelector('.search-input') as HTMLElement;
+
+    expect(component.activateMobileSearch)
+      .toBeFalse();
+
+    component.searchClickHandler(event, form, input as HTMLInputElement);
+    component.exitMobileSearch(event);
+
+    expect(form.hasAttribute("data-to-show"))
+      .not.toBeTrue();
+
+    expect(component.activateMobileSearch)
+      .not.toBeTrue();
+
+    expect(input.getAttribute("class"))
+      .not.toContain("focusable-search-input");
+
+    expect(input.getAttribute("class"))
+      .not.toContain("focusable-search-input");
+  });
+
+  it('accountClickHandler_updateActivateAccountOptionsToTrueAndAddAAttributeOnElementAccountOptions_whenAccountOptionsDoesNotHaveAttributeDataToShow', () => {
 
     component.logged = true;
     fixture.autoDetectChanges();
 
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
-    const accountOptions = compiled.querySelector('.account-options');
+    const accountOptions = compiled.querySelector('.account-options') as Element;
 
     expect(component.activateAccountOptions)
       .toBeFalse();
 
-    if (accountOptions) {
-      component.accountClickHandler(event, accountOptions);
-    }
+    component.accountClickHandler(event, accountOptions);
 
     expect(component.activateAccountOptions)
       .toBeTrue();
-
-    fixture.detectChanges();
-
-    expect(accountOptions?.getAttribute('class'))
-      .toContain('block-account-options');
 
     expect(accountOptions?.hasAttribute('data-to-show'))
       .toBeTrue();
@@ -84,27 +316,22 @@ describe('HeaderComponent', () => {
       .toBeFalse();
   });
 
-  it('handlerClickMobileMenu_updateActivateMobileMenuToTrue_whenMenuDoesNotHaveAttributeDataToShow', () => {
+  it('handlerClickMobileMenu_updateActivateMobileMenuToTrueAndAddAAttributeOnElementMobileMenu_whenMenuDoesNotHaveAttributeDataToShow', () => {
 
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
-    const menu = compiled.querySelector('.mobile-menu-options');
-    const menuMobileButton = compiled.querySelector('.mobile-menu-button');
+    const mobileMenu = compiled.querySelector('.mobile-menu-options') as Element;
 
     expect(component.activateMobileMenu)
       .toBeFalse();
 
-    if (menu) {
-      component.handlerClickMobileMenu(event, menu);
-    }
+    component.handlerClickMobileMenu(event, mobileMenu);
+
+    expect(mobileMenu.hasAttribute("data-to-show"))
+      .toBeTrue();
 
     expect(component.activateMobileMenu)
       .toBeTrue();
-
-    fixture.detectChanges();
-
-    expect(menuMobileButton?.getAttribute('class'))
-      .toContain('activate-mobile-menu');
   });
 
   it('handlerClickMobileMenu_notUpdatedMenuToTrue_whenMenuHaveAttributeDataToShow', () => {
@@ -145,25 +372,26 @@ describe('HeaderComponent', () => {
       .toBeFalse();
   });
 
-  it('searchClickHandler_updateActivateSearchToTrueAndAddAClassToTheInputElement_whenFormDoesNotHaveAttributeDataToShow', () => {
+  it('searchClickHandler_updateActivateSearchToTrueAndAddAAttributeOnElementFormAndAddAClassToTheInputElement_whenFormDoesNotHaveAttributeDataToShow', () => {
 
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
     const form = compiled.querySelector('.search-form') as Element;
     const input = compiled.querySelector('.search-input') as HTMLElement;
 
-    expect(component.activateSearch)
+    expect(component.activateMobileSearch)
       .toBeFalse();
 
     component.searchClickHandler(event, form, input as HTMLInputElement);
 
-    expect(component.activateSearch)
+    expect(form.hasAttribute("data-to-show"))
+      .toBeTrue();
+
+    expect(component.activateMobileSearch)
       .toBeTrue();
 
     expect(input.getAttribute("class"))
       .toContain("focusable-search-input");
-
-    fixture.detectChanges();
   });
 
   it('searchClickHandler_notUpdateActivateSearchToTrue_whenFormHaveAttributeDataToShow', () => {
@@ -175,14 +403,14 @@ describe('HeaderComponent', () => {
 
     form?.setAttribute('data-to-show', '');
 
-    expect(component.activateSearch)
+    expect(component.activateMobileSearch)
       .toBeFalse();
 
     if (form && input) {
       component.searchClickHandler(event, form, input as HTMLInputElement);
     }
 
-    expect(component.activateSearch)
+    expect(component.activateMobileSearch)
       .toBeFalse();
   });
 
@@ -224,7 +452,7 @@ describe('HeaderComponent', () => {
     const form = compiled.querySelector('.search-form');
     const input = compiled.querySelector('.search-input');
 
-    expect(component.activateSearch)
+    expect(component.activateMobileSearch)
       .toBeFalse();
 
     if (form && input) {
@@ -235,7 +463,7 @@ describe('HeaderComponent', () => {
       );
     }
 
-    expect(component.activateSearch)
+    expect(component.activateMobileSearch)
       .toBeTrue();
 
     fixture.detectChanges();

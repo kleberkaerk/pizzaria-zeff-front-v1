@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 
 import { Product } from '../domain/product';
 import { ProductDTO } from '../dto/product-dto';
-import { Mapper } from '../util/mapper';
+import { fromProductDTOToProduct } from '../util/mapper';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class ShoppingCartService {
 
     let productsDTO = JSON.parse(productsJson) as Array<ProductDTO>;
 
-    return productsDTO.map(productDTO => Mapper.fromProductDTOToProduct(productDTO));
+    return productsDTO.map(productDTO => fromProductDTOToProduct(productDTO));
   }
 
   public checkProductsInSession(): Array<Product> {

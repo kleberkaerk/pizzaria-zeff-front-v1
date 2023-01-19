@@ -30,7 +30,6 @@
 .shopping-cart-button svg {
     fill: var(--light-yellow-color);
     position: relative;
-    left: 0px;
     top: 3px;
 }
 

@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+import { Product } from '../domain/product';
+import { ProductService } from '../service/product.service'
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -9,16 +12,124 @@ export class HeaderComponent {
 
   public activateAccountOptions = false;
   public activateMobileMenu = false;
-  public activateSearch = false;
+  public activateMobileSearch = false;
   public logged = false;
   public username = "Luffy";
+  public searchInputValue!: string;
+  private enteredValue!: string;
+  public searchResults: Array<Product> = new Array();
+  public autocompleteCurrentFocus = -1;
+
+  constructor(private productService: ProductService) { }
+
+  public searchTypedValue() {
+
+    if (this.autocompleteCurrentFocus !== -1) this.autocompleteCurrentFocus = -1;
+
+    if (this.searchInputValue === "") this.searchResults = new Array();
+
+    this.enteredValue = this.searchInputValue.trimStart();
+
+    if (this.enteredValue.length > 0) {
+
+      this.productService.searchProducts(this.searchInputValue, 10, 0).subscribe(productsPage => {
+
+        this.searchResults = productsPage.content;
+      });
+    }
+  }
+
+  private upCurrentFocus(searchResultsLength: number) {
+
+    const indexOfThePenultimateSearchResult = searchResultsLength - 2;
+
+    if (this.autocompleteCurrentFocus <= indexOfThePenultimateSearchResult) {
+
+      ++this.autocompleteCurrentFocus;
+    } else {
+
+      this.autocompleteCurrentFocus = -1;
+    }
+  }
+
+  private decreaseCurrentFocus(searchResultsLength: number, e: KeyboardEvent) {
+
+    const indexOfTheLastSearchResult = --searchResultsLength;
+
+    e.preventDefault();
+    if (this.autocompleteCurrentFocus >= 0) {
+
+      --this.autocompleteCurrentFocus;
+    } else {
+
+      this.autocompleteCurrentFocus = indexOfTheLastSearchResult;
+    }
+  }
+
+  private setCurrentFocusOfAutocompleteWithKeyboard(e: KeyboardEvent) {
+
+    switch (e.key) {
+
+      case "ArrowDown":
+        this.upCurrentFocus(this.searchResults.length);
+        break;
+
+      case "ArrowUp":
+        this.decreaseCurrentFocus(this.searchResults.length, e);
+        break;
+    }
+  }
+
+  private setAutoComplete() {
+
+    if (this.autocompleteCurrentFocus > -1) {
+
+      this.searchInputValue = this.searchResults[this.autocompleteCurrentFocus].getName;
+    } else {
+
+      this.searchInputValue = this.enteredValue;
+    }
+  }
+
+  public autocomplete(e: KeyboardEvent) {
+
+    if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+
+    if (this.searchResults.length === 0) return;
+
+    this.setCurrentFocusOfAutocompleteWithKeyboard(e);
+
+    this.setAutoComplete();
+  }
+
+  public setCurrentFocusOfAutocompleteWithMouse(index: number) {
+
+    this.autocompleteCurrentFocus = index;
+  }
+
+  public search() {
+
+    console.log("Tecla enter pressionada");
+  }
 
   public clearSearchInput(e: Event, inputToBeCleaned: HTMLInputElement) {
 
     this.preventDefaultTouchStart(e);
+    e.stopPropagation();
 
-    inputToBeCleaned.value = "";
+    this.searchInputValue = "";
+    this.enteredValue = "";
+    this.autocompleteCurrentFocus = -1;
+    this.searchResults = new Array();
     inputToBeCleaned.focus();
+  }
+
+  public exitMobileSearch(e: Event) {
+
+    this.preventDefaultTouchStart(e);
+    e.stopPropagation();
+
+    document.documentElement.click();
   }
 
   private preventDefaultTouchStart(e: Event) {
@@ -64,14 +175,14 @@ export class HeaderComponent {
     });
   }
 
-  public handlerClickMobileMenu(e: Event, menu: Element) {
+  public handlerClickMobileMenu(e: Event, mobileMenu: Element) {
 
     if (this.activateAccountOptions) {
 
       return
     };
 
-    this.handlerClickOutside(e, menu, (value: boolean) => {
+    this.handlerClickOutside(e, mobileMenu, (value: boolean) => {
 
       this.activateMobileMenu = value;
     });
@@ -89,12 +200,12 @@ export class HeaderComponent {
 
       if (value) {
 
-        this.activateSearch = true;
+        this.activateMobileSearch = true;
         input.classList.add("focusable-search-input");
         input.focus();
       } else {
 
-        this.activateSearch = false;
+        this.activateMobileSearch = false;
         input.classList.remove("focusable-search-input");
       }
     });

@@ -5,7 +5,7 @@ import { Product } from 'src/app/shared/domain/product';
 import { Type } from 'src/app/shared/domain/type';
 import { registerLocaleData } from '@angular/common';
 import { ProductService } from '../service/product.service';
-import { Mapper } from 'src/app/shared/util/mapper';
+import { fromProductDTOToProduct } from 'src/app/shared/util/mapper';
 import { ShoppingCartService } from 'src/app/shared/service/shopping-cart.service';
 
 registerLocaleData(localeBr, "br");
@@ -30,15 +30,15 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     this.productService.findProductsInPromotion().subscribe(
       productsMap => {
 
-        this.featuredProducts.set(Type.SALTY_PIZZA, productsMap.SALTY_PIZZA.map(saltyPizza => Mapper.fromProductDTOToProduct(saltyPizza)));
+        this.featuredProducts.set(Type.SALTY_PIZZA, productsMap.SALTY_PIZZA.map(saltyPizza => fromProductDTOToProduct(saltyPizza)));
 
-        this.featuredProducts.set(Type.SWEET_PIZZA, productsMap.SWEET_PIZZA.map(sweetPizza => Mapper.fromProductDTOToProduct(sweetPizza)));
+        this.featuredProducts.set(Type.SWEET_PIZZA, productsMap.SWEET_PIZZA.map(sweetPizza => fromProductDTOToProduct(sweetPizza)));
 
-        this.featuredProducts.set(Type.SALTY_ESFIHA, productsMap.SALTY_ESFIHA.map(saltyEsfiha => Mapper.fromProductDTOToProduct(saltyEsfiha)));
+        this.featuredProducts.set(Type.SALTY_ESFIHA, productsMap.SALTY_ESFIHA.map(saltyEsfiha => fromProductDTOToProduct(saltyEsfiha)));
 
-        this.featuredProducts.set(Type.SWEET_ESFIHA, productsMap.SWEET_ESFIHA.map(sweetEsfiha => Mapper.fromProductDTOToProduct(sweetEsfiha)));
+        this.featuredProducts.set(Type.SWEET_ESFIHA, productsMap.SWEET_ESFIHA.map(sweetEsfiha => fromProductDTOToProduct(sweetEsfiha)));
 
-        this.featuredProducts.set(Type.DRINK, productsMap.DRINK.map(drink => Mapper.fromProductDTOToProduct(drink)));
+        this.featuredProducts.set(Type.DRINK, productsMap.DRINK.map(drink => fromProductDTOToProduct(drink)));
       }
     );
   }

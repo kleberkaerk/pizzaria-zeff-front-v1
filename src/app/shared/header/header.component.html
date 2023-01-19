@@ -1,6 +1,6 @@
 <header class="header">
   <ul class="header-options">
-    <li class="slogan" *ngIf="!activateSearch">
+    <li class="slogan" *ngIf="!activateMobileSearch">
       <a
         routerLink="/"
         class="slogan-link"
@@ -12,13 +12,47 @@
     </li>
 
     <li class="wrapper-of-the-search-and-account-and-mobile-menu">
-      <div class="search" [ngClass]="{ 'stretch-search-bar': activateSearch }">
-        <form class="search-form" #formContainerSearch>
+      <div
+        class="search"
+        [ngClass]="{ 'stretch-search-bar': activateMobileSearch }"
+      >
+        <form
+          (ngSubmit)="search()"
+          autocomplete="off"
+          class="search-form"
+          #formContainerSearch
+        >
+          <button
+            type="button"
+            class="exit-mobile-search"
+            (click)="exitMobileSearch($event)"
+            (touchstart)="exitMobileSearch($event)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="36px"
+              height="36px"
+              viewBox="0 0 36 36"
+              version="1.1"
+            >
+              <g id="surface1">
+                <path
+                  style="stroke: none; fill-rule: nonzero; fill-opacity: 1"
+                  d="M 18 28.835938 L 7.164062 18 L 18 7.164062 L 18.898438 8.0625 L 9.5625 17.363281 L 28.835938 17.363281 L 28.835938 18.636719 L 9.5625 18.636719 L 18.898438 27.9375 Z M 18 28.835938 "
+                />
+              </g>
+            </svg>
+          </button>
           <input
             type="search"
             class="search-input"
             placeholder="Pesquisar"
             #searchInput
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="searchInputValue"
+            (input)="searchTypedValue()"
+            (keydown)="autocomplete($event)"
           />
           <button
             type="button"
@@ -27,17 +61,49 @@
             (click)="clearSearchInput($event, searchInput)"
             (touchstart)="clearSearchInput($event, searchInput)"
           >
-            X
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="36px"
+              height="36px"
+              viewBox="0 0 36 36"
+              version="1.1"
+            >
+              <g id="surface1">
+                <path
+                  style="stroke: none; fill-rule: nonzero; fill-opacity: 1"
+                  d="M 9.523438 27.375 L 8.625 26.476562 L 17.101562 18 L 8.625 9.523438 L 9.523438 8.625 L 18 17.101562 L 26.476562 8.625 L 27.375 9.523438 L 18.898438 18 L 27.375 26.476562 L 26.476562 27.375 L 18 18.898438 Z M 9.523438 27.375 "
+                />
+              </g>
+            </svg>
           </button>
+
+          <div class="wrapper-autocomplete" *ngIf="searchResults.length">
+            <div class="autocomplete">
+              <a
+                routerLink=""
+                class="autocomplete-item"
+                *ngFor="let searchResult of searchResults; let i = index"
+                [ngClass]="{
+                  'autocomplete-item-on-focus': i === autocompleteCurrentFocus
+                }"
+                (mouseover)="setCurrentFocusOfAutocompleteWithMouse(i)"
+                (mouseout)="setCurrentFocusOfAutocompleteWithMouse(-1)"
+              >
+                {{ searchResult.getName }}
+              </a>
+            </div>
+          </div>
         </form>
 
         <button
-          class="search-mobile-button"
+          type="button"
+          class="mobile-search-button"
           (click)="searchClickHandler($event, formContainerSearch, searchInput)"
           (touchstart)="
             searchClickHandler($event, formContainerSearch, searchInput)
           "
-          *ngIf="!activateSearch"
+          *ngIf="!activateMobileSearch"
           aria-label="Abrir barra de pesquisa"
           aria-haspopup="true"
         >
@@ -51,12 +117,7 @@
           >
             <g id="surface1">
               <path
-                style="
-                  stroke: none;
-                  fill-rule: nonzero;
-                  fill: #f0d360;
-                  fill-opacity: 1;
-                "
+                style="stroke: none; fill-rule: nonzero; fill-opacity: 1"
                 d="M 29.210938 30.226562 L 19.835938 20.851562 C 19.085938 21.476562 18.226562 21.960938 17.25 22.3125 C 16.273438 22.664062 15.300781 22.835938 14.324219 22.835938 C 11.898438 22.835938 9.855469 22.007812 8.195312 20.34375 C 6.53125 18.679688 5.699219 16.648438 5.699219 14.25 C 5.699219 11.851562 6.53125 9.820312 8.195312 8.15625 C 9.855469 6.492188 11.886719 5.664062 14.289062 5.664062 C 16.6875 5.664062 18.726562 6.492188 20.398438 8.15625 C 22.074219 9.820312 22.914062 11.851562 22.914062 14.25 C 22.914062 15.300781 22.726562 16.3125 22.351562 17.289062 C 21.976562 18.261719 21.488281 19.085938 20.886719 19.761719 L 30.300781 29.175781 Z M 14.324219 21.335938 C 16.300781 21.335938 17.976562 20.65625 19.351562 19.292969 C 20.726562 17.929688 21.414062 16.25 21.414062 14.25 C 21.414062 12.25 20.726562 10.570312 19.351562 9.207031 C 17.976562 7.84375 16.300781 7.164062 14.324219 7.164062 C 12.324219 7.164062 10.636719 7.84375 9.261719 9.207031 C 7.886719 10.570312 7.199219 12.25 7.199219 14.25 C 7.199219 16.25 7.886719 17.929688 9.261719 19.292969 C 10.636719 20.65625 12.324219 21.335938 14.324219 21.335938 Z M 14.324219 21.335938 "
               />
             </g>
@@ -64,11 +125,12 @@
         </button>
       </div>
 
-      <div class="account" *ngIf="!activateSearch">
+      <div class="account" *ngIf="!activateMobileSearch">
         <a routerLink="" class="login-link" *ngIf="!logged">Fazer login</a>
 
         <div class="user-account" *ngIf="logged">
           <button
+            type="button"
             class="view-account-button"
             (click)="accountClickHandler($event, accountOptions)"
             (touchstart)="accountClickHandler($event, accountOptions)"
@@ -85,12 +147,7 @@
             >
               <g id="surface1">
                 <path
-                  style="
-                    stroke: none;
-                    fill-rule: nonzero;
-                    fill: #f0d360;
-                    fill-opacity: 1;
-                  "
+                  style="stroke: none; fill-rule: nonzero; fill-opacity: 1"
                   d="M 9.449219 26.398438 C 10.726562 25.5 12.054688 24.789062 13.445312 24.261719 C 14.832031 23.738281 16.351562 23.476562 18 23.476562 C 19.648438 23.476562 21.167969 23.738281 22.558594 24.261719 C 23.945312 24.789062 25.273438 25.5 26.550781 26.398438 C 27.574219 25.375 28.40625 24.148438 29.042969 22.726562 C 29.679688 21.300781 30 19.726562 30 18 C 30 14.675781 28.832031 11.84375 26.496094 9.503906 C 24.15625 7.167969 21.324219 6 18 6 C 14.675781 6 11.84375 7.167969 9.507812 9.503906 C 7.167969 11.84375 6 14.675781 6 18 C 6 19.726562 6.320312 21.300781 6.957031 22.726562 C 7.59375 24.148438 8.425781 25.375 9.449219 26.398438 Z M 18 18.523438 C 16.800781 18.523438 15.789062 18.113281 14.960938 17.289062 C 14.136719 16.460938 13.726562 15.449219 13.726562 14.25 C 13.726562 13.050781 14.136719 12.039062 14.960938 11.210938 C 15.789062 10.386719 16.800781 9.976562 18 9.976562 C 19.199219 9.976562 20.210938 10.386719 21.039062 11.210938 C 21.863281 12.039062 22.273438 13.050781 22.273438 14.25 C 22.273438 15.449219 21.863281 16.460938 21.039062 17.289062 C 20.210938 18.113281 19.199219 18.523438 18 18.523438 Z M 18 31.050781 C 16.175781 31.050781 14.46875 30.710938 12.882812 30.039062 C 11.292969 29.363281 9.914062 28.4375 8.738281 27.261719 C 7.5625 26.085938 6.636719 24.707031 5.960938 23.117188 C 5.289062 21.53125 4.949219 19.824219 4.949219 18 C 4.949219 16.175781 5.289062 14.46875 5.960938 12.878906 C 6.636719 11.292969 7.5625 9.914062 8.738281 8.738281 C 9.914062 7.5625 11.292969 6.636719 12.882812 5.960938 C 14.46875 5.289062 16.175781 4.949219 18 4.949219 C 19.824219 4.949219 21.53125 5.289062 23.121094 5.960938 C 24.707031 6.636719 26.085938 7.5625 27.261719 8.738281 C 28.4375 9.914062 29.363281 11.292969 30.039062 12.878906 C 30.710938 14.46875 31.050781 16.175781 31.050781 18 C 31.050781 19.824219 30.710938 21.53125 30.039062 23.117188 C 29.363281 24.707031 28.4375 26.085938 27.261719 27.261719 C 26.085938 28.4375 24.707031 29.363281 23.121094 30.039062 C 21.53125 30.710938 19.824219 31.050781 18 31.050781 Z M 18 31.050781 "
                 />
               </g>
@@ -107,7 +164,8 @@
           <ul
             class="account-options"
             [ngClass]="{
-              'block-account-options': activateAccountOptions && !activateSearch
+              'block-account-options':
+                activateAccountOptions && !activateMobileSearch
             }"
             #accountOptions
           >
@@ -128,7 +186,7 @@
       </div>
 
       <div class="mobile-menu">
-        <nav  aria-label="nav para celular">
+        <nav aria-label="navegação para celular ou tablet">
           <button
             class="mobile-menu-button"
             (click)="handlerClickMobileMenu($event, mobileMenu)"
@@ -137,7 +195,7 @@
               'activate-mobile-menu':
                 activateMobileMenu && !activateAccountOptions
             }"
-            *ngIf="!activateSearch"
+            *ngIf="!activateMobileSearch"
             aria-label="Abrir menu"
             aria-haspopup="true"
           >
@@ -166,8 +224,12 @@
     </li>
   </ul>
 
-  <nav aria-label="nav para computador">
-    <ul class="menu" *ngIf="!activateAccountOptions">
+  <nav
+    class="nav-to-computer-menu"
+    aria-label="navegação para computador"
+    *ngIf="!activateAccountOptions"
+  >
+    <ul class="computer-menu">
       <li>
         <a routerLink="" class="menu-option">Pizzas salgadas</a>
       </li>

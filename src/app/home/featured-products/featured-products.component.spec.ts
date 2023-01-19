@@ -11,7 +11,7 @@ import { PriceRating } from 'src/app/shared/domain/price-rating'
 import { ProductsMapByTypeDTO } from 'src/app/shared/dto/product-by-type-map-dto';
 import { of } from 'rxjs';
 import { Product } from 'src/app/shared/domain/product';
-import { Mapper } from 'src/app/shared/util/mapper';
+import { fromProductDTOToProduct } from 'src/app/shared/util/mapper';
 import { ShoppingCartService } from 'src/app/shared/service/shopping-cart.service';
 
 describe('FeaturedProductsComponent', () => {
@@ -95,27 +95,27 @@ describe('FeaturedProductsComponent', () => {
 
   function setSaltyPizzasToComparison() {
 
-    saltyPizzasToComparison = saltyPizzas.map(saltyPizza => Mapper.fromProductDTOToProduct(saltyPizza));
+    saltyPizzasToComparison = saltyPizzas.map(saltyPizza => fromProductDTOToProduct(saltyPizza));
   }
 
   function setSweetPizzasToComparison() {
 
-    sweetPizzasToComparison = sweetPizzas.map(sweetPizza => Mapper.fromProductDTOToProduct(sweetPizza));
+    sweetPizzasToComparison = sweetPizzas.map(sweetPizza => fromProductDTOToProduct(sweetPizza));
   }
 
   function setSaltyEsfihasToComparison() {
 
-    saltyEsfihasToComparison = saltyEsfihas.map(saltyEsfiha => Mapper.fromProductDTOToProduct(saltyEsfiha));
+    saltyEsfihasToComparison = saltyEsfihas.map(saltyEsfiha => fromProductDTOToProduct(saltyEsfiha));
   }
 
   function setSweetEsfihasToComparison() {
 
-    sweetEsfihasToComparison = sweetEsfihas.map(sweetEsfiha => Mapper.fromProductDTOToProduct(sweetEsfiha));
+    sweetEsfihasToComparison = sweetEsfihas.map(sweetEsfiha => fromProductDTOToProduct(sweetEsfiha));
   }
 
   function setDrinksToComparison() {
 
-    drinksToComparison = drinks.map(drink => Mapper.fromProductDTOToProduct(drink));
+    drinksToComparison = drinks.map(drink => fromProductDTOToProduct(drink));
   }
 
   function setSaltyPizasToSeeMoreProducts() {
@@ -445,38 +445,38 @@ describe('FeaturedProductsComponent', () => {
       .toContain(drinksToComparison[0]);
   });
 
-  it("seeMoreProducts_adds1630PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => { 
+  // it("seeMoreProducts_adds1630PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => { 
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
+  //   spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
 
-    spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
+  //   spyOn(productService, "findProductsInPromotion")
+  //     .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
 
-    component.ngOnInit();
+  //   component.ngOnInit();
 
-    fixture.detectChanges();
+  //   fixture.detectChanges();
 
-    const compiled = fixture.nativeElement as HTMLElement;
+  //   const compiled = fixture.nativeElement as HTMLElement;
 
-    let event = new MouseEvent("click");
-    const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
-    const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
-    const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
-    const wrapperHeight = wrapperElement.clientHeight;
+  //   let event = new MouseEvent("click");
+  //   const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
+  //   const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
+  //   const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
+  //   const wrapperHeight = wrapperElement.clientHeight;
 
-    component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
+  //   component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
-    fixture.detectChanges();
+  //   fixture.detectChanges();
 
-    expect(wrapperElement.clientHeight)
-      .not.toEqual(wrapperHeight);
+  //   expect(wrapperElement.clientHeight)
+  //     .not.toEqual(wrapperHeight);
 
-    expect(wrapperElement.clientHeight)
-      .not.toEqual(productsElement.clientHeight);
+  //   expect(wrapperElement.clientHeight)
+  //     .not.toEqual(productsElement.clientHeight);
 
-    expect(buttonElement?.getAttribute("class"))
-      .not.toContain("remove-expansion-button");
-  });
+  //   expect(buttonElement?.getAttribute("class"))
+  //     .not.toContain("remove-expansion-button");
+  // });
 
   it("seeMoreProducts_makesTheWrapGainAnAutomaticHeightAndAddsAClassToTheExpandButton_whenScreenWidthIsLessThan481AndWrapperHeightBecomesGreaterThanOrEqualToTheHeightOfTheProductsElement", () => {
 

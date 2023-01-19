@@ -11,7 +11,6 @@ describe("ProductTest", () => {
         product = new Product(1, "name1", "description1", 10.00, Type.DRINK, PriceRating.REGULAR_PRICE, "image1", true);
     });
 
-
     it("getId", () => {
 
         expect(product.getId)
