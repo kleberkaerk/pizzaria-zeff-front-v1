@@ -30,15 +30,7 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     this.productService.findProductsInPromotion().subscribe(
       productsMap => {
 
-        this.featuredProducts.set(Type.SALTY_PIZZA, productsMap.SALTY_PIZZA.map(saltyPizza => fromProductDTOToProduct(saltyPizza)));
-
-        this.featuredProducts.set(Type.SWEET_PIZZA, productsMap.SWEET_PIZZA.map(sweetPizza => fromProductDTOToProduct(sweetPizza)));
-
-        this.featuredProducts.set(Type.SALTY_ESFIHA, productsMap.SALTY_ESFIHA.map(saltyEsfiha => fromProductDTOToProduct(saltyEsfiha)));
-
-        this.featuredProducts.set(Type.SWEET_ESFIHA, productsMap.SWEET_ESFIHA.map(sweetEsfiha => fromProductDTOToProduct(sweetEsfiha)));
-
-        this.featuredProducts.set(Type.DRINK, productsMap.DRINK.map(drink => fromProductDTOToProduct(drink)));
+        this.featuredProducts = productsMap;
       }
     );
   }
