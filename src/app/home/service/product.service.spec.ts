@@ -6,6 +6,8 @@ import { ProductsMapByTypeDTO } from 'src/app/shared/dto/product-by-type-map-dto
 import { ProductDTO } from 'src/app/shared/dto/product-dto';
 import { Type } from 'src/app/shared/domain/type';
 import { PriceRating } from 'src/app/shared/domain/price-rating';
+import { Product } from 'src/app/shared/domain/product';
+import { fromProductDTOToProduct } from '../../shared/util/mapper'
 
 describe('ProductServiceService', () => {
 
@@ -14,7 +16,11 @@ describe('ProductServiceService', () => {
 
   let saltyPizzas: Array<ProductDTO>;
   let sweetPizzas: Array<ProductDTO>;
+  let saltyEsfihas: Array<ProductDTO>;
+  let sweetEsfihas: Array<ProductDTO>;
+  let drinks: Array<ProductDTO>;
   let productsMapByTypeDTOFindProductsInPromotion: ProductsMapByTypeDTO;
+  let productsMapByTypeToComparisonInFindProductsInPromotion: Map<Type, Array<Product>>;
 
   function setSaltyPizzas() {
 
@@ -25,16 +31,57 @@ describe('ProductServiceService', () => {
 
     sweetPizzas = [new ProductDTO(2, "name2", "description2", 20.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "image2", true), new ProductDTO(5, "name5", "description5", 50.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "image5", true)];
   }
+
+  function setSaltyEsfihas() {
+
+    saltyEsfihas = [
+      new ProductDTO(6, "name6", "description6", 6.00, Type.SALTY_ESFIHA, PriceRating.PROMOTION, "salty-esfiha.jpg", true)
+    ];
+  }
+
+  function setSweetEsfihas() {
+
+    sweetEsfihas = [
+      new ProductDTO(8, "name8", "description8", 8.00, Type.SALTY_ESFIHA, PriceRating.PROMOTION, "salty-esfiha.jpg", true)
+    ];
+  }
+
+  function setDrinks() {
+
+    drinks = [
+      new ProductDTO(7, "name7", "description7", 7.00, Type.SALTY_ESFIHA, PriceRating.PROMOTION, "salty-esfiha.jpg", true)
+    ];
+  }
+
   function setProductsMapByTypeDTOFindProductsInPromotion() {
 
-    productsMapByTypeDTOFindProductsInPromotion = new ProductsMapByTypeDTO(saltyPizzas, sweetPizzas, [], [], []);
+    productsMapByTypeDTOFindProductsInPromotion = new ProductsMapByTypeDTO(saltyPizzas, sweetPizzas, saltyEsfihas, sweetEsfihas, drinks);
+  }
+
+  function setProductsMapByTypeToComparisonInFindProductsInPromotion() {
+
+    productsMapByTypeToComparisonInFindProductsInPromotion = new Map();
+
+    productsMapByTypeToComparisonInFindProductsInPromotion.set(Type.SALTY_PIZZA, productsMapByTypeDTOFindProductsInPromotion.SALTY_PIZZA.map(saltyPizza => fromProductDTOToProduct(saltyPizza)));
+
+    productsMapByTypeToComparisonInFindProductsInPromotion.set(Type.SWEET_PIZZA, productsMapByTypeDTOFindProductsInPromotion.SWEET_PIZZA.map(sweetPizza => fromProductDTOToProduct(sweetPizza)));
+
+    productsMapByTypeToComparisonInFindProductsInPromotion.set(Type.SALTY_ESFIHA, productsMapByTypeDTOFindProductsInPromotion.SALTY_ESFIHA.map(saltyEsfiha => fromProductDTOToProduct(saltyEsfiha)));
+
+    productsMapByTypeToComparisonInFindProductsInPromotion.set(Type.SWEET_ESFIHA, productsMapByTypeDTOFindProductsInPromotion.SWEET_ESFIHA.map(sweetEsfiha => fromProductDTOToProduct(sweetEsfiha)));
+
+    productsMapByTypeToComparisonInFindProductsInPromotion.set(Type.DRINK, productsMapByTypeDTOFindProductsInPromotion.DRINK.map(drink => fromProductDTOToProduct(drink)));
   }
 
   beforeEach(() => {
 
     setSaltyPizzas();
     setSweetPizzas();
+    setSaltyEsfihas();
+    setSweetEsfihas();
+    setDrinks();
     setProductsMapByTypeDTOFindProductsInPromotion();
+    setProductsMapByTypeToComparisonInFindProductsInPromotion();
   });
 
   beforeEach(() => {
@@ -63,14 +110,38 @@ describe('ProductServiceService', () => {
 
     service.findProductsInPromotion().subscribe(productsMap => {
 
-      expect(productsMap.SALTY_PIZZA.length)
+      expect(productsMap.get(Type.SALTY_PIZZA))
+        .not.toBeNull();
+      expect(productsMap.get(Type.SWEET_PIZZA))
+        .not.toBeNull();
+      expect(productsMap.get(Type.SALTY_ESFIHA))
+        .not.toBeNull();
+      expect(productsMap.get(Type.SWEET_ESFIHA))
+        .not.toBeNull();
+      expect(productsMap.get(Type.DRINK))
         .not.toBeNull();
 
-      expect(productsMap.SALTY_PIZZA)
-        .toEqual(saltyPizzas);
+      expect(productsMap.get(Type.SALTY_PIZZA))
+        .toEqual(productsMapByTypeToComparisonInFindProductsInPromotion.get(Type.SALTY_PIZZA));
+      expect(productsMap.get(Type.SWEET_PIZZA))
+        .toEqual(productsMapByTypeToComparisonInFindProductsInPromotion.get(Type.SWEET_PIZZA));
+      expect(productsMap.get(Type.SALTY_ESFIHA))
+        .toEqual(productsMapByTypeToComparisonInFindProductsInPromotion.get(Type.SALTY_ESFIHA));
+      expect(productsMap.get(Type.SWEET_ESFIHA))
+        .toEqual(productsMapByTypeToComparisonInFindProductsInPromotion.get(Type.SWEET_ESFIHA));
+      expect(productsMap.get(Type.DRINK))
+        .toEqual(productsMapByTypeToComparisonInFindProductsInPromotion.get(Type.DRINK));
 
-      expect(productsMap.SALTY_PIZZA.length)
-        .toEqual(saltyPizzas.length);
+      expect(productsMap.get(Type.SALTY_PIZZA)?.length)
+        .toEqual(productsMapByTypeToComparisonInFindProductsInPromotion.get(Type.SALTY_PIZZA)?.length);
+      expect(productsMap.get(Type.SWEET_PIZZA)?.length)
+        .toEqual(productsMapByTypeToComparisonInFindProductsInPromotion.get(Type.SWEET_PIZZA)?.length);
+      expect(productsMap.get(Type.SALTY_ESFIHA)?.length)
+        .toEqual(productsMapByTypeToComparisonInFindProductsInPromotion.get(Type.SALTY_ESFIHA)?.length);
+      expect(productsMap.get(Type.SWEET_ESFIHA)?.length)
+        .toEqual(productsMapByTypeToComparisonInFindProductsInPromotion.get(Type.SWEET_ESFIHA)?.length);
+      expect(productsMap.get(Type.DRINK)?.length)
+        .toEqual(productsMapByTypeToComparisonInFindProductsInPromotion.get(Type.DRINK)?.length);
 
       done();
     });
@@ -80,5 +151,3 @@ describe('ProductServiceService', () => {
     testRequest.flush(productsMapByTypeDTOFindProductsInPromotion);
   });
 });
-
-

@@ -5,7 +5,6 @@ import { Product } from 'src/app/shared/domain/product';
 import { Type } from 'src/app/shared/domain/type';
 import { registerLocaleData } from '@angular/common';
 import { ProductService } from '../service/product.service';
-import { fromProductDTOToProduct } from 'src/app/shared/util/mapper';
 import { ShoppingCartService } from 'src/app/shared/service/shopping-cart.service';
 
 registerLocaleData(localeBr, "br");

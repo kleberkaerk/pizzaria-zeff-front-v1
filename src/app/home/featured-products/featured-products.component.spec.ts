@@ -5,13 +5,10 @@ import { SliderComponent } from '../slider/slider.component';
 import { FeaturedProductsComponent } from './featured-products.component';
 import { FooterComponent } from 'src/app/shared/footer/footer.component';
 import { ProductService } from '../service/product.service';
-import { ProductDTO } from 'src/app/shared/dto/product-dto';
 import { Type } from 'src/app/shared/domain/type'
 import { PriceRating } from 'src/app/shared/domain/price-rating'
-import { ProductsMapByTypeDTO } from 'src/app/shared/dto/product-by-type-map-dto';
 import { of } from 'rxjs';
 import { Product } from 'src/app/shared/domain/product';
-import { fromProductDTOToProduct } from 'src/app/shared/util/mapper';
 import { ShoppingCartService } from 'src/app/shared/service/shopping-cart.service';
 
 describe('FeaturedProductsComponent', () => {
@@ -21,135 +18,102 @@ describe('FeaturedProductsComponent', () => {
   let productService: ProductService;
   let shoppingCartService: ShoppingCartService;
 
-  let saltyPizzas: Array<ProductDTO>;
-  let sweetPizzas: Array<ProductDTO>;
-  let saltyEsfihas: Array<ProductDTO>;
-  let sweetEsfihas: Array<ProductDTO>;
-  let drinks: Array<ProductDTO>;
-  let productsMapByTypeDTOMock: ProductsMapByTypeDTO;
-
-  let saltyPizzasToComparison: Array<Product>;
-  let sweetPizzasToComparison: Array<Product>;
-  let saltyEsfihasToComparison: Array<Product>;
-  let sweetEsfihasToComparison: Array<Product>;
-  let drinksToComparison: Array<Product>;
-
-  let saltyPizasToSeeMoreProducts: Array<ProductDTO>;
-  let sweetPizasToSeeMoreProducts: Array<ProductDTO>;
-
+  let productsMapByType: Map<Type, Array<Product>>;
+  let productsMapByTypeSeeMoreProducts: Map<Type, Array<Product>>;
   let productToAddProductToCart: Product;
 
-  function setSaltyPizzas() {
+  function setProductsMapByType() {
 
-    saltyPizzas = [
-      new ProductDTO(1, "name1", "description1", 10.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
-      new ProductDTO(2, "name2", "description2", 20.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
-      new ProductDTO(3, "name3", "description3", 30.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true)
-    ]
-  }
-
-  function setSweetPizzas() {
-
-    sweetPizzas = [
-      new ProductDTO(4, "name4", "description4", 40.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(5, "name5", "description5", 50.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(6, "name6", "description6", 60.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true)
-    ]
-  }
-
-  function setSaltyEsfihas() {
-
-    saltyEsfihas = [
-      new ProductDTO(7, "name7", "description7", 70.00, Type.SALTY_ESFIHA, PriceRating.PROMOTION, "salty-esfiha.jpg", true),
-      new ProductDTO(8, "name8", "description8", 80.00, Type.SALTY_ESFIHA, PriceRating.PROMOTION, "salty-esfiha.jpg", true),
-      new ProductDTO(9, "name9", "description9", 90.00, Type.SALTY_ESFIHA, PriceRating.PROMOTION, "salty-esfiha.jpg", true)
+    let saltyPizzas = [
+      new Product(1, "name1", "description1", 10.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
+      new Product(2, "name2", "description2", 20.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
+      new Product(3, "name3", "description3", 30.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true)
     ];
-  }
 
-  function setSweetEsfihas() {
-
-    sweetEsfihas = [
-      new ProductDTO(10, "name10", "description10", 100.00, Type.SWEET_ESFIHA, PriceRating.PROMOTION, "sweet-esfiha.jpg", true),
-      new ProductDTO(11, "name11", "description11", 110.00, Type.SWEET_ESFIHA, PriceRating.PROMOTION, "sweet-esfiha.jpg", true)
+    let sweetPizzas = [
+      new Product(4, "name4", "description4", 40.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(5, "name5", "description5", 50.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(6, "name6", "description6", 60.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true)
     ];
+
+    let saltyEsfihas = [
+      new Product(7, "name7", "description7", 70.00, Type.SALTY_ESFIHA, PriceRating.PROMOTION, "salty-esfiha.jpg", true),
+      new Product(8, "name8", "description8", 80.00, Type.SALTY_ESFIHA, PriceRating.PROMOTION, "salty-esfiha.jpg", true),
+      new Product(9, "name9", "description9", 90.00, Type.SALTY_ESFIHA, PriceRating.PROMOTION, "salty-esfiha.jpg", true)
+    ];
+
+    let sweetEsfihas = [
+      new Product(10, "name10", "description10", 100.00, Type.SWEET_ESFIHA, PriceRating.PROMOTION, "sweet-esfiha.jpg", true),
+      new Product(11, "name11", "description11", 110.00, Type.SWEET_ESFIHA, PriceRating.PROMOTION, "sweet-esfiha.jpg", true)
+    ];
+
+    let drinks = [
+      new Product(12, "name12", "description12", 120.00, Type.DRINK, PriceRating.PROMOTION, "soda.jpg", true),
+      new Product(13, "name13", "description13", 130.00, Type.DRINK, PriceRating.PROMOTION, "soda.jpg", true),
+      new Product(14, "name14", "description14", 140.00, Type.DRINK, PriceRating.PROMOTION, "soda.jpg", true)
+    ];
+
+    productsMapByType = new Map();
+
+    productsMapByType.set(Type.SALTY_PIZZA, saltyPizzas);
+    productsMapByType.set(Type.SWEET_PIZZA, sweetPizzas);
+    productsMapByType.set(Type.SALTY_ESFIHA, saltyEsfihas);
+    productsMapByType.set(Type.SWEET_ESFIHA, sweetEsfihas);
+    productsMapByType.set(Type.DRINK, drinks);
   }
 
-  function setDrinks() {
-    drinks = [
-      new ProductDTO(12, "name12", "description12", 120.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "soda.jpg", true),
-      new ProductDTO(13, "name13", "description13", 130.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "soda.jpg", true),
-      new ProductDTO(14, "name14", "description14", 140.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "soda.jpg", true)
-    ]
-  }
+  function setProductsMapByTypeSeeMoreProducts() {
 
-  function setProductsMapByTypeDTOMock() {
+    let saltyPizas = [
+      new Product(1, "name1", "description1", 10.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
+      new Product(2, "name2", "description2", 20.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
+      new Product(3, "name3", "description3", 30.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
+      new Product(4, "name4", "description4", 40.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
+      new Product(5, "name5", "description5", 50.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
+      new Product(6, "name6", "description6", 60.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true)
+    ];
 
-    productsMapByTypeDTOMock = new ProductsMapByTypeDTO(
-      saltyPizzas,
-      sweetPizzas,
-      saltyEsfihas,
-      sweetEsfihas,
-      drinks
-    );
-  }
+    let sweetPizas = [
+      new Product(7, "name7", "description7", 70.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(8, "name8", "description8", 80.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(9, "name9", "description9", 90.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(10, "name10", "description10", 100.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(11, "name11", "description11", 110.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(12, "name12", "description12", 120.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(13, "name13", "description13", 130.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(14, "name14", "description14", 140.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(15, "name15", "description15", 150.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(16, "name16", "description16", 160.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(17, "name17", "description17", 170.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(18, "name18", "description18", 180.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(19, "name19", "description19", 190.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(20, "name20", "description20", 200.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(21, "name21", "description21", 210.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(22, "name22", "description22", 220.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(23, "name23", "description23", 230.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(24, "name24", "description24", 240.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(25, "name25", "description25", 250.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(26, "name26", "description26", 260.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(27, "name27", "description27", 270.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(28, "name28", "description28", 280.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(29, "name29", "description29", 290.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(30, "name30", "description30", 300.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(31, "name31", "description31", 310.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(32, "name32", "description32", 320.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(33, "name33", "description33", 330.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(34, "name34", "description34", 340.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(35, "name35", "description35", 350.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(36, "name36", "description36", 360.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+      new Product(37, "name37", "description37", 370.00, Type.SWEET_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
+    ];
 
-  function setSaltyPizzasToComparison() {
+    productsMapByTypeSeeMoreProducts = new Map();
 
-    saltyPizzasToComparison = saltyPizzas.map(saltyPizza => fromProductDTOToProduct(saltyPizza));
-  }
-
-  function setSweetPizzasToComparison() {
-
-    sweetPizzasToComparison = sweetPizzas.map(sweetPizza => fromProductDTOToProduct(sweetPizza));
-  }
-
-  function setSaltyEsfihasToComparison() {
-
-    saltyEsfihasToComparison = saltyEsfihas.map(saltyEsfiha => fromProductDTOToProduct(saltyEsfiha));
-  }
-
-  function setSweetEsfihasToComparison() {
-
-    sweetEsfihasToComparison = sweetEsfihas.map(sweetEsfiha => fromProductDTOToProduct(sweetEsfiha));
-  }
-
-  function setDrinksToComparison() {
-
-    drinksToComparison = drinks.map(drink => fromProductDTOToProduct(drink));
-  }
-
-  function setSaltyPizasToSeeMoreProducts() {
-
-    saltyPizasToSeeMoreProducts = [
-      new ProductDTO(1, "name1", "description1", 10.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
-      new ProductDTO(2, "name2", "description2", 20.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
-      new ProductDTO(3, "name3", "description3", 30.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
-      new ProductDTO(4, "name4", "description4", 40.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
-      new ProductDTO(5, "name5", "description5", 50.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true),
-      new ProductDTO(6, "name6", "description6", 60.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true)
-    ]
-  }
-
-  function setSweetPizasToSeeMoreProducts() {
-
-    sweetPizasToSeeMoreProducts = [
-      new ProductDTO(7, "name7", "description7", 70.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(8, "name8", "description8", 80.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(9, "name9", "description9", 90.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(10, "name10", "description10", 100.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(11, "name11", "description11", 110.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(12, "name12", "description12", 120.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(13, "name13", "description13", 130.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(14, "name14", "description14", 140.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(15, "name15", "description15", 150.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(16, "name16", "description16", 160.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(17, "name17", "description17", 170.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(18, "name18", "description18", 180.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(19, "name19", "description19", 190.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(20, "name20", "description20", 200.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(21, "name21", "description21", 210.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true),
-      new ProductDTO(22, "name22", "description22", 220.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "sweet-pizza.jpg", true)
-    ]
+    productsMapByTypeSeeMoreProducts.set(Type.SALTY_PIZZA, saltyPizas);
+    productsMapByTypeSeeMoreProducts.set(Type.SWEET_PIZZA, sweetPizas);
+    productsMapByTypeSeeMoreProducts.set(Type.SALTY_ESFIHA, []);
+    productsMapByTypeSeeMoreProducts.set(Type.SWEET_ESFIHA, []);
+    productsMapByTypeSeeMoreProducts.set(Type.DRINK, []);
   }
 
   function setProductToAddProductToCart() {
@@ -159,19 +123,8 @@ describe('FeaturedProductsComponent', () => {
 
   beforeEach(() => {
 
-    setSaltyPizzas();
-    setSweetPizzas();
-    setSaltyEsfihas();
-    setSweetEsfihas();
-    setDrinks();
-    setProductsMapByTypeDTOMock();
-    setSaltyPizzasToComparison();
-    setSweetPizzasToComparison();
-    setSaltyEsfihasToComparison();
-    setSweetEsfihasToComparison();
-    setDrinksToComparison();
-    setSaltyPizasToSeeMoreProducts();
-    setSweetPizasToSeeMoreProducts();
+    setProductsMapByType();
+    setProductsMapByTypeSeeMoreProducts();
     setProductToAddProductToCart();
   });
 
@@ -202,18 +155,88 @@ describe('FeaturedProductsComponent', () => {
       .toBeTruthy();
   });
 
-  it("ngOnInit_callsAServiceMethodAndAssignsItsReturnToTheFeaturedProductsAttribute_wheneverCalled", () => {
+  it("ngOnInit_callsAProductServiceMethodAndAssignsItsReturnToTheFeaturedProductsProperty_wheneverCalled", () => {
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(productsMapByTypeDTOMock));
+      .and.returnValue(of(productsMapByType));
 
     component.ngOnInit();
 
+    expect(component.getSaltyPizzas())
+      .not.toBeNull();
+    expect(component.getSweetPizzas())
+      .not.toBeNull();
     expect(component.getSaltyEsfihas())
       .not.toBeNull();
+    expect(component.getSweetEsfihas())
+      .not.toBeNull();
+    expect(component.getDrinks())
+      .not.toBeNull();
 
+    expect(component.getSaltyPizzas())
+      .toEqual(productsMapByType.get(Type.SALTY_PIZZA));
+    expect(component.getSweetPizzas())
+      .toEqual(productsMapByType.get(Type.SWEET_PIZZA));
     expect(component.getSaltyEsfihas())
-      .toEqual(saltyEsfihasToComparison);
+      .toEqual(productsMapByType.get(Type.SALTY_ESFIHA));
+    expect(component.getSweetEsfihas())
+      .toEqual(productsMapByType.get(Type.SWEET_ESFIHA));
+    expect(component.getDrinks())
+      .toEqual(productsMapByType.get(Type.DRINK));
+
+    expect(component.getSaltyPizzas()?.length)
+      .toEqual(productsMapByType.get(Type.SALTY_PIZZA)?.length);
+    expect(component.getSweetPizzas()?.length)
+      .toEqual(productsMapByType.get(Type.SWEET_PIZZA)?.length);
+    expect(component.getSaltyEsfihas()?.length)
+      .toEqual(productsMapByType.get(Type.SALTY_ESFIHA)?.length);
+    expect(component.getSweetEsfihas()?.length)
+      .toEqual(productsMapByType.get(Type.SWEET_ESFIHA)?.length);
+    expect(component.getDrinks()?.length)
+      .toEqual(productsMapByType.get(Type.DRINK)?.length);
+  });
+
+  it("ngAfterViewChecked_doesNotDoAnything_whenCalledMoreThan4Times", () => {
+
+    for (let i = 0; i < 3; i++) {
+
+      component.ngAfterViewChecked();
+    }
+
+    spyOn(productService, "findProductsInPromotion")
+      .and.returnValue(of(productsMapByType));
+
+    component.ngOnInit();
+    component.ngAfterViewChecked();
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector("#salty-pizza-button")?.getAttribute("class"))
+      .not.toContain("remove-expansion-button");
+    expect(compiled.querySelector("#wrapper-salty-pizza")?.getAttribute("class"))
+      .not.toContain("auto-height-wrapper");
+
+    expect(compiled.querySelector("#sweet-pizza-button")?.getAttribute("class"))
+      .not.toContain("remove-expansion-button");
+    expect(compiled.querySelector("#wrapper-sweet-pizza")?.getAttribute("class"))
+      .not.toContain("auto-height-wrapper");
+
+    expect(compiled.querySelector("#salty-esfiha-button")?.getAttribute("class"))
+      .not.toContain("remove-expansion-button");
+    expect(compiled.querySelector("#wrapper-salty-esfiha")?.getAttribute("class"))
+      .not.toContain("auto-height-wrapper");
+
+    expect(compiled.querySelector("#sweet-esfiha-button")?.getAttribute("class"))
+      .not.toContain("remove-expansion-button");
+    expect(compiled.querySelector("#wrapper-sweet-esfiha")?.getAttribute("class"))
+      .not.toContain("auto-height-wrapper");
+
+    expect(compiled.querySelector("#drink-button")?.getAttribute("class"))
+      .not.toContain("remove-expansion-button");
+    expect(compiled.querySelector("#wrapper-drink")?.getAttribute("class"))
+      .not.toContain("auto-height-wrapper");
   });
 
   it("ngAfterViewChecked_addsAClassToACertainExpansionButtonAndToTheWrapperThatHoldsTheProductsContainer_whenAGivenFeaturedProductsMapArrayIsLessThanOrEqualTo5ElementsAndTheBodyElementWidthIsLessThan481OrGreaterThan1023", () => {
@@ -221,12 +244,11 @@ describe('FeaturedProductsComponent', () => {
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(productsMapByTypeDTOMock));
+      .and.returnValue(of(productsMapByType));
 
     component.ngOnInit();
-    fixture.detectChanges();
-
     component.ngAfterViewChecked();
+
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
@@ -262,12 +284,11 @@ describe('FeaturedProductsComponent', () => {
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1000);
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(productsMapByTypeDTOMock));
+      .and.returnValue(of(productsMapByType));
 
     component.ngOnInit();
-    fixture.detectChanges();
-
     component.ngAfterViewChecked();
+
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
@@ -296,59 +317,12 @@ describe('FeaturedProductsComponent', () => {
       .toContain("remove-expansion-button");
     expect(compiled.querySelector("#wrapper-drink")?.getAttribute("class"))
       .toContain("auto-height-wrapper");
-  });
-
-  it("ngAfterViewChecked_doesNotDoAnything_whenCalledMoreThan4Times", () => {
-
-    for (let i = 0; i < 4; i++) {
-
-      component.ngAfterViewChecked();
-    }
-
-    spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(productsMapByTypeDTOMock));
-
-    component.ngOnInit();
-
-    fixture.detectChanges();
-
-    const body = document.querySelector("body") as HTMLElement;
-    body.style.width = "1920px";
-
-    component.ngAfterViewChecked();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-
-    expect(compiled.querySelector("#salty-pizza-button")?.getAttribute("class"))
-      .not.toContain("remove-expansion-button");
-    expect(compiled.querySelector("#wrapper-salty-pizza")?.getAttribute("class"))
-      .not.toContain("auto-height-wrapper");
-
-    expect(compiled.querySelector("#sweet-pizza-button")?.getAttribute("class"))
-      .not.toContain("remove-expansion-button");
-    expect(compiled.querySelector("#wrapper-sweet-pizza")?.getAttribute("class"))
-      .not.toContain("auto-height-wrapper");
-
-    expect(compiled.querySelector("#salty-esfiha-button")?.getAttribute("class"))
-      .not.toContain("remove-expansion-button");
-    expect(compiled.querySelector("#wrapper-salty-esfiha")?.getAttribute("class"))
-      .not.toContain("auto-height-wrapper");
-
-    expect(compiled.querySelector("#sweet-esfiha-button")?.getAttribute("class"))
-      .not.toContain("remove-expansion-button");
-    expect(compiled.querySelector("#wrapper-sweet-esfiha")?.getAttribute("class"))
-      .not.toContain("auto-height-wrapper");
-
-    expect(compiled.querySelector("#drink-button")?.getAttribute("class"))
-      .not.toContain("remove-expansion-button");
-    expect(compiled.querySelector("#wrapper-drink")?.getAttribute("class"))
-      .not.toContain("auto-height-wrapper");
   });
 
   it("getSaltyPizzas_returnsTheArrayOfSaltyPizzasFromTheFeaturedProductsMap_wheneverCalled", () => {
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(productsMapByTypeDTOMock));
+      .and.returnValue(of(productsMapByType));
 
     component.ngOnInit();
 
@@ -356,19 +330,19 @@ describe('FeaturedProductsComponent', () => {
       .not.toBeNull();
 
     expect(component.getSaltyPizzas())
-      .toEqual(saltyPizzasToComparison);
+      .toEqual(productsMapByType.get(Type.SALTY_PIZZA));
 
     expect(component.getSaltyPizzas()?.length)
-      .toEqual(saltyPizzasToComparison.length);
+      .toEqual(productsMapByType.get(Type.SALTY_PIZZA)?.length);
 
     expect(component.getSaltyPizzas())
-      .toContain(saltyPizzasToComparison[0]);
+      .toContain((productsMapByType.get(Type.SALTY_PIZZA) as Array<Product>)[0]);
   });
 
   it("getSweetPizzas_returnsTheArrayOfSweetPizzasFromTheFeaturedProductsMap_wheneverCalled", () => {
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(productsMapByTypeDTOMock));
+      .and.returnValue(of(productsMapByType));
 
     component.ngOnInit();
 
@@ -376,19 +350,19 @@ describe('FeaturedProductsComponent', () => {
       .not.toBeNull();
 
     expect(component.getSweetPizzas())
-      .toEqual(sweetPizzasToComparison);
+      .toEqual(productsMapByType.get(Type.SWEET_PIZZA));
 
     expect(component.getSweetPizzas()?.length)
-      .toEqual(sweetPizzasToComparison.length);
+      .toEqual(productsMapByType.get(Type.SWEET_PIZZA)?.length);
 
     expect(component.getSweetPizzas())
-      .toContain(sweetPizzasToComparison[0]);
+      .toContain((productsMapByType.get(Type.SWEET_PIZZA) as Array<Product>)[0]);
   });
 
   it("getSaltyEsfihas_returnsTheArrayOfSaltyEsfihasFromTheFeaturedProductsMap_wheneverCalled", () => {
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(productsMapByTypeDTOMock));
+      .and.returnValue(of(productsMapByType));
 
     component.ngOnInit();
 
@@ -396,19 +370,19 @@ describe('FeaturedProductsComponent', () => {
       .not.toBeNull();
 
     expect(component.getSaltyEsfihas())
-      .toEqual(saltyEsfihasToComparison);
+      .toEqual(productsMapByType.get(Type.SALTY_ESFIHA));
 
     expect(component.getSaltyEsfihas()?.length)
-      .toEqual(saltyEsfihasToComparison.length);
+      .toEqual(productsMapByType.get(Type.SALTY_ESFIHA)?.length);
 
     expect(component.getSaltyEsfihas())
-      .toContain(saltyEsfihasToComparison[0]);
+      .toContain((productsMapByType.get(Type.SALTY_ESFIHA) as Array<Product>)[0]);
   });
 
   it("getSweetEsfihas_returnsTheArrayOfSweetEsfihasFromTheFeaturedProductsMap_wheneverCalled", () => {
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(productsMapByTypeDTOMock));
+      .and.returnValue(of(productsMapByType));
 
     component.ngOnInit();
 
@@ -416,19 +390,19 @@ describe('FeaturedProductsComponent', () => {
       .not.toBeNull();
 
     expect(component.getSweetEsfihas())
-      .toEqual(sweetEsfihasToComparison);
+      .toEqual(productsMapByType.get(Type.SWEET_ESFIHA));
 
     expect(component.getSweetEsfihas()?.length)
-      .toEqual(sweetEsfihasToComparison.length);
+      .toEqual(productsMapByType.get(Type.SWEET_ESFIHA)?.length);
 
     expect(component.getSweetEsfihas())
-      .toContain(sweetEsfihasToComparison[0]);
+      .toContain((productsMapByType.get(Type.SWEET_ESFIHA) as Array<Product>)[0]);
   });
 
   it("getDrinks_returnsTheArrayOfDrinksFromTheFeaturedProductsMap_wheneverCalled", () => {
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(productsMapByTypeDTOMock));
+      .and.returnValue(of(productsMapByType));
 
     component.ngOnInit();
 
@@ -436,54 +410,52 @@ describe('FeaturedProductsComponent', () => {
       .not.toBeNull();
 
     expect(component.getDrinks())
-      .toEqual(drinksToComparison);
+      .toEqual(productsMapByType.get(Type.DRINK));
 
     expect(component.getDrinks()?.length)
-      .toEqual(drinksToComparison.length);
+      .toEqual(productsMapByType.get(Type.DRINK)?.length);
 
     expect(component.getDrinks())
-      .toContain(drinksToComparison[0]);
+      .toContain((productsMapByType.get(Type.DRINK) as Array<Product>)[0]);
   });
 
-  // it("seeMoreProducts_adds1630PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => { 
+  it("seeMoreProducts_adds1630PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => {
 
-  //   spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
+    spyOn(productService, "findProductsInPromotion")
+      .and.returnValue(of(productsMapByTypeSeeMoreProducts));
 
-  //   spyOn(productService, "findProductsInPromotion")
-  //     .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
+    component.ngOnInit(); 
 
-  //   component.ngOnInit();
+    fixture.detectChanges();
 
-  //   fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
 
-  //   const compiled = fixture.nativeElement as HTMLElement;
+    let event = new MouseEvent("click");
+    const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
+    const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
+    const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
+    const wrapperHeight = wrapperElement.clientHeight;
 
-  //   let event = new MouseEvent("click");
-  //   const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
-  //   const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
-  //   const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
-  //   const wrapperHeight = wrapperElement.clientHeight;
+    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
 
-  //   component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
+    component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
-  //   fixture.detectChanges();
+    expect(wrapperElement.clientHeight)
+      .not.toEqual(wrapperHeight);
 
-  //   expect(wrapperElement.clientHeight)
-  //     .not.toEqual(wrapperHeight);
+    expect(wrapperElement.clientHeight)
+      .not.toEqual(productsElement.clientHeight);
 
-  //   expect(wrapperElement.clientHeight)
-  //     .not.toEqual(productsElement.clientHeight);
-
-  //   expect(buttonElement?.getAttribute("class"))
-  //     .not.toContain("remove-expansion-button");
-  // });
+    expect(buttonElement?.getAttribute("class"))
+      .not.toContain("remove-expansion-button");
+  });
 
   it("seeMoreProducts_makesTheWrapGainAnAutomaticHeightAndAddsAClassToTheExpandButton_whenScreenWidthIsLessThan481AndWrapperHeightBecomesGreaterThanOrEqualToTheHeightOfTheProductsElement", () => {
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, [], [], [], [])));
+      .and.returnValue(of(productsMapByTypeSeeMoreProducts));
 
     component.ngOnInit();
 
@@ -515,7 +487,7 @@ describe('FeaturedProductsComponent', () => {
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
+      .and.returnValue(of(productsMapByTypeSeeMoreProducts));
 
     component.ngOnInit();
 
@@ -548,7 +520,7 @@ describe('FeaturedProductsComponent', () => {
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, [], [], [], [])));
+      .and.returnValue(of(productsMapByTypeSeeMoreProducts));
 
     component.ngOnInit();
 
@@ -580,7 +552,7 @@ describe('FeaturedProductsComponent', () => {
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, sweetPizasToSeeMoreProducts, [], [], [])));
+      .and.returnValue(of(productsMapByTypeSeeMoreProducts));
 
     component.ngOnInit();
 
@@ -613,7 +585,7 @@ describe('FeaturedProductsComponent', () => {
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
 
     spyOn(productService, "findProductsInPromotion")
-      .and.returnValue(of(new ProductsMapByTypeDTO(saltyPizasToSeeMoreProducts, [], [], [], [])));
+      .and.returnValue(of(productsMapByTypeSeeMoreProducts));
 
     component.ngOnInit();
 
