@@ -25,6 +25,7 @@
           <button
             type="button"
             class="exit-mobile-search"
+            aria-label="Sair do modo pesquisa"
             (click)="exitMobileSearch($event)"
             (touchstart)="exitMobileSearch($event)"
           >
@@ -99,12 +100,13 @@
         <button
           type="button"
           class="mobile-search-button"
+          aria-label="Abrir modo pesquisa"
+          aria-haspopup="true"
           (click)="searchClickHandler($event, formContainerSearch, searchInput)"
           (touchstart)="
             searchClickHandler($event, formContainerSearch, searchInput)
           "
           *ngIf="!activateMobileSearch"
-          aria-label="Abrir barra de pesquisa"
           aria-haspopup="true"
         >
           <svg
@@ -132,10 +134,10 @@
           <button
             type="button"
             class="view-account-button"
-            (click)="accountClickHandler($event, accountOptions)"
-            (touchstart)="accountClickHandler($event, accountOptions)"
             aria-label="Configurações de conta"
             aria-haspopup="true"
+            (click)="accountClickHandler($event, accountOptions)"
+            (touchstart)="accountClickHandler($event, accountOptions)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -189,6 +191,8 @@
         <nav aria-label="navegação para celular ou tablet">
           <button
             class="mobile-menu-button"
+            aria-label="Abrir menu"
+            aria-haspopup="true"
             (click)="handlerClickMobileMenu($event, mobileMenu)"
             (touchstart)="handlerClickMobileMenu($event, mobileMenu)"
             [ngClass]="{
@@ -196,8 +200,6 @@
                 activateMobileMenu && !activateAccountOptions
             }"
             *ngIf="!activateMobileSearch"
-            aria-label="Abrir menu"
-            aria-haspopup="true"
           >
             <div class="hamburguer"></div>
           </button>
