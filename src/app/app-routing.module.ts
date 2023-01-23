@@ -7,7 +7,11 @@ const routes: Routes = [
     path: "",
     component: FeaturedProductsComponent,
     pathMatch: "full"
-  }
+  },
+  // {
+  //   path: "",
+  //   loadChildren: () => import("./search/search.module").then(module => module.SearchModule),
+  // }
 ];
 
 @NgModule({
