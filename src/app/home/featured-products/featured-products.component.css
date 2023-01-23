@@ -64,7 +64,6 @@
     grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
     gap: 10px;
     padding: 10px 20px;
-    /* overflow: hidden; */
 }
 
 .product {
@@ -121,26 +120,6 @@
 
 .link-image-name:hover .product-name span::after {
     width: 100%;
-}
-
-.product-description {
-    width: 100%;
-    display: flex;
-    align-self: baseline;
-    height: 1em;
-    overflow-y: hidden;
-    position: relative;
-    font-family: "content-font-light", sans-serif;
-}
-
-.product-description::after {
-    content: " ";
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    height: 1.2em;
-    background-image: linear-gradient(to bottom, #ffffff71 30%, var(--darkgrey-color));
 }
 
 .container-button-price {
