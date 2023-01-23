@@ -1,25 +1,26 @@
 <main>
-  <h1>Resultados para X</h1>
+  <h1 class="title-of-search-results">Resultados para X</h1>
 
-  <ul class="products">
-    <li class="product" *ngFor="let product of searchResultsPage?.content">
-      <p>{{ product.getName }}</p>
-      <a routerLink="" class="link-image-name">
-        <img
-          [src]="'../../../assets/images/' + product.getImage"
-          alt="Foto de pizza"
-          class="product-image"
-        />
-        <p class="product-name">
-          <span>{{ product.getName }}</span>
-        </p>
-      </a>
-      <div class="container-button-price">
-        <button class="add-to-cart-button">Adicionar ao carrinho</button>
-        <p class="product-price">
-          R${{ product.getPrice | number : "1.2-2" : "br" }}
-        </p>
-      </div>
-    </li>
-  </ul>
+  <div>
+    <ul class="products">
+      <li class="product" *ngFor="let product of searchResultsPage?.content">
+        <a routerLink="" class="product-link">
+          <img
+            [src]="'../../../assets/images/' + product.getImage"
+            alt="Foto de pizza"
+            class="product-image"
+          />
+          <div>
+            <span class="product-name">{{ product.getName }}</span>
+          </div>
+        </a>
+        <div class="container-button-price">
+          <p class="product-price">
+            R${{ product.getPrice | number : "1.2-2" : "br" }}
+          </p>
+          <button class="add-to-cart-button">Adicionar ao carrinho</button>
+        </div>
+      </li>
+    </ul>
+  </div>
 </main>
