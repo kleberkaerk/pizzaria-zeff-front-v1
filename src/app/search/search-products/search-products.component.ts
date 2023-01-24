@@ -11,16 +11,46 @@ import { Page } from 'src/app/shared/util/page';
 })
 export class SearchProductsComponent implements OnInit {
 
-  searchResultsPage?: Page<Array<Product>>;
-  pageNumber = 0;
+  public valueOfSearch: string = "a";
+  public searchResultsPage?: Page<Array<Product>>;
+  public availablePages: Array<number> = new Array();
+  public currentPage = 0;
 
   constructor(private productService: ProductService) { }
 
+  private initializeAvailablePages(numberOfPages: number) {
+
+    for (let i = 1; i <= numberOfPages; i++) {
+
+      this.availablePages.push(i);
+    }
+  }
+
+  private searchProducts(valueOfSearch: string, quantity: number, pageNumber: number) {
+
+    this.productService.searchProducts(valueOfSearch, quantity, pageNumber).subscribe(productsPage => {
+
+      if (this.availablePages.length === 0) {
+
+        this.initializeAvailablePages(productsPage.totalPages);
+      }
+
+      this.searchResultsPage = productsPage;
+    });
+  }
+
   ngOnInit(): void {
 
-    this.productService.searchProducts("a", 20, this.pageNumber).subscribe(productsPage => {
+    this.searchProducts(this.valueOfSearch, 20, this.currentPage);
 
-        this.searchResultsPage = productsPage;
-      });
+  }
+
+  public changePage(nextPage: number) {
+
+    this.currentPage = --nextPage;
+
+    this.searchProducts(this.valueOfSearch, 20, this.currentPage);
+
+    window.scrollTo(0, 0);
   }
 }

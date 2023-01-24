@@ -1,5 +1,5 @@
 <main>
-  <h1 class="title-of-search-results">Resultados para X</h1>
+  <h1 class="title-of-search-results" id="component-start">Resultados para {{ valueOfSearch }}</h1>
 
   <div>
     <ul class="products">
@@ -22,5 +22,19 @@
         </div>
       </li>
     </ul>
+
+    <ul class="available-pages">
+      <li *ngFor="let availablePage of availablePages">
+        <button
+          class="available-page"
+          [ngClass]="{ 'current-page': availablePage === currentPage + 1 }"
+          (click)="changePage(availablePage)"
+        >
+          {{ availablePage }}
+        </button>
+      </li>
+    </ul>
   </div>
 </main>
+
+<app-footer></app-footer>
