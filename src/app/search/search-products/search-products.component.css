@@ -151,4 +151,8 @@
     .add-to-cart-button {
         padding: 8px;
     }
+
+    .available-pages {
+        gap: 10px;
+    }
 }

@@ -1,5 +1,7 @@
 <main>
-  <h1 class="title-of-search-results" id="component-start">Resultados para {{ valueOfSearch }}</h1>
+  <h1 class="title-of-search-results">
+    Resultados para {{ valueOfSearch }}
+  </h1>
 
   <div>
     <ul class="products">
@@ -18,7 +20,13 @@
           <p class="product-price">
             R${{ product.getPrice | number : "1.2-2" : "br" }}
           </p>
-          <button class="add-to-cart-button">Adicionar ao carrinho</button>
+          <button
+            class="add-to-cart-button"
+            (click)="addProductToCard($event, product)"
+            (touchstart)="addProductToCard($event, product)"
+          >
+            Adicionar ao carrinho
+          </button>
         </div>
       </li>
     </ul>
@@ -28,7 +36,8 @@
         <button
           class="available-page"
           [ngClass]="{ 'current-page': availablePage === currentPage + 1 }"
-          (click)="changePage(availablePage)"
+          (click)="changePage($event, availablePage)"
+          (touchstart)="changePage($event, availablePage)"
         >
           {{ availablePage }}
         </button>
