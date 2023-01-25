@@ -79,10 +79,12 @@
             </svg>
           </button>
 
-          <div class="wrapper-autocomplete" *ngIf="searchResults.length">
+          <div
+            class="wrapper-autocomplete"
+            *ngIf="searchResults.length !== 0"
+          >
             <div class="autocomplete">
-              <a
-                routerLink=""
+              <div
                 class="autocomplete-item"
                 *ngFor="let searchResult of searchResults; let i = index"
                 [ngClass]="{
@@ -90,9 +92,10 @@
                 }"
                 (mouseover)="setCurrentFocusOfAutocompleteWithMouse(i)"
                 (mouseout)="setCurrentFocusOfAutocompleteWithMouse(-1)"
+                (mousedown)="searchClick(searchResult.getName)"
               >
                 {{ searchResult.getName }}
-              </a>
+              </div>
             </div>
           </div>
         </form>

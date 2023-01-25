@@ -151,8 +151,6 @@
 }
 
 .autocomplete-item {
-    display: block;
-    text-decoration: none;
     overflow: hidden;
     color: var(--black-color);
     padding: 10px 0px 10px 15px;
@@ -160,6 +158,7 @@
     font-weight: 600;
     white-space: nowrap;
     text-overflow: ellipsis;
+    cursor: pointer;
 }
 
 .autocomplete-item-on-focus {

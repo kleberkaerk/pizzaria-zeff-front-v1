@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { Product } from 'src/app/shared/domain/product';
 import { ProductService } from 'src/app/shared/service/product.service';
@@ -12,12 +13,13 @@ import { Page } from 'src/app/shared/util/page';
 })
 export class SearchProductsComponent implements OnInit {
 
-  public valueOfSearch: string = "a";
+  public valueSearch: string = "";
   public searchResultsPage?: Page<Array<Product>>;
   public availablePages: Array<number> = new Array();
   public currentPage = 0;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private productService: ProductService,
     private shoppingCartService: ShoppingCartService
   ) { }
@@ -45,7 +47,12 @@ export class SearchProductsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.searchProducts(this.valueOfSearch, 20, this.currentPage);
+    this.activatedRoute.queryParams.subscribe(queryParam => {
+
+      this.valueSearch = queryParam['value'];
+    });
+
+    this.searchProducts(this.valueSearch, 20, this.currentPage);
   }
 
   private preventDefaultTouchStart(e: Event) {
@@ -64,7 +71,7 @@ export class SearchProductsComponent implements OnInit {
 
     this.currentPage = --nextPage;
 
-    this.searchProducts(this.valueOfSearch, 20, this.currentPage);
+    this.searchProducts(this.valueSearch, 20, this.currentPage);
 
     window.scrollTo(0, 0);
   }

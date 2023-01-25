@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Product } from '../domain/product';
 import { ProductService } from '../service/product.service'
@@ -20,7 +21,10 @@ export class HeaderComponent {
   public searchResults: Array<Product> = new Array();
   public autocompleteCurrentFocus = -1;
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService,
+    private router: Router
+  ) { }
 
   public searchTypedValue() {
 
@@ -109,7 +113,12 @@ export class HeaderComponent {
 
   public search() {
 
-    console.log("Tecla enter pressionada");
+    this.router.navigate(["/search"], { queryParams: { value: this.searchInputValue } });
+  }
+
+  public searchClick(productName: string) {
+    
+    this.router.navigate(["/search"], { queryParams: { value: productName } });
   }
 
   public clearSearchInput(e: Event, inputToBeCleaned: HTMLInputElement) {

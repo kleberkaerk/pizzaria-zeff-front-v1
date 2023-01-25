@@ -8,10 +8,10 @@ const routes: Routes = [
     component: FeaturedProductsComponent,
     pathMatch: "full"
   },
-  // {
-  //   path: "",
-  //   loadChildren: () => import("./search/search.module").then(module => module.SearchModule),
-  // }
+  {
+    path: "search",
+    loadChildren: () => import("./search/search.module").then(module => module.SearchModule)
+  }
 ];
 
 @NgModule({
