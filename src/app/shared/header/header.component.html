@@ -17,7 +17,7 @@
         [ngClass]="{ 'stretch-search-bar': activateMobileSearch }"
       >
         <form
-          (ngSubmit)="search()"
+          (ngSubmit)="search(searchInput)"
           autocomplete="off"
           class="search-form"
           #formContainerSearch
@@ -92,7 +92,7 @@
                 }"
                 (mouseover)="setCurrentFocusOfAutocompleteWithMouse(i)"
                 (mouseout)="setCurrentFocusOfAutocompleteWithMouse(-1)"
-                (mousedown)="searchClick(searchResult.getName)"
+                (mousedown)="clickSearch(searchResult.getName)"
               >
                 {{ searchResult.getName }}
               </div>

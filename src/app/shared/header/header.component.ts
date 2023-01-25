@@ -111,13 +111,14 @@ export class HeaderComponent {
     this.autocompleteCurrentFocus = index;
   }
 
-  public search() {
+  public search(searchInput: HTMLInputElement) {
 
+    searchInput.blur();
     this.router.navigate(["/search"], { queryParams: { value: this.searchInputValue } });
   }
 
-  public searchClick(productName: string) {
-    
+  public clickSearch(productName: string) {
+
     this.router.navigate(["/search"], { queryParams: { value: productName } });
   }
 
