@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FeaturedProductsComponent } from './home/featured-products/featured-products.component';
+import { FinalizeSliderComponentTasksGuard } from './guard/finalize-slider-component-tasks.guard';
+import { SliderComponent } from './home/slider/slider.component';
 
 const routes: Routes = [
   {
     path: "",
-    component: FeaturedProductsComponent,
+    component: SliderComponent,
+    canDeactivate: [FinalizeSliderComponentTasksGuard],
     pathMatch: "full"
   },
   {

@@ -8,10 +8,11 @@ import { Component, OnInit } from '@angular/core';
 export class SliderComponent implements OnInit {
 
   private nextSlide = 2;
+  public intervalId!: number;
 
   ngOnInit(): void {
 
-    setInterval(() => {
+    this.intervalId = window.setInterval(() => {
 
       let slideButton = document.getElementById("slide-" + this.nextSlide) as HTMLInputElement;
 
@@ -22,8 +23,7 @@ export class SliderComponent implements OnInit {
       if (this.nextSlide > 4) {
         this.nextSlide = 1
       }
-
-    }, 8000);
+    }, 8000)
   }
 
   public setSlide(e: Event, currentSlide: number) {
