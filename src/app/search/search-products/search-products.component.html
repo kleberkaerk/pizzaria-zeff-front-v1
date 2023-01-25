@@ -1,7 +1,6 @@
 <main>
-  <h1 class="title-of-search-results">
-    Resultados para {{ valueSearch }}
-  </h1>
+  <h1 class="title-of-search-results" *ngIf="quantityOfProducts > 0">Resultados para {{ valueSearch }}</h1>
+  <h1 class="title-of-search-results" *ngIf="quantityOfProducts === 0">Infelizmente não encontramos resultados para {{ valueSearch }}</h1>
 
   <div>
     <ul class="products">
@@ -31,7 +30,7 @@
       </li>
     </ul>
 
-    <ul class="available-pages">
+    <ul class="available-pages" *ngIf="availablePages.length > 1">
       <li *ngFor="let availablePage of availablePages">
         <button
           class="available-page"

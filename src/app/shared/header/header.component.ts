@@ -119,6 +119,8 @@ export class HeaderComponent {
 
   public clickSearch(productName: string) {
 
+    this.searchInputValue = productName;
+
     this.router.navigate(["/search"], { queryParams: { value: productName } });
   }
 
