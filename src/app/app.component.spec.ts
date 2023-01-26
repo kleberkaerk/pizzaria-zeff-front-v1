@@ -2,7 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './shared/header/header.component';
+import { HeaderComponent } from './header/header.component';
 import { ShoppingCartComponent } from './shared/shopping-cart/shopping-cart.component';
 
 describe('AppComponent', () => {

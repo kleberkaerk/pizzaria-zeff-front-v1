@@ -1,16 +1,16 @@
 @font-face {
     font-family: "slogan-font";
-    src: url("../../../assets/fonts/slogan-font/Courgette-Regular.ttf") format("truetype");
+    src: url("../../assets/fonts/slogan-font/Courgette-Regular.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "content-font-light";
-    src: url("../../../assets/fonts/content-font/NotoSans-Light.ttf") format("truetype");
+    src: url("../../assets/fonts/content-font/NotoSans-Light.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "content-font-medium";
-    src: url("../../../assets/fonts/content-font/NotoSans-Medium.ttf") format("truetype");
+    src: url("../../assets/fonts/content-font/NotoSans-Medium.ttf") format("truetype");
 }
 
 .mobile-search-button,
