@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PriceRating } from '../shared/domain/price-rating';
-import { Product } from '../shared/domain/product';
-import { Type } from '../shared/domain/type';
-import { ShoppingCartService } from '../shared/service/shopping-cart.service';
+import { PriceRating } from '../domain/price-rating';
+import { Product } from '../domain/product';
+import { Type } from '../domain/type';
+import { ShoppingCartService } from '../service/shopping-cart.service';
 
 import { ShoppingCartComponent } from './shopping-cart.component';
 

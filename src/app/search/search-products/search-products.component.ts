@@ -1,10 +1,10 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Product } from 'src/app/shared/domain/product';
-import { ProductService } from 'src/app/shared/service/product.service';
-import { ShoppingCartService } from 'src/app/shared/service/shopping-cart.service';
-import { Page } from 'src/app/shared/util/page';
+import { Product } from 'src/app/domain/product';
+import { ProductService } from 'src/app/service/product.service';
+import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
+import { Page } from 'src/app/util/page';
 
 @Component({
   selector: 'app-search-products',

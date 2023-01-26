@@ -2,12 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 
 import { ProductService } from './product.service';
-import { ProductsMapByTypeDTO } from 'src/app/shared/dto/product-by-type-map-dto';
-import { ProductDTO } from 'src/app/shared/dto/product-dto';
-import { Type } from 'src/app/shared/domain/type';
-import { PriceRating } from 'src/app/shared/domain/price-rating';
-import { Product } from 'src/app/shared/domain/product';
-import { fromProductDTOToProduct } from '../../shared/util/mapper'
+import { ProductsMapByTypeDTO } from 'src/app/dto/product-by-type-map-dto';
+import { ProductDTO } from 'src/app/dto/product-dto';
+import { Type } from 'src/app/domain/type';
+import { PriceRating } from 'src/app/domain/price-rating';
+import { Product } from 'src/app/domain/product';
+import { fromProductDTOToProduct } from '../../util/mapper'
 
 describe('ProductServiceService', () => {
 

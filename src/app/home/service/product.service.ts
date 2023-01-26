@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-import { ProductsMapByTypeDTO } from 'src/app/shared/dto/product-by-type-map-dto';
-import { Type } from '../../shared/domain/type'
-import { Product } from '../../shared/domain/product'
-import { fromProductDTOToProduct } from 'src/app/shared/util/mapper';
+import { ProductsMapByTypeDTO } from 'src/app/dto/product-by-type-map-dto';
+import { Type } from '../../domain/type'
+import { Product } from '../../domain/product'
+import { fromProductDTOToProduct } from 'src/app/util/mapper';
 
 @Injectable({
   providedIn: 'root'

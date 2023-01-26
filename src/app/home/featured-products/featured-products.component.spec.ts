@@ -3,11 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FeaturedProductsComponent } from './featured-products.component';
 import { ProductService } from '../service/product.service';
-import { Type } from 'src/app/shared/domain/type'
-import { PriceRating } from 'src/app/shared/domain/price-rating'
+import { Type } from 'src/app/domain/type'
+import { PriceRating } from 'src/app/domain/price-rating'
 import { of } from 'rxjs';
-import { Product } from 'src/app/shared/domain/product';
-import { ShoppingCartService } from 'src/app/shared/service/shopping-cart.service';
+import { Product } from 'src/app/domain/product';
+import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 describe('FeaturedProductsComponent', () => {
 
@@ -133,7 +134,8 @@ describe('FeaturedProductsComponent', () => {
         FeaturedProductsComponent
       ],
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        SharedModule
       ]
     })
       .compileComponents();

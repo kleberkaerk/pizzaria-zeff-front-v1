@@ -3,13 +3,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
-import { PriceRating } from 'src/app/shared/domain/price-rating';
+import { PriceRating } from 'src/app/domain/price-rating';
 
-import { Product } from 'src/app/shared/domain/product';
-import { Type } from 'src/app/shared/domain/type';
-import { ProductService } from 'src/app/shared/service/product.service';
-import { ShoppingCartService } from 'src/app/shared/service/shopping-cart.service';
-import { Page } from 'src/app/shared/util/page';
+import { Product } from 'src/app/domain/product';
+import { Type } from 'src/app/domain/type';
+import { ProductService } from 'src/app/service/product.service';
+import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { Page } from 'src/app/util/page';
 
 import { SearchProductsComponent } from './search-products.component';
 
@@ -62,7 +63,8 @@ describe('SearchProductsComponent', () => {
       ],
       imports: [
         RouterTestingModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        SharedModule
       ]
     })
       .compileComponents();

@@ -5,12 +5,12 @@ import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { HeaderComponent } from './header.component';
-import { ProductService } from '../shared/service/product.service'
+import { ProductService } from '../service/product.service'
 import { Router } from '@angular/router';
-import { Page } from '../shared/util/page';
-import { Product } from '../shared/domain/product';
-import { Type } from '../shared/domain/type';
-import { PriceRating } from '../shared/domain/price-rating';
+import { Page } from '../util/page';
+import { Product } from '../domain/product';
+import { Type } from '../domain/type';
+import { PriceRating } from '../domain/price-rating';
 
 describe('HeaderComponent', () => {
 
