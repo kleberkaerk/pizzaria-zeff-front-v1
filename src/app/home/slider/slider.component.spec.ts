@@ -1,4 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FeaturedProductsComponent } from '../featured-products/featured-products.component';
 
 import { SliderComponent } from './slider.component';
 
@@ -8,7 +10,8 @@ describe('SliderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SliderComponent]
+      declarations: [SliderComponent, FeaturedProductsComponent],
+      imports: [HttpClientTestingModule]
     })
       .compileComponents();
 

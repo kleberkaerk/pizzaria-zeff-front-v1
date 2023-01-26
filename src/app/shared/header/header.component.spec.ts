@@ -1,20 +1,25 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { HeaderComponent } from './header.component';
 import { ProductService } from '../service/product.service'
+import { Router } from '@angular/router';
 import { Page } from '../util/page';
 import { Product } from '../domain/product';
 import { Type } from '../domain/type';
 import { PriceRating } from '../domain/price-rating';
-import { of } from 'rxjs';
 
 describe('HeaderComponent', () => {
 
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
+
   let productService: ProductService;
+  let router: Router;
+
   let productsSearchTypedValue: Page<Array<Product>>;
   let productsAutocomplete: Array<Product>;
   let productsClearSearchInput: Array<Product>;
@@ -71,14 +76,17 @@ describe('HeaderComponent', () => {
       declarations: [HeaderComponent],
       imports: [
         HttpClientTestingModule,
-        FormsModule
+        FormsModule,
+        RouterTestingModule
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
-    productService = TestBed.inject(ProductService);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    productService = TestBed.inject(ProductService);
+    router = TestBed.inject(Router);
   });
 
   it('should create', () => {
@@ -217,17 +225,37 @@ describe('HeaderComponent', () => {
       .toEqual(2);
   });
 
-  // ------------------------------------------------------------------------
+  it("search_navigatesToTheSearchRouteAndPutsTheValueOfTheSearchInputValuePropertyOnValueQueryParam", () => {
 
-  it("search_", () => {
+    const routerSpy = spyOn(router, "navigate");
 
-    component.search();
+    const searchInput = document.querySelector(".search-input") as HTMLInputElement;
+    component.searchInputValue = "name";
 
-    expect(true)
-      .toBeTrue();
+    component.search(searchInput);
+
+    expect(routerSpy.calls.first().args[0])
+      .toContain("/search");
+
+    expect(routerSpy.calls.first().args[1]?.queryParams)
+      .toEqual({ value: "name" });
   });
 
-  // ------------------------------------------------------------------------
+  it("clickSearch_setsTheValueOfTheProductNameParameterInTheSearchInputValuePropertyAndNavigatesToTheSearchRouteAndPutsTheValueOfTheProductNameParameterOnValueQueryParam", () => {
+
+    const routerSpy = spyOn(router, "navigate");
+
+    component.clickSearch("name");
+
+    expect(component.searchInputValue)
+      .toEqual("name");
+
+    expect(routerSpy.calls.first().args[0])
+      .toContain("/search");
+
+    expect(routerSpy.calls.first().args[1]?.queryParams)
+      .toEqual({ value: "name" });
+  });
 
   it("clearSearchInput_clearsTheSearchResultsPropertyAndTheValueOfTheSearchInputValuePropertyAndSetsTheAutocompleteCurrentFocusPropertyTo-1_wheneverCalled", () => {
 

@@ -1,9 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SliderComponent } from '../slider/slider.component';
 import { FeaturedProductsComponent } from './featured-products.component';
-import { FooterComponent } from 'src/app/shared/footer/footer.component';
 import { ProductService } from '../service/product.service';
 import { Type } from 'src/app/shared/domain/type'
 import { PriceRating } from 'src/app/shared/domain/price-rating'
@@ -132,9 +130,7 @@ describe('FeaturedProductsComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [
-        FeaturedProductsComponent,
-        SliderComponent,
-        FooterComponent
+        FeaturedProductsComponent
       ],
       imports: [
         HttpClientTestingModule
@@ -612,25 +608,13 @@ describe('FeaturedProductsComponent', () => {
       .toContain("remove-expansion-button");
   });
 
-  it("addProductToCart_callsTheShoppingCartServiceToAddANewProduct_wheneverCalled", () => {
+  it("addProductToCart_callsThePreventDefaultMethodInEventObjectCancelableAndTouchstartAndCallsTheShoppingCartServiceToAddANewProduct_wheneverCalled", () => {
 
-    let event = new MouseEvent("click");
-
-    spyOn(shoppingCartService, "addProduct");
-
-    component.addProductToCart(event, productToAddProductToCart);
-
-    expect(shoppingCartService.addProduct)
-      .toHaveBeenCalled();
-  });
-
-  it("addProductToCart_callsThePreventDefaultMethod_whenTheEventObjectIsACancelableTouchstart", () => {
-
-    let event = new TouchEvent("touchstart", { cancelable: true });
+    let touchstartEvent = new TouchEvent("touchstart", { cancelable: true });
 
     spyOn(shoppingCartService, "addProduct");
 
-    component.addProductToCart(event, productToAddProductToCart);
+    component.addProductToCart(touchstartEvent, productToAddProductToCart);
 
     expect(shoppingCartService.addProduct)
       .toHaveBeenCalled();
