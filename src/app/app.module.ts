@@ -8,7 +8,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { SliderComponent } from './home/slider/slider.component';
 import { FeaturedProductsComponent } from './home/featured-products/featured-products.component';
-import { ShoppingCartComponent } from './shared/shopping-cart/shopping-cart.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({

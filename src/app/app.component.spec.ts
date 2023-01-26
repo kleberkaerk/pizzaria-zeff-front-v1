@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { ShoppingCartComponent } from './shared/shopping-cart/shopping-cart.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {

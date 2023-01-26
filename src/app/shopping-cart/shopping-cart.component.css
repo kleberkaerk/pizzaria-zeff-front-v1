@@ -1,6 +1,6 @@
 @font-face {
     font-family: "number-font-medium";
-    src: url("../../../assets/fonts/number-font/InterTight-Medium.ttf") format("truetype");
+    src: url("../../assets/fonts/number-font/InterTight-Medium.ttf") format("truetype");
 }
 
 .shopping-cart-button {
