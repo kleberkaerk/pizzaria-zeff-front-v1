@@ -4,8 +4,8 @@ import localeBr from '@angular/common/locales/br';
 import { Product } from 'src/app/domain/product';
 import { Type } from 'src/app/domain/type';
 import { registerLocaleData } from '@angular/common';
-import { ProductService } from '../service/product.service';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
+import { ProductService } from 'src/app/service/product.service';
 
 registerLocaleData(localeBr, "br");
 
