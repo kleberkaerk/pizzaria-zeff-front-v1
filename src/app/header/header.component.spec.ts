@@ -95,7 +95,7 @@ describe('HeaderComponent', () => {
       .toBeTruthy();
   });
 
-  it("scrollPageToTop_scrollTheSiteToTheTop_wheneverCalled", () => {
+  it("scrollPageToTop_scrollTheSiteToTheTop_whenTheEventObjectIsNotOfTypeTouchstart", () => {
 
     const mouseEvent = new MouseEvent("click");
 
@@ -106,6 +106,24 @@ describe('HeaderComponent', () => {
 
     expect(document.documentElement.scrollLeft)
       .toEqual(0);
+  });
+
+  it("scrollPageToTop_scrollTheSiteToTheTopAndNavigateToHomePage_whenTheEventObjectIsOfTypeTouchstart", () => {
+
+    const touchEvent = new TouchEvent("touchstart");
+
+    const routerSpy = spyOn(router, "navigate");
+
+    component.scrollPageToTop(touchEvent);
+
+    expect(document.documentElement.scrollTop)
+      .toEqual(0);
+
+    expect(document.documentElement.scrollLeft)
+      .toEqual(0);
+
+      expect(routerSpy.calls.first().args[0])
+      .toContain("/");
   });
 
   it("searchTypedValue_setsTheAutocompleteCurrentFocusPropertyTo-1_whenAutocompleteCurrentFocusIsDifferentFrom-1", () => {

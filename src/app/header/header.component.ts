@@ -29,10 +29,15 @@ export class HeaderComponent {
   public scrollPageToTop(e: Event) {
 
     e.stopPropagation();
-    
+
     this.preventDefaultTouchStart(e);
 
     window.scrollTo(0, 0);
+
+    if (e.type === "touchstart") {
+
+      this.router.navigate(["/"]);
+    }
   }
 
   public searchTypedValue() {
