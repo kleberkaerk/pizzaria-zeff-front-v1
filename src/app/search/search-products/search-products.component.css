@@ -1,3 +1,7 @@
+main {
+    min-height: calc(100vh - 308px);
+}
+
 .title-of-search-results {
     font-family: "content-font-medium", sans-serif;
     font-weight: 100;
