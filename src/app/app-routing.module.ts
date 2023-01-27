@@ -4,16 +4,21 @@ import { FinalizeSliderComponentTasksGuard } from './guard/finalize-slider-compo
 import { SliderComponent } from './home/slider/slider.component';
 
 const routes: Routes = [
-  {
-    path: "",
-    component: SliderComponent,
-    canDeactivate: [FinalizeSliderComponentTasksGuard],
-    pathMatch: "full"
-  },
+  // {
+  //   path: "",
+  //   component: SliderComponent,
+  //   canDeactivate: [FinalizeSliderComponentTasksGuard],
+  //   pathMatch: "full"
+  // },
   {
     path: "search",
     loadChildren: () => import("./search/search.module").then(module => module.SearchModule)
-  }
+  },
+  {
+    path: "",
+    loadChildren: () => import("./menu/menu.module").then(module => module.MenuModule),
+    pathMatch: "full"
+  },
 ];
 
 @NgModule({
