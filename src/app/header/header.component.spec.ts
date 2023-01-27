@@ -95,6 +95,19 @@ describe('HeaderComponent', () => {
       .toBeTruthy();
   });
 
+  it("scrollPageToTop_scrollTheSiteToTheTop_wheneverCalled", () => {
+
+    const mouseEvent = new MouseEvent("click");
+
+    component.scrollPageToTop(mouseEvent);
+
+    expect(document.documentElement.scrollTop)
+      .toEqual(0);
+
+    expect(document.documentElement.scrollLeft)
+      .toEqual(0);
+  });
+
   it("searchTypedValue_setsTheAutocompleteCurrentFocusPropertyTo-1_whenAutocompleteCurrentFocusIsDifferentFrom-1", () => {
 
     component.searchInputValue = "  ";
@@ -253,7 +266,7 @@ describe('HeaderComponent', () => {
     component.search(input);
 
     expect(component.activateMobileSearch)
-    .toBeFalse();
+      .toBeFalse();
 
     expect(routerSpy.calls.first().args[0])
       .toContain("/search");
