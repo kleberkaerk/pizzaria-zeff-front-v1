@@ -237,6 +237,31 @@ describe('HeaderComponent', () => {
       .not.toHaveBeenCalled();
   });
 
+  it("search_triggersAnClickEventAttachedToTheHtmlElementThatSetsTheActivateMobileSearchPropertyToFalse_ whenPropertyActivateMobileSearchIsTrue", () => {
+
+    const event = new MouseEvent('click');
+    const compiled = fixture.nativeElement as HTMLElement;
+    const form = compiled.querySelector('.search-form') as Element;
+    const input = compiled.querySelector('.search-input') as HTMLInputElement;
+
+    component.searchClickHandler(event, form, input);
+
+    component.searchInputValue = "name";
+
+    const routerSpy = spyOn(router, "navigate");
+
+    component.search(input);
+
+    expect(component.activateMobileSearch)
+    .toBeFalse();
+
+    expect(routerSpy.calls.first().args[0])
+      .toContain("/search");
+
+    expect(routerSpy.calls.first().args[1]?.queryParams)
+      .toEqual({ value: "name" });
+  });
+
   it("search_navigatesToTheSearchRouteAndPutsTheValueOfTheSearchInputValuePropertyOnValueQueryParam_whenPropertySearchInputValueIsNotEmpty", () => {
 
     const routerSpy = spyOn(router, "navigate");
@@ -412,17 +437,17 @@ describe('HeaderComponent', () => {
       .toBeFalse();
   });
 
-  it('searchClickHandler_updateActivateSearchToTrueAndAddAAttributeOnElementFormAndAddAClassToTheInputElement_whenFormDoesNotHaveAttributeDataToShow', () => {
+  it('searchClickHandler_updateActivateMobileSearchToTrueAndAddAAttributeOnElementFormAndAddAClassToTheInputElement_whenFormDoesNotHaveAttributeDataToShow', () => {
 
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
     const form = compiled.querySelector('.search-form') as Element;
-    const input = compiled.querySelector('.search-input') as HTMLElement;
+    const input = compiled.querySelector('.search-input') as HTMLInputElement;
 
     expect(component.activateMobileSearch)
       .toBeFalse();
 
-    component.searchClickHandler(event, form, input as HTMLInputElement);
+    component.searchClickHandler(event, form, input);
 
     expect(form.hasAttribute("data-to-show"))
       .toBeTrue();
@@ -434,7 +459,7 @@ describe('HeaderComponent', () => {
       .toContain("focusable-search-input");
   });
 
-  it('searchClickHandler_notUpdateActivateSearchToTrue_whenFormHaveAttributeDataToShow', () => {
+  it('searchClickHandler_notUpdateActivateMobileSearchToTrue_whenFormHaveAttributeDataToShow', () => {
 
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
