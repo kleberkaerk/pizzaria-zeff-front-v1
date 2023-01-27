@@ -16,7 +16,7 @@ export class HeaderComponent {
   public activateMobileSearch = false;
   public logged = false;
   public username = "Luffy";
-  public searchInputValue!: string;
+  public searchInputValue = "";
   private enteredValue!: string;
   public searchResults: Array<Product> = new Array();
   public autocompleteCurrentFocus = -1;
@@ -112,6 +112,11 @@ export class HeaderComponent {
   }
 
   public search(searchInput: HTMLInputElement) {
+
+    if (this.searchInputValue === "") {
+
+      return;
+    }
 
     searchInput.blur();
     this.router.navigate(["/search"], { queryParams: { value: this.searchInputValue } });

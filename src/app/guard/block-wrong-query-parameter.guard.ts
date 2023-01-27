@@ -13,9 +13,7 @@ export class BlockWrongQueryParameterGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    const queryParams = route.queryParams['value'] as string;
-
-    if (queryParams.trimStart().length === 0) {
+    if (route.queryParams['value'] === "") {
 
       return this.router.parseUrl("")
     } else {

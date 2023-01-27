@@ -225,7 +225,19 @@ describe('HeaderComponent', () => {
       .toEqual(2);
   });
 
-  it("search_navigatesToTheSearchRouteAndPutsTheValueOfTheSearchInputValuePropertyOnValueQueryParam", () => {
+  it("search_doesNotDoAnything_whenPropertySearchInputValueIsEmpty", () => {
+
+    spyOn(router, "navigate");
+
+    const searchInput = document.querySelector(".search-input") as HTMLInputElement;
+
+    component.search(searchInput);
+
+    expect(router.navigate)
+      .not.toHaveBeenCalled();
+  });
+
+  it("search_navigatesToTheSearchRouteAndPutsTheValueOfTheSearchInputValuePropertyOnValueQueryParam_whenPropertySearchInputValueIsNotEmpty", () => {
 
     const routerSpy = spyOn(router, "navigate");
 
@@ -241,7 +253,7 @@ describe('HeaderComponent', () => {
       .toEqual({ value: "name" });
   });
 
-  it("clickSearch_setsTheValueOfTheProductNameParameterInTheSearchInputValuePropertyAndNavigatesToTheSearchRouteAndPutsTheValueOfTheProductNameParameterOnValueQueryParam", () => {
+  it("clickSearch_setsTheValueOfTheProductNameParameterInTheSearchInputValuePropertyAndNavigatesToTheSearchRouteAndPutsTheValueOfTheProductNameParameterOnValueQueryParam_wheneverCalled", () => {
 
     const routerSpy = spyOn(router, "navigate");
 
@@ -278,7 +290,7 @@ describe('HeaderComponent', () => {
       .toEqual(new Array());
   });
 
-  it("exitMobileSearch_triggersTheClickEventHandlerThatWasDefinedInTheHtmlTag", () => {
+  it("exitMobileSearch_triggersTheClickEventHandlerThatWasDefinedInTheHtmlTag_wheneverCalled", () => {
 
     const event = new MouseEvent('click');
     const compiled = fixture.nativeElement as HTMLElement;
