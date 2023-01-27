@@ -118,6 +118,11 @@ export class HeaderComponent {
       return;
     }
 
+    if (this.activateMobileSearch) {
+
+      document.documentElement.click();
+    }
+
     searchInput.blur();
     this.router.navigate(["/search"], { queryParams: { value: this.searchInputValue } });
   }
