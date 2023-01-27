@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Product } from 'src/app/domain/product';
@@ -11,7 +11,7 @@ import { Page } from 'src/app/util/page';
   templateUrl: './search-products.component.html',
   styleUrls: ['./search-products.component.css']
 })
-export class SearchProductsComponent implements OnInit, AfterViewChecked {
+export class SearchProductsComponent implements OnInit, AfterViewInit {
 
   public valueSearch: string = "";
   public searchResultsPage?: Page<Array<Product>>;
@@ -63,10 +63,11 @@ export class SearchProductsComponent implements OnInit, AfterViewChecked {
         this.currentPage = Number.parseInt(pageNumberInString);
         this.searchProducts(this.valueSearch, 20, this.currentPage);
       }
+      window.scrollTo(0, 0);
     });
   }
 
-  ngAfterViewChecked(): void {
+  ngAfterViewInit(): void {
 
     window.scrollTo(0, 0);
   }

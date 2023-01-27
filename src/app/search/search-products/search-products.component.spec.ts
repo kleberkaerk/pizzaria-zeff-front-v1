@@ -85,7 +85,7 @@ describe('SearchProductsComponent', () => {
       .toBeTruthy();
   });
 
-  it("ngOnInit_takesTheQueryParamAndUsesTheSameInTheProductServiceAndSetsTheReturnOfTheProductServiceInTheSearchResultsPagePropertyAndSetsTheCurrentPagePropertyTo0_whenThePagePropertyOfTheQueryParamIsUndefined", () => {
+  it("ngOnInit_takesTheQueryParamAndUsesTheSameInTheProductServiceAndSetsTheReturnOfTheProductServiceInTheSearchResultsPagePropertyAndSetsTheCurrentPagePropertyTo0AndScrollTheSiteToTheTop_whenThePagePropertyOfTheQueryParamIsUndefined", () => {
 
     Object.defineProperty(activatedRoute, "queryParams", {
       get: function () {
@@ -115,9 +115,15 @@ describe('SearchProductsComponent', () => {
 
     expect(component.quantityOfProducts)
       .toEqual(productsPageNgOnInit.content.length);
+
+    expect(document.documentElement.scrollTop)
+      .toEqual(0);
+
+    expect(document.documentElement.scrollLeft)
+      .toEqual(0);
   });
 
-  it("ngOnInit_takesTheQueryParamAndUsesTheSameInTheProductServiceAndSetsTheReturnOfTheProductServiceInTheSearchResultsPagePropertyAndSetsTheValueOfThePagePropertyInTheCurrentPageProperty_whenThePagePropertyOfTheQueryParamIsNotUndefined", () => {
+  it("ngOnInit_takesTheQueryParamAndUsesTheSameInTheProductServiceAndSetsTheReturnOfTheProductServiceInTheSearchResultsPagePropertyAndSetsTheValueOfThePagePropertyInTheCurrentPagePropertyAndScrollTheSiteToTheTop_whenThePagePropertyOfTheQueryParamIsNotUndefined", () => {
 
     Object.defineProperty(activatedRoute, "queryParams", {
       get: function () {
@@ -148,11 +154,17 @@ describe('SearchProductsComponent', () => {
 
     expect(component.quantityOfProducts)
       .toEqual(productsPageNgOnInit.content.length);
+
+    expect(document.documentElement.scrollTop)
+      .toEqual(0);
+
+    expect(document.documentElement.scrollLeft)
+      .toEqual(0);
   });
 
-  it("ngAfterViewChecked_scrollTheSiteToTheTop_wheneverCalled", () => {
+  it("ngAfterViewInit_scrollTheSiteToTheTop_wheneverCalled", () => {
 
-    component.ngAfterViewChecked();
+    component.ngAfterViewInit();
 
     expect(document.documentElement.scrollTop)
       .toEqual(0);
