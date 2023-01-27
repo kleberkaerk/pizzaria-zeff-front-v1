@@ -26,6 +26,15 @@ export class HeaderComponent {
     private router: Router
   ) { }
 
+  public scrollPageToTop(e: Event) {
+
+    e.stopPropagation();
+    
+    this.preventDefaultTouchStart(e);
+
+    window.scrollTo(0, 0);
+  }
+
   public searchTypedValue() {
 
     if (this.autocompleteCurrentFocus !== -1) this.autocompleteCurrentFocus = -1;

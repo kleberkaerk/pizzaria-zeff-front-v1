@@ -5,7 +5,9 @@
         routerLink="/"
         class="slogan-link"
         title="Página inicial Pizzaria Zeff"
-        aria-label="Início"
+        aria-labelledby="ir para o início"
+        (click)="scrollPageToTop($event)"
+        (touch)="scrollPageToTop($event)"
       >
         Pizzaria Zeff
       </a>
@@ -79,10 +81,7 @@
             </svg>
           </button>
 
-          <div
-            class="wrapper-autocomplete"
-            *ngIf="searchResults.length !== 0"
-          >
+          <div class="wrapper-autocomplete" *ngIf="searchResults.length !== 0">
             <div class="autocomplete">
               <div
                 class="autocomplete-item"
