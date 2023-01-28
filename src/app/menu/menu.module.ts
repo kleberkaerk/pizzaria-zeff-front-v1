@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MenuRoutingModule } from './menu-routing.module';
 import { ProductMenuComponent } from './product-menu/product-menu.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { ProductMenuComponent } from './product-menu/product-menu.component';
   ],
   imports: [
     CommonModule,
-    MenuRoutingModule
+    MenuRoutingModule,
+    SharedModule
   ]
 })
 export class MenuModule { }
