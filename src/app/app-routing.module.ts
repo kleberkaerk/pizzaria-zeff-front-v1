@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: "menu",
-    loadChildren: () => import("./menu/menu.module").then(module => module.MenuModule),
+    loadChildren: () => import("./menu/menu.module").then(module => module.MenuModule)
   },
 ];
 

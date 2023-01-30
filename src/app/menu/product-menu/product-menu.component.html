@@ -1,5 +1,19 @@
 <main>
-  <h1 class="menu-title">Bebidas</h1>
+  <div [ngSwitch]="typeOfProducts">
+    <h1 class="menu-title" *ngSwitchCase="'SALTY_PIZZA'">
+      <span>Pizzas salgadas</span>
+    </h1>
+    <h1 class="menu-title" *ngSwitchCase="'SWEET_PIZZA'">
+      <span>Pizzas doces</span>
+    </h1>
+    <h1 class="menu-title" *ngSwitchCase="'SALTY_ESFIHA'">
+      <span>Esfihas salgadas</span>
+    </h1>
+    <h1 class="menu-title" *ngSwitchCase="'SWEET_ESFIHA'">
+      <span>Esfihas doces</span>
+    </h1>
+    <h1 class="menu-title" *ngSwitchCase="'DRINK'"><span>Bebidas</span></h1>
+  </div>
 
   <ul class="products">
     <li class="product" *ngFor="let product of menuProductsPage?.content">
@@ -14,7 +28,9 @@
         </p>
       </a>
       <div class="container-button-price">
-        <button class="add-to-cart-button">Adicionar ao carrinho</button>
+        <button class="add-to-cart-button" (click)="addProductToCard($event, product)">
+          Adicionar ao carrinho
+        </button>
         <p class="product-price">
           R${{ product.getPrice | number : "1.2-2" : "br" }}
         </p>
@@ -27,6 +43,8 @@
       <button
         class="available-page"
         [ngClass]="{ 'current-page': availablePage === currentPage + 1 }"
+        (click)="changePage($event, availablePage)"
+        (touchstart)="changePage($event, availablePage)"
       >
         {{ availablePage }}
       </button>

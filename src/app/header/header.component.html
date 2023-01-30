@@ -208,19 +208,44 @@
 
           <ul class="mobile-menu-options" #mobileMenu>
             <li class="option-wrapper">
-              <a routerLink="" class="mobile-menu-option">Pizzas salgadas</a>
+              <a
+                [routerLink]="'/menu'"
+                [queryParams]="{ type: 'SALTY_PIZZA' }"
+                class="mobile-menu-option"
+                >Pizzas salgadas</a
+              >
             </li>
             <li class="option-wrapper">
-              <a routerLink="" class="mobile-menu-option">Pizzas doces</a>
+              <a
+                [routerLink]="'/menu'"
+                [queryParams]="{ type: 'SWEET_PIZZA' }"
+                class="mobile-menu-option"
+                >Pizzas doces</a
+              >
             </li>
             <li class="option-wrapper">
-              <a routerLink="" class="mobile-menu-option">Esfihas salgadas</a>
+              <a
+                [routerLink]="'/menu'"
+                [queryParams]="{ type: 'SALTY_ESFIHA' }"
+                class="mobile-menu-option"
+                >Esfihas salgadas</a
+              >
             </li>
             <li class="option-wrapper">
-              <a routerLink="" class="mobile-menu-option">Esfihas doces</a>
+              <a
+                [routerLink]="'/menu'"
+                [queryParams]="{ type: 'SWEET_ESFIHA' }"
+                class="mobile-menu-option"
+                >Esfihas doces</a
+              >
             </li>
             <li class="option-wrapper">
-              <a routerLink="" class="mobile-menu-option">Bebidas</a>
+              <a
+                [routerLink]="'/menu'"
+                [queryParams]="{ type: 'DRINK' }"
+                class="mobile-menu-option"
+                >Bebidas</a
+              >
             </li>
           </ul>
         </nav>
@@ -235,19 +260,44 @@
   >
     <ul class="computer-menu">
       <li>
-        <a [routerLink]="'/menu'" [queryParams]="{value: 'SALTY_PIZZA'}" class="menu-option">Pizzas salgadas</a>
+        <a
+          [routerLink]="'/menu'"
+          [queryParams]="{ type: 'SALTY_PIZZA' }"
+          class="menu-option"
+          >Pizzas salgadas</a
+        >
       </li>
       <li>
-        <a [routerLink]="'/menu'" [queryParams]="{value: 'SWEET_PIZZA'}" class="menu-option">Pizzas doces</a>
+        <a
+          [routerLink]="'/menu'"
+          [queryParams]="{ type: 'SWEET_PIZZA' }"
+          class="menu-option"
+          >Pizzas doces</a
+        >
       </li>
       <li>
-        <a [routerLink]="'/menu'" [queryParams]="{value: 'SALTY_ESFIHA'}" class="menu-option">Esfihas salgadas</a>
+        <a
+          [routerLink]="'/menu'"
+          [queryParams]="{ type: 'SALTY_ESFIHA' }"
+          class="menu-option"
+          >Esfihas salgadas</a
+        >
       </li>
       <li>
-        <a [routerLink]="'/menu'" [queryParams]="{value: 'SWEET_ESFIHA'}" class="menu-option">Esfihas doces</a>
+        <a
+          [routerLink]="'/menu'"
+          [queryParams]="{ type: 'SWEET_ESFIHA' }"
+          class="menu-option"
+          >Esfihas doces</a
+        >
       </li>
       <li>
-        <a [routerLink]="'/menu'" [queryParams]="{value: 'DRINK'}" class="menu-option">Bebidas</a>
+        <a
+          [routerLink]="'/menu'"
+          [queryParams]="{ type: 'DRINK' }"
+          class="menu-option"
+          >Bebidas</a
+        >
       </li>
     </ul>
   </nav>
