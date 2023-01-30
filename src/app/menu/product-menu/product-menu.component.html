@@ -2,7 +2,7 @@
   <h1 class="menu-title">Bebidas</h1>
 
   <ul class="products">
-    <li class="product" *ngFor="let product of products">
+    <li class="product" *ngFor="let product of menuProductsPage?.content">
       <a routerLink="" class="link-image-name">
         <img
           [src]="'../../../assets/images/' + product.getImage"

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { PriceRating } from 'src/app/domain/price-rating';
 import { Product } from 'src/app/domain/product';
@@ -15,45 +16,50 @@ import { Page } from 'src/app/util/page';
 export class ProductMenuComponent implements OnInit {
 
   menuProductsPage?: Page<Array<Product>>;
-  products: Array<Product> = new Array();
-  availablePages: Array<number> = new Array();
+  availablePages = new Array<number>();
   currentPage = 0;
 
-  constructor(private productService: ProductService) {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private productService: ProductService
+  ) { }
 
-    this.products.push(new Product(1, "name1", "description1", 1.00, Type.DRINK, PriceRating.REGULAR_PRICE, "soda.jpg", true));
-    this.products.push(new Product(2, "name2", "description2", 2.00, Type.DRINK, PriceRating.REGULAR_PRICE, "soda.jpg", true));
-    this.products.push(new Product(3, "name3", "description3", 3.00, Type.DRINK, PriceRating.REGULAR_PRICE, "juice.jpg", true));
-    this.products.push(new Product(4, "name4", "description4", 4.00, Type.DRINK, PriceRating.REGULAR_PRICE, "soda.jpg", true));
-    this.products.push(new Product(5, "name5", "description5", 5.00, Type.DRINK, PriceRating.REGULAR_PRICE, "juice.jpg", true));
-    this.products.push(new Product(6, "name6", "description6", 6.00, Type.DRINK, PriceRating.REGULAR_PRICE, "soda.jpg", true));
-    this.products.push(new Product(7, "name7", "description7", 7.00, Type.DRINK, PriceRating.REGULAR_PRICE, "soda.jpg", true));
-    this.products.push(new Product(8, "name8", "description8", 8.00, Type.DRINK, PriceRating.REGULAR_PRICE, "juice.jpg", true));
-    this.products.push(new Product(9, "name9", "description9", 9.00, Type.DRINK, PriceRating.REGULAR_PRICE, "soda.jpg", true));
-    this.products.push(new Product(10, "name10", "description10", 10.00, Type.DRINK, PriceRating.REGULAR_PRICE, "juice.jpg", true));
-    this.products.push(new Product(11, "name11", "description11", 11.00, Type.DRINK, PriceRating.REGULAR_PRICE, "beer.jpg", true));
-    this.products.push(new Product(12, "name12", "description12", 12.00, Type.DRINK, PriceRating.REGULAR_PRICE, "juice.jpg", true));
-    this.products.push(new Product(13, "name13", "description13", 13.00, Type.DRINK, PriceRating.REGULAR_PRICE, "beer.jpg", true));
-    this.products.push(new Product(14, "name14", "description14", 14.00, Type.DRINK, PriceRating.REGULAR_PRICE, "beer.jpg", true));
-    this.products.push(new Product(15, "name15", "description15", 15.00, Type.DRINK, PriceRating.REGULAR_PRICE, "juice.jpg", true));
-    this.products.push(new Product(16, "name16", "description16", 16.00, Type.DRINK, PriceRating.REGULAR_PRICE, "soda.jpg", true));
-    this.products.push(new Product(17, "name17", "description17", 17.00, Type.DRINK, PriceRating.REGULAR_PRICE, "beer.jpg", true));
-    this.products.push(new Product(18, "name18", "description18", 18.00, Type.DRINK, PriceRating.REGULAR_PRICE, "juice.jpg", true));
-    this.products.push(new Product(19, "name19", "description19", 19.00, Type.DRINK, PriceRating.REGULAR_PRICE, "beer.jpg", true));
-    this.products.push(new Product(20, "name20", "description20", 20.00, Type.DRINK, PriceRating.REGULAR_PRICE, "juice.jpg", true));
+  private initializeAvailablePages(numberOfPages: number) {
 
-    this.availablePages.push(1);
-    this.availablePages.push(2);
-    this.availablePages.push(3);
-    this.availablePages.push(4);
-    this.availablePages.push(5);
-    this.availablePages.push(6);
+    for (let i = 1; i <= numberOfPages; i++) {
+
+      this.availablePages.push(i);
+    }
   }
+
+  private findMenuProducts(productType: string, pageNumber: number) {
+
+    this.productService.findMenuProducts(productType, pageNumber).subscribe(productsPage => {
+
+      this.menuProductsPage = productsPage;
+
+      this.initializeAvailablePages(productsPage.totalPages);
+
+      console.log(this.menuProductsPage);
+    });
+  }
+
   ngOnInit(): void {
 
-    this.productService.findMenuProducts("DRINK", 0).subscribe(productsPage => {
+    this.activatedRoute.queryParams.subscribe(queryParams => {
 
-      // console.log(productsPage.content);
+      if (queryParams['page'] === undefined) {
+
+        this.currentPage = 0;
+        this.findMenuProducts(queryParams['value'], this.currentPage);
+      } else {
+
+        const pageNumberInString = queryParams['page'] as string;
+        this.currentPage = Number.parseInt(pageNumberInString);
+        this.findMenuProducts(queryParams['value'], this.currentPage);
+      }
+
+      window.scrollTo(0, 0);
     });
   }
 
