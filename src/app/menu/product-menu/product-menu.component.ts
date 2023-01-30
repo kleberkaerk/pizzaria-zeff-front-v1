@@ -51,7 +51,10 @@ export class ProductMenuComponent implements OnInit {
   }
   ngOnInit(): void {
 
-    this.productService.findMenuProducts("DRINK", 0).subscribe(productsPaage => { });
+    this.productService.findMenuProducts("DRINK", 0).subscribe(productsPage => {
+
+      // console.log(productsPage.content);
+    });
   }
 
 

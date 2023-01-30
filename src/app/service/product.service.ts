@@ -43,15 +43,20 @@ export class ProductService {
     return productsDTO.map(productDTO => fromProductDTOToProduct(productDTO));
   }
 
+  private mapperFromProductsDTOPageToProductsPage(productsDTOPage: Page<Array<ProductDTO>>): Page<Array<Product>> {
+
+    return {
+      ...productsDTOPage,
+      content: this.mapperFromProductsDTOToProducts(productsDTOPage.content)
+    };
+  }
+
   public searchProducts(productName: string, quantity: number, pageNumber: number): Observable<Page<Array<Product>>> {
 
     return this.httpClient.get<Page<Array<ProductDTO>>>(this.urlBase + "products/search?name=" + productName + "&size=" + quantity.toString() + "&page=" + pageNumber.toString())
       .pipe(map(productsDTOPage => {
 
-        return {
-          ...productsDTOPage,
-          content: this.mapperFromProductsDTOToProducts(productsDTOPage.content)
-        };
+        return this.mapperFromProductsDTOPageToProductsPage(productsDTOPage);
       }));
   }
 
@@ -60,10 +65,7 @@ export class ProductService {
     return this.httpClient.get<Page<Array<ProductDTO>>>(this.urlBase + "products/find-by-type?type=" + productType + "&page=" + pageNumber.toString())
       .pipe(map(productsDTOPage => {
 
-        return {
-          ...productsDTOPage,
-          content: this.mapperFromProductsDTOToProducts(productsDTOPage.content)
-        };
+        return this.mapperFromProductsDTOPageToProductsPage(productsDTOPage);
       }));
   }
 }
