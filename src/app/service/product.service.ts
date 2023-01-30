@@ -54,4 +54,16 @@ export class ProductService {
         };
       }));
   }
+
+  public findMenuProducts(productType: string, pageNumber: number): Observable<Page<Array<Product>>> {
+
+    return this.httpClient.get<Page<Array<ProductDTO>>>(this.urlBase + "products/find-by-type?type=" + productType + "&page=" + pageNumber.toString())
+      .pipe(map(productsDTOPage => {
+
+        return {
+          ...productsDTOPage,
+          content: this.mapperFromProductsDTOToProducts(productsDTOPage.content)
+        };
+      }));
+  }
 }
