@@ -13,10 +13,10 @@ import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 })
 export class ProductMenuComponent implements OnInit, AfterViewInit {
 
-  menuProductsPage!: Page<Array<Product>>;
-  availablePages = new Array<number>();
-  currentPage = 0;
-  typeOfProducts = "";
+  public menuProductsPage!: Page<Array<Product>>;
+  public availablePages = new Array<number>();
+  public currentPage = 0;
+  public typeOfProducts = "";
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -41,10 +41,7 @@ export class ProductMenuComponent implements OnInit, AfterViewInit {
 
       this.menuProductsPage = productsPage;
 
-      if (pageNumber === 0) {
-
-        this.initializeAvailablePages(productsPage.totalPages);
-      }
+      this.initializeAvailablePages(productsPage.totalPages);
     });
   }
 
@@ -57,14 +54,13 @@ export class ProductMenuComponent implements OnInit, AfterViewInit {
       if (queryParams['page'] === undefined) {
 
         this.currentPage = 0;
-        this.findMenuProducts(this.typeOfProducts, this.currentPage);
       } else {
 
         const pageNumberInString = queryParams['page'] as string;
         this.currentPage = Number.parseInt(pageNumberInString);
-        this.findMenuProducts(this.typeOfProducts, this.currentPage);
       }
 
+      this.findMenuProducts(this.typeOfProducts, this.currentPage);
       window.scrollTo(0, 0);
     });
   }

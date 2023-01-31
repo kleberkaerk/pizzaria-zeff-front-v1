@@ -12,7 +12,6 @@ import { PriceRating } from '../domain/price-rating';
 import { Page } from '../util/page';
 import { fromProductDTOToProduct } from '../util/mapper';
 
-
 describe('ProductService', () => {
 
   let service: ProductService;
@@ -22,8 +21,11 @@ describe('ProductService', () => {
   let productsMapByTypeDTOFindProductsInPromotion: ProductsMapByTypeDTO;
   let productsMapByTypeToComparisonInFindProductsInPromotion: Map<Type, Array<Product>>;
 
-  let productDTOPageSearchProducts: Page<Array<ProductDTO>>;
-  let productToComparisonInSearchProducts: Product;
+  let productsDTOPageSearchProducts: Page<Array<ProductDTO>>;
+  let productsPageToComparisonInSearchProducts: Page<Array<Product>>;
+
+  let productsDTOPageFindMenuProducts: Page<Array<ProductDTO>>;
+  let productsPageToComparisonInFindMenuProducts: Page<Array<Product>>;
 
   function setProductsMapByTypeDTOFindProductsInPromotion() {
 
@@ -68,39 +70,62 @@ describe('ProductService', () => {
     productsMapByTypeToComparisonInFindProductsInPromotion.set(Type.DRINK, productsMapByTypeDTOFindProductsInPromotion.DRINK.map(drink => fromProductDTOToProduct(drink)));
   }
 
-  function setProductDTOPageSearchProducts() {
+  function setProductsDTOPageSearchProducts() {
 
-    let product = new ProductDTO(1, "name1", "description1", 1.00, Type.DRINK, PriceRating.REGULAR_PRICE, "drink.jpg", true);
-
-    let state = {
-      empty: true,
-      sorted: true,
-      unsorted: true
-    }
-
-    let pageable = {
-      sort: state,
-      offset: 1,
-      pageSize: 1,
-      pageNumber: 1,
-      unpaged: 1,
-      paged: true
-    }
-
-    productDTOPageSearchProducts = new Page([product], pageable, 1, 1, true, 1, 1, state, true, 1, true);
+    productsDTOPageSearchProducts = new Page(
+      [new ProductDTO(1, "name1", "description1", 1.00, Type.DRINK, PriceRating.REGULAR_PRICE, "drink.jpg", true)],
+      { sort: { empty: true, sorted: true, unsorted: true }, offset: 1, pageSize: 1, pageNumber: 1, unpaged: 1, paged: true },
+      1,
+      1,
+      true,
+      1,
+      1,
+      { empty: true, sorted: true, unsorted: true },
+      true,
+      1,
+      true);
   }
 
-  function setProductToComparisonInSearchProducts() {
+  function setProductsPageToComparisonInSearchProducts() {
 
-    productToComparisonInSearchProducts = new Product(1, "name1", "description1", 1.00, Type.DRINK, PriceRating.REGULAR_PRICE, "drink.jpg", true);
+    productsPageToComparisonInSearchProducts = {
+      ...productsDTOPageSearchProducts,
+      content: [new Product(1, "name1", "description1", 1.00, Type.DRINK, PriceRating.REGULAR_PRICE, "drink.jpg", true)]
+    };
+  }
+
+  function setProductsDTOPageFindMenuProducts() {
+
+    productsDTOPageFindMenuProducts = new Page(
+      [new ProductDTO(2, "name2", "description2", 2.00, Type.SWEET_PIZZA, PriceRating.REGULAR_PRICE, "sweet-pizza.jpg", true)],
+      { sort: { empty: true, sorted: true, unsorted: true }, offset: 2, pageSize: 2, pageNumber: 2, unpaged: 2, paged: true },
+      2,
+      2,
+      true,
+      2,
+      2,
+      { empty: true, sorted: true, unsorted: true },
+      true,
+      2,
+      true);
+  }
+
+  function setProductsPageToComparisonInFindMenuProducts() {
+
+    productsPageToComparisonInFindMenuProducts = {
+      ...productsDTOPageFindMenuProducts,
+      content: [new Product(2, "name2", "description2", 2.00, Type.SWEET_PIZZA, PriceRating.REGULAR_PRICE, "sweet-pizza.jpg", true)]
+    }
   }
 
   beforeEach(() => {
 
     setProductsMapByTypeDTOFindProductsInPromotion();
     setProductsMapByTypeToComparisonInFindProductsInPromotion();
-    setProductDTOPageSearchProducts();
-    setProductToComparisonInSearchProducts();
+    setProductsDTOPageSearchProducts();
+    setProductsPageToComparisonInSearchProducts();
+    setProductsDTOPageFindMenuProducts();
+    setProductsPageToComparisonInFindMenuProducts();
   });
 
   beforeEach(() => {
@@ -124,7 +149,7 @@ describe('ProductService', () => {
     expect(service).toBeTruthy();
   });
 
-  it("findProductsInPromotion_makesARequestToTheWebServiceAndReturnsAnObjectOfTypeProductsMapByTypeDTOWithAllProductsOnPromotion_wheneverCalled", (done) => {
+  it("findProductsInPromotion_makesARequestToTheWebServiceAndReturnsAMapOfProductsGroupedByTypeWithAllProductsOnPromotion_wheneverCalled", (done) => {
 
     service.findProductsInPromotion().subscribe(productsMap => {
 
@@ -169,7 +194,7 @@ describe('ProductService', () => {
     testRequest.flush(productsMapByTypeDTOFindProductsInPromotion);
   });
 
-  it("searchProducts_makesARequestToTheWebServicePassingTheValueOfItsParametersAsQueryParamAndReturnsAnArrayOfProducts_wheneverCalled", (done) => {
+  it("searchProducts_makesARequestToTheWebServicePassingTheValueOfItsParametersAsQueryParamAndReturnsAProductArrayPage_wheneverCalled", (done) => {
 
     const productName = "name";
     const quantity = 10;
@@ -177,22 +202,47 @@ describe('ProductService', () => {
 
     service.searchProducts(productName, quantity, pageNumber).subscribe(productsPage => {
 
-      let ProductsPageToComparison = {
-        ...productDTOPageSearchProducts,
-        content: [productToComparisonInSearchProducts]
-      }
+      expect(productsPage)
+        .not.toBeNull();
 
       expect(productsPage)
-        .toEqual(ProductsPageToComparison);
+        .toEqual(productsPageToComparisonInSearchProducts);
 
       expect(productsPage.content[0])
-        .toEqual(productToComparisonInSearchProducts);
+        .toEqual(productsPageToComparisonInSearchProducts.content[0]);
 
       done();
     });
 
     const request = httpTestingController.expectOne(urlBase + "products/search?name=" + productName + "&size=" + quantity.toString() + "&page=" + pageNumber.toString());
 
-    request.flush(productDTOPageSearchProducts);
+    request.flush(productsDTOPageSearchProducts);
+  });
+
+  it("findMenuProducts_makesARequestToTheWebServicePassingTheValueOfItsParametersAsQueryParamAndReturnsAProductArrayPage_wheneverCalled", (done) => {
+
+    const productType = "SWEET_PIZZA";
+    const pageNumber = 0;
+
+    service.findMenuProducts(productType, pageNumber).subscribe(productsPage => {
+
+      expect(productsPage)
+        .not.toBeNull();
+
+      expect(productsPage)
+        .toEqual(productsPageToComparisonInFindMenuProducts);
+
+      expect(productsPage.content.length)
+        .toEqual(productsPageToComparisonInFindMenuProducts.content.length);
+
+      expect(productsPage.content[0])
+        .toEqual(productsPageToComparisonInFindMenuProducts.content[0]);
+
+      done();
+    });
+
+    const request = httpTestingController.expectOne(urlBase + "products/find-by-type?type=" + productType + "&page=" + pageNumber.toString());
+
+    request.flush(productsDTOPageFindMenuProducts);
   });
 });

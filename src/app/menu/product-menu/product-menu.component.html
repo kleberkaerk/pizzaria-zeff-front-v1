@@ -28,7 +28,11 @@
         </p>
       </a>
       <div class="container-button-price">
-        <button class="add-to-cart-button" (click)="addProductToCard($event, product)">
+        <button
+          class="add-to-cart-button"
+          (click)="addProductToCard($event, product)"
+          (touchstart)="addProductToCard($event, product)"
+        >
           Adicionar ao carrinho
         </button>
         <p class="product-price">

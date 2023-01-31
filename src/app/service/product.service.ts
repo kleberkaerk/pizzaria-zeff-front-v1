@@ -23,11 +23,11 @@ export class ProductService {
 
     const productsMap = new Map<Type, Array<Product>>();
 
-    productsMap.set(Type.SALTY_PIZZA, productsMapByTypeDTO.SALTY_PIZZA.map(saltyPizza => fromProductDTOToProduct(saltyPizza)))
-    productsMap.set(Type.SWEET_PIZZA, productsMapByTypeDTO.SWEET_PIZZA.map(sweetPizza => fromProductDTOToProduct(sweetPizza)))
-    productsMap.set(Type.SALTY_ESFIHA, productsMapByTypeDTO.SALTY_ESFIHA.map(saltyEsfiha => fromProductDTOToProduct(saltyEsfiha)))
-    productsMap.set(Type.SWEET_ESFIHA, productsMapByTypeDTO.SWEET_ESFIHA.map(sweetEsfiha => fromProductDTOToProduct(sweetEsfiha)))
-    productsMap.set(Type.DRINK, productsMapByTypeDTO.DRINK.map(drink => fromProductDTOToProduct(drink)))
+    productsMap.set(Type.SALTY_PIZZA, productsMapByTypeDTO.SALTY_PIZZA.map(saltyPizza => fromProductDTOToProduct(saltyPizza)));
+    productsMap.set(Type.SWEET_PIZZA, productsMapByTypeDTO.SWEET_PIZZA.map(sweetPizza => fromProductDTOToProduct(sweetPizza)));
+    productsMap.set(Type.SALTY_ESFIHA, productsMapByTypeDTO.SALTY_ESFIHA.map(saltyEsfiha => fromProductDTOToProduct(saltyEsfiha)));
+    productsMap.set(Type.SWEET_ESFIHA, productsMapByTypeDTO.SWEET_ESFIHA.map(sweetEsfiha => fromProductDTOToProduct(sweetEsfiha)));
+    productsMap.set(Type.DRINK, productsMapByTypeDTO.DRINK.map(drink => fromProductDTOToProduct(drink)));
 
     return productsMap;
   }
@@ -35,7 +35,7 @@ export class ProductService {
   public findProductsInPromotion(): Observable<Map<Type, Array<Product>>> {
 
     return this.httpClient.get<ProductsMapByTypeDTO>(this.urlBase + "products/find-promotions")
-      .pipe(map(productMapByTypeDTO => this.mapperFromProductsMapByTypeDTOToProductsMapByType(productMapByTypeDTO)))
+      .pipe(map(productMapByTypeDTO => this.mapperFromProductsMapByTypeDTOToProductsMapByType(productMapByTypeDTO)));
   }
 
   private mapperFromProductsDTOToProducts(productsDTO: Array<ProductDTO>): Array<Product> {
