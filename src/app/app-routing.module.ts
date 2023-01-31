@@ -7,12 +7,12 @@ import { FilterValueQueryParamGuard } from './guard/filter-value-query-param.gua
 import { FilterProductTypeQueryParamGuard } from './guard/filter-product-type-query-param.guard';
 
 const routes: Routes = [
-  {
-    path: "",
-    component: SliderComponent,
-    canDeactivate: [FinalizeSliderComponentTasksGuard],
-    pathMatch: "full"
-  },
+  // {
+  //   path: "",
+  //   component: SliderComponent,
+  //   canDeactivate: [FinalizeSliderComponentTasksGuard],
+  //   pathMatch: "full"
+  // },
   {
     path: "search",
     loadChildren: () => import("./search/search.module").then(module => module.SearchModule),
@@ -23,6 +23,10 @@ const routes: Routes = [
     loadChildren: () => import("./menu/menu.module").then(module => module.MenuModule),
     canActivate: [FilterProductTypeQueryParamGuard]
   },
+  {
+    path: "",
+    loadChildren: () => import("./product/product.module").then(module => module.ProductModule)
+  }
 ];
 
 @NgModule({
