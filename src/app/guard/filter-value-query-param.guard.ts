@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class BlockWrongQueryParameterGuard implements CanActivate {
+export class FilterValueQueryParamGuard implements CanActivate {
 
   constructor(private router: Router) { }
 
@@ -15,7 +15,7 @@ export class BlockWrongQueryParameterGuard implements CanActivate {
 
     if (route.queryParams['value'] === "") {
 
-      return this.router.parseUrl("")
+      return this.router.parseUrl("");
     } else {
 
       return true;

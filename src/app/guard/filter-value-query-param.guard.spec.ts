@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { BlockWrongQueryParameterGuard } from './block-wrong-query-parameter.guard';
+import { FilterValueQueryParamGuard } from './filter-value-query-param.guard';
 
 describe('BlockWrongQueryParameterGuard', () => {
 
-  let guard: BlockWrongQueryParameterGuard;
+  let guard: FilterValueQueryParamGuard;
   let routerToComparisonInCanActivate: Router;
 
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe('BlockWrongQueryParameterGuard', () => {
       ]
     });
 
-    guard = TestBed.inject(BlockWrongQueryParameterGuard);
+    guard = TestBed.inject(FilterValueQueryParamGuard);
     routerToComparisonInCanActivate = TestBed.inject(Router);
   });
 
