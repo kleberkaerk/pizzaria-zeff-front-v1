@@ -11,7 +11,8 @@
             routerLink="/product"
             class="link-image-name"
             (click)="viewProduct($event, saltyPizza)"
-            (touchstart)="viewProduct($event, saltyPizza)"
+            (touchstart)="setInitialTouchPoint($event)"
+            (touchend)="viewProduct($event, saltyPizza)"
           >
             <img
               [src]="'../../../assets/images/' + saltyPizza.getImage"

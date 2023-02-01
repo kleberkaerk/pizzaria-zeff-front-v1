@@ -20,6 +20,8 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
   private featuredProducts: Map<Type, Array<Product>> = new Map();
   private limiterToAfterViewChecked = 0;
+  private initialTouch = { clientX: 0, clientY: 0 };
+  private finalTouch = { clientX: 0, clientY: 0 };
 
   constructor(
     private productService: ProductRequisitionService,
@@ -94,17 +96,38 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  public setInitialTouchPoint(e: TouchEvent) {
+
+    this.initialTouch.clientX = e.changedTouches.item(0)?.clientX as number;
+    this.initialTouch.clientY = e.changedTouches.item(0)?.clientY as number;
+  }
+
+  public itsAMovingTouch(e: Event): boolean {
+
+    if (e.type === "touchend") {
+
+      this.finalTouch.clientX = (e as TouchEvent).changedTouches.item(0)?.clientX as number;
+      this.finalTouch.clientY = (e as TouchEvent).changedTouches.item(0)?.clientY as number;
+
+      if (JSON.stringify(this.finalTouch) !== JSON.stringify(this.initialTouch)) return true;
+    }
+
+    return false;
+  }
+
   public viewProduct(e: Event, product: Product) {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchStart(e);
+    this.preventDefaultTouchend(e);
+
+    if (this.itsAMovingTouch(e)) return;
 
     this.productTransferService.setProduct(product);
 
-    if(e.type === "touchstart") {
-      
-      this.router.navigate(['/product']);
+    if (e.type === "touchend") {
+
+      this.router.navigate(["/product"]);
     }
   }
 
@@ -133,9 +156,9 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     return this.featuredProducts.get(Type.DRINK);
   }
 
-  private preventDefaultTouchStart(e: Event) {
+  private preventDefaultTouchend(e: Event) {
 
-    if (e.cancelable && e.type === "touchstart") {
+    if (e.cancelable && e.type === "touchend") {
 
       e.preventDefault();
     }
@@ -164,7 +187,7 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
   public seeMoreProducts(e: Event, wrapper: HTMLElement, products: Element, button: Element) {
 
-    this.preventDefaultTouchStart(e);
+    this.preventDefaultTouchend(e);
 
     const clientWidth = document.documentElement.clientWidth;
     const productsHeight = products.scrollHeight;
@@ -183,7 +206,7 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
   public addProductToCart(e: Event, product: Product) {
 
-    this.preventDefaultTouchStart(e);
+    this.preventDefaultTouchend(e);
 
     this.shoppingCartService.addProduct(product);
   }

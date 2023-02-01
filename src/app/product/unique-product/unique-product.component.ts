@@ -22,6 +22,9 @@ export class UniqueProductComponent implements OnInit {
 
     this.productTransferService.getProduct().subscribe(product => {
 
+    // console.log(product)
+
+
       if (product === undefined) {
 
         this.router.navigate(["/"]);
