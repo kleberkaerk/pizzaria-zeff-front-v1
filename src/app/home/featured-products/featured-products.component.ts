@@ -6,6 +6,8 @@ import { Type } from 'src/app/domain/type';
 import { registerLocaleData } from '@angular/common';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
+import { ProductTransferService } from 'src/app/service/product-transfer.service';
+import { Router } from '@angular/router';
 
 registerLocaleData(localeBr, "br");
 
@@ -21,7 +23,9 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private productService: ProductRequisitionService,
-    private shoppingCartService: ShoppingCartService
+    private shoppingCartService: ShoppingCartService,
+    private productTransferService: ProductTransferService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -87,6 +91,20 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     } else {
 
       this.removeButton(5);
+    }
+  }
+
+  public viewProduct(e: Event, product: Product) {
+
+    e.stopPropagation();
+
+    this.preventDefaultTouchStart(e);
+
+    this.productTransferService.setProduct(product);
+
+    if(e.type === "touchstart") {
+      
+      this.router.navigate(['/product']);
     }
   }
 

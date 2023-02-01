@@ -7,12 +7,12 @@ import { FilterValueQueryParamGuard } from './guard/filter-value-query-param.gua
 import { FilterProductTypeQueryParamGuard } from './guard/filter-product-type-query-param.guard';
 
 const routes: Routes = [
-  // {
-  //   path: "",
-  //   component: SliderComponent,
-  //   canDeactivate: [FinalizeSliderComponentTasksGuard],
-  //   pathMatch: "full"
-  // },
+  {
+    path: "",
+    component: SliderComponent,
+    canDeactivate: [FinalizeSliderComponentTasksGuard],
+    pathMatch: "full"
+  },
   {
     path: "search",
     loadChildren: () => import("./search/search.module").then(module => module.SearchModule),
@@ -24,7 +24,7 @@ const routes: Routes = [
     canActivate: [FilterProductTypeQueryParamGuard]
   },
   {
-    path: "",
+    path: "product",
     loadChildren: () => import("./product/product.module").then(module => module.ProductModule)
   }
 ];

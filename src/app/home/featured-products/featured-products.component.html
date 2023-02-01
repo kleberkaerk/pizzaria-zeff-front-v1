@@ -7,7 +7,12 @@
     <div id="wrapper-salty-pizza" class="wrapper" #wrapperSaltyPizza>
       <ul class="products" #saltyPizzas>
         <li class="product" *ngFor="let saltyPizza of getSaltyPizzas()">
-          <a routerLink="" class="link-image-name">
+          <a
+            routerLink="/product"
+            class="link-image-name"
+            (click)="viewProduct($event, saltyPizza)"
+            (touchstart)="viewProduct($event, saltyPizza)"
+          >
             <img
               [src]="'../../../assets/images/' + saltyPizza.getImage"
               alt="Foto de pizza"
@@ -68,7 +73,12 @@
     <div id="wrapper-sweet-pizza" class="wrapper" #wrapperSweetPizza>
       <ul class="products" #sweetPizzas>
         <li class="product" *ngFor="let sweetPizza of getSweetPizzas()">
-          <a routerLink="" class="link-image-name">
+          <a
+            routerLink="/product"
+            class="link-image-name"
+            (click)="viewProduct($event, sweetPizza)"
+            (touchstart)="viewProduct($event, sweetPizza)"
+          >
             <img
               [src]="'../../../assets/images/' + sweetPizza.getImage"
               alt="Foto de pizza"
@@ -129,7 +139,12 @@
     <div id="wrapper-salty-esfiha" class="wrapper" #wrapperSaltyEsfiha>
       <ul class="products" #saltyEsfihas>
         <li class="product" *ngFor="let saltyEsfiha of getSaltyEsfihas()">
-          <a routerLink="" class="link-image-name">
+          <a
+            routerLink="/product"
+            class="link-image-name"
+            (click)="viewProduct($event, saltyEsfiha)"
+            (touchstart)="viewProduct($event, saltyEsfiha)"
+          >
             <img
               [src]="'../../../assets/images/' + saltyEsfiha.getImage"
               alt="Foto de pizza"
@@ -190,7 +205,12 @@
     <div id="wrapper-sweet-esfiha" class="wrapper" #wrapperSweetEsfiha>
       <ul class="products" #sweetEsfihas>
         <li class="product" *ngFor="let sweetEsfiha of getSweetEsfihas()">
-          <a routerLink="" class="link-image-name">
+          <a
+            routerLink="/product"
+            class="link-image-name"
+            (click)="viewProduct($event, sweetEsfiha)"
+            (touchstart)="viewProduct($event, sweetEsfiha)"
+          >
             <img
               [src]="'../../../assets/images/' + sweetEsfiha.getImage"
               alt="Foto de pizza"
@@ -251,7 +271,12 @@
     <div id="wrapper-drink" class="wrapper" #wrapperDrink>
       <ul class="products" #drinks>
         <li class="product" *ngFor="let drink of getDrinks()">
-          <a routerLink="" class="link-image-name">
+          <a
+            routerLink="/product"
+            class="link-image-name"
+            (click)="viewProduct($event, drink)"
+            (touchstart)="viewProduct($event, drink)"
+          >
             <img
               [src]="'../../../assets/images/' + drink.getImage"
               alt="Foto de pizza"

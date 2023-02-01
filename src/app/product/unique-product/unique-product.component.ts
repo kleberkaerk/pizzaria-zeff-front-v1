@@ -1,15 +1,33 @@
-import { Component } from '@angular/core';
-import { PriceRating } from 'src/app/domain/price-rating';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { Product } from 'src/app/domain/product';
-import { Type } from 'src/app/domain/type';
+import { ProductTransferService } from 'src/app/service/product-transfer.service';
 
 @Component({
   selector: 'app-unique-product',
   templateUrl: './unique-product.component.html',
   styleUrls: ['./unique-product.component.css']
 })
-export class UniqueProductComponent {
-  
-  product: Product = new Product(1, "name1", "description 1 ", 1.00, Type.DRINK, PriceRating.PROMOTION, "juice.jpg", true);
+export class UniqueProductComponent implements OnInit {
 
+  public product!: Product;
+
+  constructor(
+    private productTransferService: ProductTransferService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+
+    this.productTransferService.getProduct().subscribe(product => {
+
+      if (product === undefined) {
+
+        this.router.navigate(["/"]);
+      }
+
+      this.product = product as Product;
+    });
+  }
 }
