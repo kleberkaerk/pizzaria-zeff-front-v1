@@ -2,7 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FeaturedProductsComponent } from './featured-products.component';
-import { ProductService } from 'src/app/service/product.service';
+import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
 import { Type } from 'src/app/domain/type'
 import { PriceRating } from 'src/app/domain/price-rating'
 import { of } from 'rxjs';
@@ -14,7 +14,7 @@ describe('FeaturedProductsComponent', () => {
 
   let component: FeaturedProductsComponent;
   let fixture: ComponentFixture<FeaturedProductsComponent>;
-  let productService: ProductService;
+  let productService: ProductRequisitionService;
   let shoppingCartService: ShoppingCartService;
 
   let productsMapByType: Map<Type, Array<Product>>;
@@ -143,7 +143,7 @@ describe('FeaturedProductsComponent', () => {
     fixture = TestBed.createComponent(FeaturedProductsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    productService = TestBed.inject(ProductService);
+    productService = TestBed.inject(ProductRequisitionService);
     shoppingCartService = TestBed.inject(ShoppingCartService);
   });
 

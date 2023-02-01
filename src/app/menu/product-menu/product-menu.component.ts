@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ProductService } from 'src/app/service/product.service';
+import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
 import { Page } from 'src/app/util/page';
 import { Product } from 'src/app/domain/product';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
@@ -20,7 +20,7 @@ export class ProductMenuComponent implements OnInit, AfterViewInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private productService: ProductService,
+    private productService: ProductRequisitionService,
     private router: Router,
     private shoppingCartService: ShoppingCartService
   ) { }

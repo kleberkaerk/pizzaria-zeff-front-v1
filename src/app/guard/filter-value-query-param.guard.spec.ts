@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { FilterValueQueryParamGuard } from './filter-value-query-param.guard';
 
-describe('BlockWrongQueryParameterGuard', () => {
+describe('FilterValueQueryParamGuard', () => {
 
   let guard: FilterValueQueryParamGuard;
   let routerToComparisonInCanActivate: Router;

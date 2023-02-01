@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Product } from '../domain/product';
-import { ProductService } from '../service/product.service'
+import { ProductRequisitionService } from '../service/product.requisition.service'
 
 @Component({
   selector: 'app-header',
@@ -22,7 +22,7 @@ export class HeaderComponent {
   public autocompleteCurrentFocus = -1;
 
   constructor(
-    private productService: ProductService,
+    private productService: ProductRequisitionService,
     private router: Router
   ) { }
 

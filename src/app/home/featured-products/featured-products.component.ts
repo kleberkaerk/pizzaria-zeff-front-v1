@@ -5,7 +5,7 @@ import { Product } from 'src/app/domain/product';
 import { Type } from 'src/app/domain/type';
 import { registerLocaleData } from '@angular/common';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
-import { ProductService } from 'src/app/service/product.service';
+import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
 
 registerLocaleData(localeBr, "br");
 
@@ -20,7 +20,7 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
   private limiterToAfterViewChecked = 0;
 
   constructor(
-    private productService: ProductService,
+    private productService: ProductRequisitionService,
     private shoppingCartService: ShoppingCartService
   ) { }
 

@@ -7,7 +7,7 @@ import { PriceRating } from 'src/app/domain/price-rating';
 
 import { Product } from 'src/app/domain/product';
 import { Type } from 'src/app/domain/type';
-import { ProductService } from 'src/app/service/product.service';
+import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { Page } from 'src/app/util/page';
@@ -21,7 +21,7 @@ describe('SearchProductsComponent', () => {
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let productService: ProductService;
+  let productService: ProductRequisitionService;
   let shoppingCartService: ShoppingCartService;
 
   let productsPageNgOnInit: Page<Array<Product>>;
@@ -75,7 +75,7 @@ describe('SearchProductsComponent', () => {
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    productService = TestBed.inject(ProductService);
+    productService = TestBed.inject(ProductRequisitionService);
     shoppingCartService = TestBed.inject(ShoppingCartService);
   });
 

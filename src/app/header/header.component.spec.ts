@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { HeaderComponent } from './header.component';
-import { ProductService } from '../service/product.service'
+import { ProductRequisitionService } from '../service/product.requisition.service'
 import { Router } from '@angular/router';
 import { Page } from '../util/page';
 import { Product } from '../domain/product';
@@ -17,7 +17,7 @@ describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
-  let productService: ProductService;
+  let productService: ProductRequisitionService;
   let router: Router;
 
   let productsSearchTypedValue: Page<Array<Product>>;
@@ -85,7 +85,7 @@ describe('HeaderComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    productService = TestBed.inject(ProductService);
+    productService = TestBed.inject(ProductRequisitionService);
     router = TestBed.inject(Router);
   });
 

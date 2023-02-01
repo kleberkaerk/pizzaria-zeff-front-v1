@@ -13,7 +13,7 @@ import { fromProductDTOToProduct } from '../util/mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
+export class ProductRequisitionService {
 
   private readonly urlBase = environment.urlBase;
 

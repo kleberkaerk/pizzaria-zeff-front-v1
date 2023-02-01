@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 
-import { ProductService } from './product.service';
+import { ProductRequisitionService } from './product.requisition.service';
 
 import { ProductDTO } from '../dto/product-dto';
 import { ProductsMapByTypeDTO } from '../dto/product-by-type-map-dto';
@@ -12,9 +12,9 @@ import { PriceRating } from '../domain/price-rating';
 import { Page } from '../util/page';
 import { fromProductDTOToProduct } from '../util/mapper';
 
-describe('ProductService', () => {
+describe('ProductRequisitionService', () => {
 
-  let service: ProductService;
+  let service: ProductRequisitionService;
   let urlBase = environment.urlBase;
   let httpTestingController: HttpTestingController;
 
@@ -136,7 +136,7 @@ describe('ProductService', () => {
       ]
     });
 
-    service = TestBed.inject(ProductService);
+    service = TestBed.inject(ProductRequisitionService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 

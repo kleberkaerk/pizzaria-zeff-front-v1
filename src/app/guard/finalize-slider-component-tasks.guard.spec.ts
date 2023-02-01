@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { FinalizeSliderComponentTasksGuard } from './finalize-slider-component-tasks.guard';
 import { SliderComponent } from '../home/slider/slider.component';
 
-describe('FinalizeHomeComponentTasksGuard', () => {
+describe('FinalizeSliderComponentTasksGuard', () => {
 
   let guard: FinalizeSliderComponentTasksGuard;
   let sliderComponent: SliderComponent;
