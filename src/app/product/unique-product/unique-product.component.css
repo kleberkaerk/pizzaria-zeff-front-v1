@@ -1,0 +1,147 @@
+main {
+    margin-top: 50px;
+    min-height: calc(100vh - 338px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    flex: 1;
+    display: flex;
+    padding: 0px 20px;
+    max-width: 1200px;
+}
+
+.image-wrapper {
+    flex: 1;
+    display: flex;
+}
+
+.image {
+    width: 100%;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.wrapper-name-and-price {
+    display: flex;
+    justify-content: space-between;
+}
+
+.name {
+    font-family: 'content-font-medium', sans-serif;
+    margin-left: 10px;
+}
+
+.price {
+    font-family: 'number-font-medium', sans-serif;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.description {
+    font-family: 'content-font-light', sans-serif;
+    text-align: center;
+    margin: 0px 10px;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.add-to-cart-button {
+    font-family: 'content-font-medium', sans-serif;
+    color: var(--blue-color);
+    border: 1px solid var(--blue-color);
+    background-color: inherit;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-to-cart-button:hover {
+    background-color: var(--blue-color);
+    color: var(--white-color);
+}
+
+.purchase-button {
+    font-family: 'content-font-medium', sans-serif;
+    color: var(--green-color);
+    border: 1px solid var(--green-color);
+    background-color: inherit;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.purchase-button:hover {
+    background-color: var(--green-color);
+    color: var(--white-color);
+}
+
+@media (max-width: 1023px), (max-height: 1023px) and (pointer: coarse) {
+
+    .wrapper {
+        flex-direction: column;
+        max-width: 600px;
+    }
+
+    .wrapper-name-and-price {
+        margin-top: 20px;
+    }
+
+    .description {
+        margin: 20px 10px 0px 10px;
+    }
+
+    .button-wrapper {
+        margin-top: 20px;
+        flex-direction: column;
+    }
+
+    .add-to-cart-button:hover {
+        color: var(--blue-color);
+        background-color: var(--white-color);
+    }
+
+    .add-to-cart-button:active {
+        color: var(--white-color);
+        background-color: var(--blue-color);
+    }
+
+    .purchase-button {
+        color: var(--white-color);
+        background-color: var(--green-color);
+    }
+}
+
+@media (max-width: 480px), (max-height: 480px) and (pointer: coarse) {
+
+    main {
+        margin-top: 0px;
+        min-height: calc(100vh - 288px);
+        align-items: flex-start;
+    }
+
+    .wrapper {
+        padding: 0px;
+    }
+
+    .add-to-cart-button {
+        margin: 0px 10px;
+    }
+
+    .purchase-button {
+        margin: 0px 10px;
+    }
+}
