@@ -1,7 +1,7 @@
 <main>
   <div class="wrapper" *ngIf="product !== undefined">
     <div class="image-wrapper">
-        <img
+      <img
         [src]="'../../../assets/images/' + product.getImage"
         alt="Imagem de produto"
         class="image"
@@ -9,13 +9,27 @@
     </div>
     <div class="content-wrapper">
       <div class="wrapper-name-and-price">
-        <p class="name"> {{ product.getName }}</p>
+        <p class="name">{{ product.getName }}</p>
         <p class="price">R${{ product.getPrice | number : "1.2-2" : "br" }}</p>
       </div>
       <p class="description">{{ product.getDescription }}</p>
       <div class="button-wrapper">
-        <button class="add-to-cart-button">Adicionar ao carrinho</button>
-        <button class="purchase-button">Comprar</button>
+        <button
+          class="add-to-cart-button"
+          (click)="addProductToCart($event)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="addProductToCart($event)"
+        >
+          Adicionar ao carrinho
+        </button>
+        <button
+          class="purchase-button"
+          (click)="purchaseProduct($event)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="purchaseProduct($event)"
+        >
+          Comprar
+        </button>
       </div>
     </div>
   </div>
