@@ -8,6 +8,7 @@ import { Type } from 'src/app/domain/type';
 import { ProductTransferService } from 'src/app/service/product-transfer.service';
 import { FooterComponent } from 'src/app/shared/footer/footer.component';
 import { ProductComponent } from './product.component';
+import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 
 describe('UniqueProductComponent', () => {
 
@@ -16,6 +17,7 @@ describe('UniqueProductComponent', () => {
 
   let productTransferService: ProductTransferService;
   let router: Router;
+  let shoppingCartService: ShoppingCartService;
 
   let productNgOnInit: Product;
 
@@ -45,6 +47,7 @@ describe('UniqueProductComponent', () => {
 
     productTransferService = TestBed.inject(ProductTransferService);
     router = TestBed.inject(Router);
+    shoppingCartService = TestBed.inject(ShoppingCartService);
   });
 
   it('should create', () => {
@@ -73,5 +76,72 @@ describe('UniqueProductComponent', () => {
 
     expect(routerSpy.calls.first().args[0][0])
       .toEqual("/");
+  });
+
+  it("setInitialTouchPoint_initializeInitialTouchPropertyWithEventObject_wheneverCalled", () => {
+
+    const touchEvent = new TouchEvent("touchend", { cancelable: true });
+
+    spyOn(touchEvent.changedTouches, "item");
+
+    component.setInitialTouchPoint(touchEvent);
+
+    expect(touchEvent.changedTouches.item)
+      .toHaveBeenCalled();
+  });
+
+  it("addProductToCart_callsThePreventDefaultMethodInEventObjectCancelableAndTouchendDoesNotDoAnything_whenEventObjectIsTouchendTypeAndItIsAMovingTouchMethodReturnsTrue", () => {
+
+    const touchEvent = new TouchEvent("touchend", { cancelable: true });
+    const touchMock = new Touch({ clientX: 1, clientY: 2, identifier: 1, target: new EventTarget() });
+
+    spyOn(touchEvent, "preventDefault");
+    spyOn(touchEvent.changedTouches, "item").and.callFake(() => touchMock);
+
+    spyOn(shoppingCartService, "addProduct");
+
+    component.addProductToCart(touchEvent);
+
+    expect(touchEvent.preventDefault)
+      .toHaveBeenCalled();
+
+    expect(shoppingCartService.addProduct)
+      .not.toHaveBeenCalled();
+  });
+
+  it("addProductToCart_callsTheShoppingCartServiceToAddANewProduct_whenItIsAMovingTouchMethodReturnsFalse", () => {
+
+    const touchEvent = new TouchEvent("touchend", { cancelable: true });
+    const touchMock = new Touch({ clientX: 1, clientY: 2, identifier: 1, target: new EventTarget() });
+
+    spyOn(touchEvent.changedTouches, "item").and.callFake(() => touchMock);
+
+    component.setInitialTouchPoint(touchEvent);
+
+    spyOn(touchEvent, "preventDefault");
+
+    spyOn(shoppingCartService, "addProduct");
+
+    component.addProductToCart(touchEvent);
+
+    expect(touchEvent.preventDefault)
+      .toHaveBeenCalled();
+
+    expect(shoppingCartService.addProduct)
+      .toHaveBeenCalled();
+  });
+
+  it("purchaseProduct_callsThePreventDefaultMethodInEventObjectCancelableAndTouchendDoesNotDoAnything_whenEventObjectIsTouchendTypeAndItIsAMovingTouchMethodReturnsTrue", () => {
+
+    const touchEvent = new TouchEvent("touchend", { cancelable: true });
+    const touchMock = new Touch({ clientX: 1, clientY: 2, identifier: 1, target: new EventTarget() });
+
+    spyOn(touchEvent, "preventDefault");
+    spyOn(touchEvent.changedTouches, "item").and.callFake(() => touchMock);
+
+    component.purchaseProduct(touchEvent);
+
+    expect(touchEvent.preventDefault)
+      .toHaveBeenCalled();
   });
 });
