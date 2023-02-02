@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Product } from 'src/app/domain/product';
+import { ProductTransferService } from 'src/app/service/product-transfer.service';
 import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 import { Page } from 'src/app/util/page';
@@ -18,10 +19,13 @@ export class SearchProductsComponent implements OnInit, AfterViewInit {
   public quantityOfProducts = 0;
   public availablePages: Array<number> = new Array();
   public currentPage = 0;
+  private initialTouch = { clientX: 0, clientY: 0 };
+  private finalTouch = { clientX: 0, clientY: 0 };
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private productService: ProductRequisitionService,
+    private productTransferService: ProductTransferService,
     private shoppingCartService: ShoppingCartService,
     private router: Router
   ) { }
@@ -72,11 +76,48 @@ export class SearchProductsComponent implements OnInit, AfterViewInit {
     window.scrollTo(0, 0);
   }
 
-  private preventDefaultTouchStart(e: Event) {
+  public setInitialTouchPoint(e: TouchEvent) {
 
-    if (e.cancelable && e.type === "touchstart") {
+    e.stopPropagation();
+
+    this.initialTouch.clientX = e.changedTouches.item(0)?.clientX as number;
+    this.initialTouch.clientY = e.changedTouches.item(0)?.clientY as number;
+  }
+
+  private preventDefaultTouchend(e: Event) {
+
+    if (e.cancelable && e.type === "touchend") {
 
       e.preventDefault();
+    }
+  }
+
+  private itIsAMovingTouch(e: Event): boolean {
+
+    if (e.type === "touchend") {
+
+      this.finalTouch.clientX = (e as TouchEvent).changedTouches.item(0)?.clientX as number;
+      this.finalTouch.clientY = (e as TouchEvent).changedTouches.item(0)?.clientY as number;
+
+      if (JSON.stringify(this.finalTouch) !== JSON.stringify(this.initialTouch)) return true;
+    }
+
+    return false;
+  }
+
+  public viewProduct(e: Event, product: Product) {
+
+    e.stopPropagation();
+
+    this.preventDefaultTouchend(e);
+
+    if (this.itIsAMovingTouch(e)) return;
+
+    this.productTransferService.setProduct(product);
+
+    if (e.type === "touchend") {
+
+      this.router.navigate(["/product"]);
     }
   }
 
@@ -84,9 +125,9 @@ export class SearchProductsComponent implements OnInit, AfterViewInit {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchStart(e);
-
-    if (this.currentPage === (nextPage - 1)) return;
+    this.preventDefaultTouchend(e);
+    
+    if (this.itIsAMovingTouch(e) || this.currentPage === (nextPage - 1)) return;
 
     this.router.navigate(["/search"], { queryParams: { value: this.valueSearch, page: (nextPage - 1) } });
   }
@@ -94,8 +135,10 @@ export class SearchProductsComponent implements OnInit, AfterViewInit {
   public addProductToCard(e: Event, product: Product) {
 
     e.stopPropagation();
-
-    this.preventDefaultTouchStart(e);
+    
+    this.preventDefaultTouchend(e);
+    
+    if (this.itIsAMovingTouch(e)) return;
 
     this.shoppingCartService.addProduct(product);
   }

@@ -1,11 +1,21 @@
 <main>
-  <h1 class="title-of-search-results" *ngIf="quantityOfProducts > 0">Resultados para {{ valueSearch }}</h1>
-  <h1 class="title-of-search-results" *ngIf="quantityOfProducts === 0">Infelizmente não encontramos resultados para {{ valueSearch }}</h1>
+  <h1 class="title-of-search-results" *ngIf="quantityOfProducts > 0">
+    Resultados para {{ valueSearch }}
+  </h1>
+  <h1 class="title-of-search-results" *ngIf="quantityOfProducts === 0">
+    Infelizmente não encontramos resultados para {{ valueSearch }}
+  </h1>
 
   <div>
     <ul class="products">
       <li class="product" *ngFor="let product of searchResultsPage?.content">
-        <a routerLink="" class="product-link">
+        <a
+          routerLink="/product"
+          class="product-link"
+          (click)="viewProduct($event, product)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="viewProduct($event, product)"
+        >
           <img
             [src]="'../../../assets/images/' + product.getImage"
             alt="Foto de pizza"
@@ -22,7 +32,8 @@
           <button
             class="add-to-cart-button"
             (click)="addProductToCard($event, product)"
-            (touchstart)="addProductToCard($event, product)"
+            (touchstart)="setInitialTouchPoint($event)"
+            (touchend)="addProductToCard($event, product)"
           >
             Adicionar ao carrinho
           </button>
@@ -36,7 +47,8 @@
           class="available-page"
           [ngClass]="{ 'current-page': availablePage === currentPage + 1 }"
           (click)="changePage($event, availablePage)"
-          (touchstart)="changePage($event, availablePage)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="changePage($event, availablePage)"
         >
           {{ availablePage }}
         </button>
