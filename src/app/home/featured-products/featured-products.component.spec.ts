@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 import { FeaturedProductsComponent } from './featured-products.component';
 import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
@@ -9,6 +10,7 @@ import { of } from 'rxjs';
 import { Product } from 'src/app/domain/product';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ProductTransferService } from 'src/app/service/product-transfer.service';
 
 describe('FeaturedProductsComponent', () => {
 
@@ -16,10 +18,18 @@ describe('FeaturedProductsComponent', () => {
   let fixture: ComponentFixture<FeaturedProductsComponent>;
   let productService: ProductRequisitionService;
   let shoppingCartService: ShoppingCartService;
+  let productTransferService: ProductTransferService;
+  let router: Router;
 
+  let productViewProduct: Product;
   let productsMapByType: Map<Type, Array<Product>>;
   let productsMapByTypeSeeMoreProducts: Map<Type, Array<Product>>;
   let productToAddProductToCart: Product;
+
+  function setProductViewProduct() {
+
+    productViewProduct = new Product(1, "name1", "description1", 10.00, Type.SWEET_ESFIHA, PriceRating.PROMOTION, "sweet-pizza.jpg", true);
+  }
 
   function setProductsMapByType() {
 
@@ -122,6 +132,7 @@ describe('FeaturedProductsComponent', () => {
 
   beforeEach(() => {
 
+    setProductViewProduct();
     setProductsMapByType();
     setProductsMapByTypeSeeMoreProducts();
     setProductToAddProductToCart();
@@ -143,8 +154,11 @@ describe('FeaturedProductsComponent', () => {
     fixture = TestBed.createComponent(FeaturedProductsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
     productService = TestBed.inject(ProductRequisitionService);
     shoppingCartService = TestBed.inject(ShoppingCartService);
+    productTransferService = TestBed.inject(ProductTransferService);
+    router = TestBed.inject(Router);
   });
 
   it('should create', () => {
@@ -317,6 +331,71 @@ describe('FeaturedProductsComponent', () => {
       .toContain("auto-height-wrapper");
   });
 
+  it("setInitialTouchPoint_initializeInitialTouchPropertyWithEventObject_wheneverCalled", () => {
+
+    const touchEvent = new TouchEvent("touchend", { cancelable: true });
+
+    spyOn(touchEvent.changedTouches, "item");
+
+    component.setInitialTouchPoint(touchEvent);
+
+    expect(touchEvent.changedTouches.item)
+      .toHaveBeenCalled();
+  });
+
+  it("viewProduct_doesNotDoAnything_whenItIsAMovingTouchMethodReturnsTrue", () => {
+
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+
+    const mockTouchend = new Touch({ clientX: 2, clientY: 1, identifier: 1, target: new EventTarget() });
+
+    spyOn(touchendEvent.changedTouches, "item").and.callFake(() => mockTouchend);
+
+    spyOn(productTransferService, "setProduct");
+
+    component.viewProduct(touchendEvent, productViewProduct);
+
+    expect(productTransferService.setProduct)
+      .not.toHaveBeenCalled();
+  });
+
+  it("viewProduct_callsTheProductTransferServicePassingTheProductParameter_whenEverythingGoesWell", () => {
+
+    const mouseEvent = new MouseEvent("click");
+
+    spyOn(productTransferService, "setProduct");
+
+    component.viewProduct(mouseEvent, productViewProduct);
+
+    expect(productTransferService.setProduct)
+      .toHaveBeenCalled();
+  });
+
+  it("viewProduct_callsTheProductTransferServicePassingTheProductParameterAndNavigatesToProductRoute_whenTheEventIsOfTypeTouchend", () => {
+
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+    const touchstartEvent = new TouchEvent("touchstart", { cancelable: true });
+
+    const mockTouch = new Touch({ clientX: 0, clientY: 0, identifier: 1, target: new EventTarget() });
+
+    spyOn(touchendEvent.changedTouches, "item").and.callFake(() => mockTouch);
+    spyOn(touchstartEvent.changedTouches, "item").and.callFake(() => mockTouch);
+
+    component.setInitialTouchPoint(touchstartEvent);
+
+    spyOn(productTransferService, "setProduct");
+
+    const routerSpy = spyOn(router, "navigate");
+
+    component.viewProduct(touchendEvent, productViewProduct);
+
+    expect(productTransferService.setProduct)
+      .toHaveBeenCalled();
+
+    expect(routerSpy.calls.first().args[0])
+      .toEqual(["/product"]);
+  });
+
   it("getSaltyPizzas_returnsTheArrayOfSaltyPizzasFromTheFeaturedProductsMap_wheneverCalled", () => {
 
     spyOn(productService, "findProductsInPromotion")
@@ -417,12 +496,41 @@ describe('FeaturedProductsComponent', () => {
       .toContain((productsMapByType.get(Type.DRINK) as Array<Product>)[0]);
   });
 
+  it("seeMoreProducts_doesNotDoAnything_whenItIsAMovingTouchMethodReturnsTrue", () => {
+
+    spyOn(productService, "findProductsInPromotion")
+      .and.returnValue(of(productsMapByTypeSeeMoreProducts));
+
+    component.ngOnInit();
+
+    fixture.detectChanges();
+
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+
+    const mockTouchend = new Touch({ clientX: 2, clientY: 1, identifier: 1, target: new EventTarget() });
+
+    spyOn(touchendEvent.changedTouches, "item").and.callFake(() => mockTouchend);
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
+    const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
+    const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
+
+    expect(wrapperElement.clientHeight)
+      .toEqual(650);
+
+    component.seeMoreProducts(touchendEvent, wrapperElement, productsElement, buttonElement);
+
+    expect(wrapperElement.clientHeight)
+      .toEqual(650);
+  });
+
   it("seeMoreProducts_adds1630PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => {
 
     spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeSeeMoreProducts));
 
-    component.ngOnInit(); 
+    component.ngOnInit();
 
     fixture.detectChanges();
 
@@ -610,13 +718,37 @@ describe('FeaturedProductsComponent', () => {
       .toContain("remove-expansion-button");
   });
 
-  it("addProductToCart_callsThePreventDefaultMethodInEventObjectCancelableAndTouchstartAndCallsTheShoppingCartServiceToAddANewProduct_wheneverCalled", () => {
+  it("addProductToCart_doesNotDoAnything_whenItIsAMovingTouchMethodReturnsTrue", () => {
 
-    let touchstartEvent = new TouchEvent("touchstart", { cancelable: true });
+    const touchEvent = new TouchEvent("touchend", { cancelable: true });
+    const touchMock = new Touch({ clientX: 1, clientY: 2, identifier: 1, target: new EventTarget() });
+
+    spyOn(touchEvent.changedTouches, "item").and.callFake(() => touchMock);
 
     spyOn(shoppingCartService, "addProduct");
 
-    component.addProductToCart(touchstartEvent, productToAddProductToCart);
+    component.addProductToCart(touchEvent, productToAddProductToCart);
+
+    expect(shoppingCartService.addProduct)
+      .not.toHaveBeenCalled();
+  });
+
+  it("addProductToCart_callsThePreventDefaultMethodInEventObjectCancelableAndTouchendAndCallsTheShoppingCartServiceToAddANewProduct_whenItIsAMovingTouchMethodReturnsFalse", () => {
+
+    const touchEvent = new TouchEvent("touchend", { cancelable: true });
+    const touchMock = new Touch({ clientX: 1, clientY: 2, identifier: 1, target: new EventTarget() });
+
+    spyOn(touchEvent, "preventDefault");
+    spyOn(touchEvent.changedTouches, "item").and.callFake(() => touchMock);
+
+    component.setInitialTouchPoint(touchEvent);
+
+    spyOn(shoppingCartService, "addProduct");
+
+    component.addProductToCart(touchEvent, productToAddProductToCart);
+
+    expect(touchEvent.preventDefault)
+      .toHaveBeenCalled();
 
     expect(shoppingCartService.addProduct)
       .toHaveBeenCalled();

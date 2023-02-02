@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ProductRoutingModule } from './product-routing.module';
-import { UniqueProductComponent } from './unique-product/unique-product.component';
+import { ProductComponent } from './product/product.component';
 import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
   declarations: [
-    UniqueProductComponent
+    ProductComponent
   ],
   imports: [
     CommonModule,

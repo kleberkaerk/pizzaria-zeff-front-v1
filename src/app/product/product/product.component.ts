@@ -6,10 +6,10 @@ import { ProductTransferService } from 'src/app/service/product-transfer.service
 
 @Component({
   selector: 'app-unique-product',
-  templateUrl: './unique-product.component.html',
-  styleUrls: ['./unique-product.component.css']
+  templateUrl: './product.component.html',
+  styleUrls: ['./product.component.css']
 })
-export class UniqueProductComponent implements OnInit {
+export class ProductComponent implements OnInit {
 
   public product!: Product;
 
@@ -22,15 +22,13 @@ export class UniqueProductComponent implements OnInit {
 
     this.productTransferService.getProduct().subscribe(product => {
 
-    // console.log(product)
-
-
       if (product === undefined) {
 
         this.router.navigate(["/"]);
-      }
+      } else {
 
-      this.product = product as Product;
+        this.product = product;
+      }
     });
   }
 }

@@ -1,5 +1,5 @@
 <main>
-  <div class="wrapper">
+  <div class="wrapper" *ngIf="product !== undefined">
     <div class="image-wrapper">
         <img
         [src]="'../../../assets/images/' + product.getImage"

@@ -30,6 +30,14 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     private router: Router
   ) { }
 
+  private preventDefaultTouchend(e: Event) {
+
+    if (e.cancelable && e.type === "touchend") {
+
+      e.preventDefault();
+    }
+  }
+
   ngOnInit(): void {
 
     this.productService.findProductsInPromotion().subscribe(
@@ -98,11 +106,13 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
   public setInitialTouchPoint(e: TouchEvent) {
 
+    e.stopPropagation();
+
     this.initialTouch.clientX = e.changedTouches.item(0)?.clientX as number;
     this.initialTouch.clientY = e.changedTouches.item(0)?.clientY as number;
   }
 
-  public itsAMovingTouch(e: Event): boolean {
+  private itIsAMovingTouch(e: Event): boolean {
 
     if (e.type === "touchend") {
 
@@ -121,7 +131,7 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
     this.preventDefaultTouchend(e);
 
-    if (this.itsAMovingTouch(e)) return;
+    if (this.itIsAMovingTouch(e)) return;
 
     this.productTransferService.setProduct(product);
 
@@ -156,14 +166,6 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     return this.featuredProducts.get(Type.DRINK);
   }
 
-  private preventDefaultTouchend(e: Event) {
-
-    if (e.cancelable && e.type === "touchend") {
-
-      e.preventDefault();
-    }
-  }
-
   private showMoreProducts(
     wrapper: HTMLElement,
     productsHeight: number,
@@ -187,7 +189,11 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
   public seeMoreProducts(e: Event, wrapper: HTMLElement, products: Element, button: Element) {
 
-    this.preventDefaultTouchend(e);
+    e.stopPropagation();
+
+    this.preventDefaultTouchend(e);  
+
+    if (this.itIsAMovingTouch(e)) return;
 
     const clientWidth = document.documentElement.clientWidth;
     const productsHeight = products.scrollHeight;
@@ -206,7 +212,11 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
   public addProductToCart(e: Event, product: Product) {
 
+    e.stopPropagation();
+
     this.preventDefaultTouchend(e);
+
+    if (this.itIsAMovingTouch(e)) return;
 
     this.shoppingCartService.addProduct(product);
   }
