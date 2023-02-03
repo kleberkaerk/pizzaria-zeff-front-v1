@@ -9,7 +9,8 @@
         wrapperProductsInTheShoppingCart
       )
     "
-    (touchstart)="
+    (touchstart)="setInitialTouchPoint($event)"
+    (touchend)="
       displayProductsInShoppingCart(
         $event,
         shoppingCartButton,
@@ -36,7 +37,8 @@
       <button
         class="close-shopping-cart-button"
         (click)="closeShoppingCart($event)"
-        (touchstart)="closeShoppingCart($event)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="closeShoppingCart($event)"
       >
         <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
           <path
@@ -56,7 +58,8 @@
           </p>
           <button
             (click)="removeProduct($event, i)"
-            (touchstart)="removeProduct($event, i)"
+            (touchstart)="setInitialTouchPoint($event)"
+            (touchend)="removeProduct($event, i)"
             class="button-delete-product-from-shopping-cart"
           >
             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
@@ -78,7 +81,14 @@
             >R$ {{ amount | number : "1.2-2" : "br" }}</span
           >
         </p>
-        <button class="checkout-button">Finalizar pedido</button>
+        <button
+          class="purchase-products-button"
+          (click)="purchaseProducts($event)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="purchaseProducts($event)"
+        >
+          Finalizar pedido
+        </button>
       </div>
     </div>
   </div>

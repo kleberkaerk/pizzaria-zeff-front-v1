@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Product } from '../domain/product';
 import { ShoppingCartService } from '../service/shopping-cart.service';
+import { TouchEventHandlerService } from '../service/touch-event-handler.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -14,7 +15,10 @@ export class ShoppingCartComponent implements OnInit {
   public amount = 0;
   readonly htmlElement = document.documentElement;
 
-  constructor(private shoppingCartService: ShoppingCartService) { }
+  constructor(
+    private shoppingCartService: ShoppingCartService,
+    private touchEventHandlerService: TouchEventHandlerService
+  ) { }
 
   private calculateTotalAmount() {
 
@@ -37,17 +41,18 @@ export class ShoppingCartComponent implements OnInit {
     });
   }
 
-  private preventDefaultTouchStart(e: Event) {
+  public setInitialTouchPoint(e: TouchEvent) {
 
-    if (e.cancelable && e.type === "touchstart") {
-
-      e.preventDefault();
-    }
+    this.touchEventHandlerService.setInitialTouchPoint(e);
   }
 
   public displayProductsInShoppingCart(e: Event, button: Element, focusElement: Element) {
 
-    this.preventDefaultTouchStart(e);
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     const externalClickChecker = (e: Event) => {
 
@@ -74,7 +79,9 @@ export class ShoppingCartComponent implements OnInit {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchStart(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.htmlElement.click();
   }
@@ -83,8 +90,21 @@ export class ShoppingCartComponent implements OnInit {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchStart(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.shoppingCartService.removeProduct(index);
+  }
+
+  public purchaseProducts(e: Event) {
+
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    // Lógica aqui
   }
 }
