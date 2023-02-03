@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Product } from 'src/app/domain/product';
 import { ProductTransferService } from 'src/app/service/product-transfer.service';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
+import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 
 @Component({
   selector: 'app-unique-product',
@@ -13,12 +14,11 @@ import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 export class ProductComponent implements OnInit, AfterViewInit {
 
   public product!: Product;
-  private initialTouch = { clientX: 0, clientY: 0 };
-  private finalTouch = { clientX: 0, clientY: 0 };
 
   constructor(
     private productTransferService: ProductTransferService,
     private router: Router,
+    private touchEventHandlerService: TouchEventHandlerService,
     private shoppingCartService: ShoppingCartService
   ) { }
 
@@ -43,40 +43,16 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
   public setInitialTouchPoint(e: TouchEvent) {
 
-    e.stopPropagation();
-
-    this.initialTouch.clientX = e.changedTouches.item(0)?.clientX as number;
-    this.initialTouch.clientY = e.changedTouches.item(0)?.clientY as number;
-  }
-
-  private preventDefaultTouchend(e: Event) {
-
-    if (e.cancelable && e.type === "touchend") {
-
-      e.preventDefault();
-    }
-  }
-
-  private itIsAMovingTouch(e: Event): boolean {
-
-    if (e.type === "touchend") {
-
-      this.finalTouch.clientX = (e as TouchEvent).changedTouches.item(0)?.clientX as number;
-      this.finalTouch.clientY = (e as TouchEvent).changedTouches.item(0)?.clientY as number;
-
-      if (JSON.stringify(this.finalTouch) !== JSON.stringify(this.initialTouch)) return true;
-    }
-
-    return false;
+    this.touchEventHandlerService.setInitialTouchPoint(e);
   }
 
   public addProductToCart(e: Event) {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchend(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    if (this.itIsAMovingTouch(e)) return;
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.shoppingCartService.addProduct(this.product);
   }
@@ -85,9 +61,9 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchend(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    if (this.itIsAMovingTouch(e)) return;
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     // Lógica aqui
   }

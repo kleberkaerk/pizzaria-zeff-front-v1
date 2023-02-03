@@ -319,7 +319,7 @@ describe('ProductMenuComponent', () => {
       .toEqual({ type: "DRINK", page: 1 });
   });
 
-  it("addProductToCard_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
+  it("addProductToCart_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
 
@@ -328,7 +328,7 @@ describe('ProductMenuComponent', () => {
 
     spyOn(shoppingCartService, "addProduct");
 
-    component.addProductToCard(touchendEvent, productToAddProductToCart);
+    component.addProductToCart(touchendEvent, productToAddProductToCart);
 
     expect(touchEventHandlerService.preventDefaultTouchend)
       .toHaveBeenCalled();
@@ -337,7 +337,7 @@ describe('ProductMenuComponent', () => {
       .not.toHaveBeenCalled();
   });
 
-  it("addProductToCard_callsTheShoppingCartServiceToAddANewProductAndPassesTheProductOfTheParameterAsAnArgument_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalse", () => {
+  it("addProductToCart_callsTheShoppingCartServiceToAddANewProductAndPassesTheProductOfTheParameterAsAnArgument_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalse", () => {
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
 
@@ -346,7 +346,10 @@ describe('ProductMenuComponent', () => {
 
     const shoppingCartServiceSpy = spyOn(shoppingCartService, "addProduct");
 
-    component.addProductToCard(touchendEvent, productToAddProductToCart);
+    component.addProductToCart(touchendEvent, productToAddProductToCart);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+    .toHaveBeenCalled();
 
     expect(shoppingCartService.addProduct)
       .toHaveBeenCalled();

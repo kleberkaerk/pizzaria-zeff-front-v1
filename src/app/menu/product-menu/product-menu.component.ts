@@ -108,7 +108,7 @@ export class ProductMenuComponent implements OnInit, AfterViewInit {
     this.router.navigate(["/menu"], { queryParams: { type: this.typeOfProducts, page: (nextPage - 1) } });
   }
 
-  public addProductToCard(e: Event, product: Product) {
+  public addProductToCart(e: Event, product: Product) {
 
     e.stopPropagation();
 

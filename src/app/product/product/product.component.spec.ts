@@ -9,6 +9,7 @@ import { ProductTransferService } from 'src/app/service/product-transfer.service
 import { FooterComponent } from 'src/app/shared/footer/footer.component';
 import { ProductComponent } from './product.component';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
+import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 
 describe('UniqueProductComponent', () => {
 
@@ -17,18 +18,25 @@ describe('UniqueProductComponent', () => {
 
   let productTransferService: ProductTransferService;
   let router: Router;
+  let touchEventHandlerService: TouchEventHandlerService;
   let shoppingCartService: ShoppingCartService;
 
   let productNgOnInit: Product;
+  let productToAddProductToCart: Product;
 
   function setProductNgOnInit() {
 
     productNgOnInit = new Product(1, "name1", "description1", 1.00, Type.SALTY_PIZZA, PriceRating.REGULAR_PRICE, "salty-pizza.jpg", true);
   }
 
+  function setProductToAddProductToCart() {
+
+    productToAddProductToCart = new Product(2, "name2", "description2", 2.00, Type.DRINK, PriceRating.REGULAR_PRICE, "drink.jpg", true);
+  }
   beforeEach(() => {
 
     setProductNgOnInit();
+    setProductToAddProductToCart();
   });
 
   beforeEach(async () => {
@@ -47,6 +55,7 @@ describe('UniqueProductComponent', () => {
 
     productTransferService = TestBed.inject(ProductTransferService);
     router = TestBed.inject(Router);
+    touchEventHandlerService = TestBed.inject(TouchEventHandlerService);
     shoppingCartService = TestBed.inject(ShoppingCartService);
   });
 
@@ -78,70 +87,85 @@ describe('UniqueProductComponent', () => {
       .toEqual("/");
   });
 
-  it("setInitialTouchPoint_initializeInitialTouchPropertyWithEventObject_wheneverCalled", () => {
+  it("ngAfterViewInit_scrollTheSiteToTheTop_wheneverCalled", () => {
 
-    const touchEvent = new TouchEvent("touchend", { cancelable: true });
+    component.ngAfterViewInit();
 
-    spyOn(touchEvent.changedTouches, "item");
+    expect(document.documentElement.scrollTop)
+      .toEqual(0);
+
+    expect(document.documentElement.scrollLeft)
+      .toEqual(0);
+  });
+
+  it("setInitialTouchPoint_callsTouchEventHandlerServiceAndPassesEventObjectAsArgument_wheneverCalled", () => {
+
+    const touchEvent = new TouchEvent("touchstart", { cancelable: true });
+
+    const touchEventHandlerServiceSpy = spyOn(touchEventHandlerService, "setInitialTouchPoint");
 
     component.setInitialTouchPoint(touchEvent);
 
-    expect(touchEvent.changedTouches.item)
+    expect(touchEventHandlerService.setInitialTouchPoint)
       .toHaveBeenCalled();
+
+    expect(touchEventHandlerServiceSpy.calls.argsFor(0)[0])
+      .toEqual(touchEvent);
   });
 
-  it("addProductToCart_callsThePreventDefaultMethodInEventObjectCancelableAndTouchendDoesNotDoAnything_whenEventObjectIsTouchendTypeAndItIsAMovingTouchMethodReturnsTrue", () => {
+  it("addProductToCart_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
-    const touchEvent = new TouchEvent("touchend", { cancelable: true });
-    const touchMock = new Touch({ clientX: 1, clientY: 2, identifier: 1, target: new EventTarget() });
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
 
-    spyOn(touchEvent, "preventDefault");
-    spyOn(touchEvent.changedTouches, "item").and.callFake(() => touchMock);
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
 
     spyOn(shoppingCartService, "addProduct");
 
-    component.addProductToCart(touchEvent);
+    component.addProductToCart(touchendEvent);
 
-    expect(touchEvent.preventDefault)
+    expect(touchEventHandlerService.preventDefaultTouchend)
       .toHaveBeenCalled();
 
     expect(shoppingCartService.addProduct)
       .not.toHaveBeenCalled();
   });
 
-  it("addProductToCart_callsTheShoppingCartServiceToAddANewProduct_whenItIsAMovingTouchMethodReturnsFalse", () => {
+  it("addProductToCart_callsTheShoppingCartServiceToAddANewProductAndPassesTheProductPropertyAsAnArgument_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalse", () => {
 
-    const touchEvent = new TouchEvent("touchend", { cancelable: true });
-    const touchMock = new Touch({ clientX: 1, clientY: 2, identifier: 1, target: new EventTarget() });
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
 
-    spyOn(touchEvent.changedTouches, "item").and.callFake(() => touchMock);
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
-    component.setInitialTouchPoint(touchEvent);
+    const shoppingCartServiceSpy = spyOn(shoppingCartService, "addProduct");
 
-    spyOn(touchEvent, "preventDefault");
+    component.product = productToAddProductToCart;
 
-    spyOn(shoppingCartService, "addProduct");
+    component.addProductToCart(touchendEvent);
 
-    component.addProductToCart(touchEvent);
-
-    expect(touchEvent.preventDefault)
+    expect(touchEventHandlerService.preventDefaultTouchend)
       .toHaveBeenCalled();
 
     expect(shoppingCartService.addProduct)
       .toHaveBeenCalled();
+
+    expect(shoppingCartServiceSpy.calls.first().args[0])
+      .toEqual(productToAddProductToCart);
   });
 
-  it("purchaseProduct_callsThePreventDefaultMethodInEventObjectCancelableAndTouchendDoesNotDoAnything_whenEventObjectIsTouchendTypeAndItIsAMovingTouchMethodReturnsTrue", () => {
+  it("purchaseProduct_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
-    const touchEvent = new TouchEvent("touchend", { cancelable: true });
-    const touchMock = new Touch({ clientX: 1, clientY: 2, identifier: 1, target: new EventTarget() });
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
 
-    spyOn(touchEvent, "preventDefault");
-    spyOn(touchEvent.changedTouches, "item").and.callFake(() => touchMock);
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
 
-    component.purchaseProduct(touchEvent);
+    component.purchaseProduct(touchendEvent);
 
-    expect(touchEvent.preventDefault)
-      .toHaveBeenCalled();
+    expect(touchEventHandlerService.preventDefaultTouchend)
+    .toHaveBeenCalled();
+
+    // Tem mais
   });
 });
