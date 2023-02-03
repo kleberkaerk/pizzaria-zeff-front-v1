@@ -17,7 +17,13 @@
 
   <ul class="products">
     <li class="product" *ngFor="let product of menuProductsPage?.content">
-      <a routerLink="" class="link-image-name">
+      <a
+        routerLink="/product"
+        class="link-image-name"
+        (click)="viewProduct($event, product)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="viewProduct($event, product)"
+      >
         <img
           [src]="'../../../assets/images/' + product.getImage"
           alt="Foto de pizza"
@@ -31,7 +37,8 @@
         <button
           class="add-to-cart-button"
           (click)="addProductToCard($event, product)"
-          (touchstart)="addProductToCard($event, product)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="addProductToCard($event, product)"
         >
           Adicionar ao carrinho
         </button>
@@ -48,7 +55,8 @@
         class="available-page"
         [ngClass]="{ 'current-page': availablePage === currentPage + 1 }"
         (click)="changePage($event, availablePage)"
-        (touchstart)="changePage($event, availablePage)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="changePage($event, availablePage)"
       >
         {{ availablePage }}
       </button>

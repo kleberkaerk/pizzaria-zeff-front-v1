@@ -12,6 +12,8 @@ import { Type } from 'src/app/domain/type';
 import { PriceRating } from 'src/app/domain/price-rating';
 import { Page } from 'src/app/util/page';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
+import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
+import { ProductTransferService } from 'src/app/service/product-transfer.service';
 
 describe('ProductMenuComponent', () => {
 
@@ -21,10 +23,13 @@ describe('ProductMenuComponent', () => {
   let router: Router;
 
   let productService: ProductRequisitionService;
+  let touchEventHandlerService: TouchEventHandlerService;
+  let productTransferService: ProductTransferService;
   let shoppingCartService: ShoppingCartService;
 
   let productsPageNgOnInit: Page<Array<Product>>;
   let productToAddProductToCart: Product;
+  let productViewProduct: Product;
 
   function setProductsPageNgOnInit() {
 
@@ -56,10 +61,16 @@ describe('ProductMenuComponent', () => {
     productToAddProductToCart = new Product(1, "name1", "description1", 1.00, Type.DRINK, PriceRating.PROMOTION, "drink.jpg", true);
   }
 
+  function setProductViewProduct() {
+
+    productViewProduct = new Product(1, "name1", "description1", 10.00, Type.SALTY_PIZZA, PriceRating.PROMOTION, "salty-pizza.jpg", true);
+  }
+
   beforeEach(() => {
 
     setProductsPageNgOnInit();
     setProductToAddProductToCart();
+    setProductViewProduct();
   });
 
   beforeEach(async () => {
@@ -82,6 +93,8 @@ describe('ProductMenuComponent', () => {
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     productService = TestBed.inject(ProductRequisitionService);
+    touchEventHandlerService = TestBed.inject(TouchEventHandlerService);
+    productTransferService = TestBed.inject(ProductTransferService);
     router = TestBed.inject(Router);
     shoppingCartService = TestBed.inject(ShoppingCartService);
   });
@@ -167,25 +180,137 @@ describe('ProductMenuComponent', () => {
       .toEqual(0);
   });
 
-  it("changePage_callsPreventDefaultFunctionOfTheEventObjectAndDoesNothing_whenEventIsOfTypeTouchstartAndIsCancelableAndParameterNextPage-1IsEqualToPropertyCurrentPage", () => {
+  it("setInitialTouchPoint_callsTouchEventHandlerServiceAndPassesEventObjectAsArgument_wheneverCalled", () => {
 
-    const touchstartEvent = new TouchEvent("touchstart", { cancelable: true });
+    const touchEvent = new TouchEvent("touchstart", { cancelable: true });
 
-    component.changePage(touchstartEvent, 1);
+    const touchEventHandlerServiceSpy = spyOn(touchEventHandlerService, "setInitialTouchPoint");
 
-    expect(component.currentPage)
-      .toEqual(0);
+    component.setInitialTouchPoint(touchEvent);
+
+    expect(touchEventHandlerService.setInitialTouchPoint)
+      .toHaveBeenCalled();
+
+    expect(touchEventHandlerServiceSpy.calls.argsFor(0)[0])
+      .toEqual(touchEvent);
   });
 
-  it("changePage_navigatesToTheMenuRouteAndSendsTheTypeAndPageQueryParameters_whenCurrentPagePropertyIsDifferentFromNextPageParameter", () => {
+  it("viewProduct_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
-    const routerSpy = spyOn(router, "navigate");
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
+
+    spyOn(productTransferService, "setProduct");
+
+    component.viewProduct(touchendEvent, productViewProduct);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
+    expect(productTransferService.setProduct)
+      .not.toHaveBeenCalled();
+  });
+
+  it("viewProduct_callsTheProductTransferServicePassingTheProductParameterAsArgument_whenEverythingGoesWell", () => {
 
     const mouseEvent = new MouseEvent("click");
 
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
+    const productTransferServiceSpy = spyOn(productTransferService, "setProduct");
+
+    component.viewProduct(mouseEvent, productViewProduct);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
+    expect(productTransferService.setProduct)
+      .toHaveBeenCalled();
+
+    expect(productTransferServiceSpy.calls.argsFor(0)[0])
+      .toEqual(productViewProduct);
+  });
+
+  it("viewProduct_callsTheProductTransferServicePassingTheProductParameterAndNavigatesToProductRoute_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndTheEventIsOfTypeTouchend", () => {
+
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
+    const productTransferServiceSpy = spyOn(productTransferService, "setProduct");
+
+    const routerSpy = spyOn(router, "navigate");
+
+    component.viewProduct(touchendEvent, productViewProduct);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
+    expect(productTransferService.setProduct)
+      .toHaveBeenCalled();
+
+    expect(productTransferServiceSpy.calls.argsFor(0)[0])
+      .toEqual(productViewProduct);
+
+    expect(routerSpy.calls.first().args[0])
+      .toEqual(["/product"]);
+  });
+
+  it("changePage_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
+
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
+
+    spyOn(router, "navigate");
+
+    component.changePage(touchendEvent, 2);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
+    expect(router.navigate)
+      .not.toHaveBeenCalled();
+  });
+
+  it("changePage_doesNothing_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndParameterNextPage-1IsEqualToPropertyCurrentPage", () => {
+
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
+    spyOn(router, "navigate");
+
+    component.changePage(touchendEvent, 1);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
+    expect(router.navigate)
+      .not.toHaveBeenCalled();
+  });
+
+  it("changePage_navigatesToTheMenuRouteAndSendsTheTypeAndPageQueryParameters_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndCurrentPagePropertyIsDifferentFromNextPageParameter", () => {
+
+    const mouseEvent = new MouseEvent("click");
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
     component.typeOfProducts = "DRINK";
 
+    const routerSpy = spyOn(router, "navigate");
+
     component.changePage(mouseEvent, 2);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
 
     expect(routerSpy.calls.first().args[0])
       .toContain("/menu");
@@ -194,15 +319,39 @@ describe('ProductMenuComponent', () => {
       .toEqual({ type: "DRINK", page: 1 });
   });
 
-  it("addProductToCard_callsTheShoppingCartServiceToAddANewProduct_wheneverCalled", () => {
+  it("addProductToCard_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
-    let mouseEvent = new MouseEvent("click");
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
 
     spyOn(shoppingCartService, "addProduct");
 
-    component.addProductToCard(mouseEvent, productToAddProductToCart);
+    component.addProductToCard(touchendEvent, productToAddProductToCart);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
+    expect(shoppingCartService.addProduct)
+      .not.toHaveBeenCalled();
+  });
+
+  it("addProductToCard_callsTheShoppingCartServiceToAddANewProductAndPassesTheProductOfTheParameterAsAnArgument_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalse", () => {
+
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
+    const shoppingCartServiceSpy = spyOn(shoppingCartService, "addProduct");
+
+    component.addProductToCard(touchendEvent, productToAddProductToCart);
 
     expect(shoppingCartService.addProduct)
       .toHaveBeenCalled();
+
+    expect(shoppingCartServiceSpy.calls.first().args[0])
+      .toEqual(productToAddProductToCart);
   });
 });

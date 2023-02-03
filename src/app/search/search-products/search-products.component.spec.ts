@@ -188,7 +188,7 @@ describe('SearchProductsComponent', () => {
 
   it("setInitialTouchPoint_callsTouchEventHandlerServiceAndPassesEventObjectAsArgument_wheneverCalled", () => {
 
-    const touchEvent = new TouchEvent("touchend", { cancelable: true });
+    const touchEvent = new TouchEvent("touchstart", { cancelable: true });
 
     const touchEventHandlerServiceSpy = spyOn(touchEventHandlerService, "setInitialTouchPoint");
 
@@ -223,11 +223,15 @@ describe('SearchProductsComponent', () => {
 
     const mouseEvent = new MouseEvent("click");
 
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
     const productTransferServiceSpy = spyOn(productTransferService, "setProduct");
 
     component.viewProduct(mouseEvent, productViewProduct);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+    .toHaveBeenCalled();
 
     expect(productTransferService.setProduct)
       .toHaveBeenCalled();
@@ -240,6 +244,7 @@ describe('SearchProductsComponent', () => {
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
 
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
     const productTransferServiceSpy = spyOn(productTransferService, "setProduct");
@@ -247,6 +252,9 @@ describe('SearchProductsComponent', () => {
     const routerSpy = spyOn(router, "navigate");
 
     component.viewProduct(touchendEvent, productViewProduct);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+    .toHaveBeenCalled();
 
     expect(productTransferService.setProduct)
       .toHaveBeenCalled();
@@ -258,11 +266,11 @@ describe('SearchProductsComponent', () => {
       .toEqual(["/product"]);
   });
 
-  it("changePage_callsPreventDefaultFunctionOfTheEventObjectAndDoesNothing_whenEventIsOfTypeTouchstartAndIsCancelableAndParameterNextPage-1IsEqualToPropertyCurrentPage", () => {
+  it("changePage_callsPreventDefaultFunctionOfTheEventObjectAndDoesNothing_whenEventIsOfTypeTouchendAndIsCancelableAndParameterNextPage-1IsEqualToPropertyCurrentPage", () => {
 
-    const touchstartEvent = new TouchEvent("touchstart", { cancelable: true });
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
 
-    component.changePage(touchstartEvent, 1);
+    component.changePage(touchendEvent, 1);
 
     expect(component.currentPage)
       .toEqual(0);

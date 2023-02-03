@@ -337,7 +337,7 @@ describe('FeaturedProductsComponent', () => {
 
   it("setInitialTouchPoint_callsTouchEventHandlerServiceAndPassesEventObjectAsArgument_wheneverCalled", () => {
 
-    const touchEvent = new TouchEvent("touchend", { cancelable: true });
+    const touchEvent = new TouchEvent("touchstart", { cancelable: true });
 
     const touchEventHandlerServiceSpy = spyOn(touchEventHandlerService, "setInitialTouchPoint");
 

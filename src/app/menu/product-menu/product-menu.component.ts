@@ -5,6 +5,8 @@ import { ProductRequisitionService } from 'src/app/service/product.requisition.s
 import { Page } from 'src/app/util/page';
 import { Product } from 'src/app/domain/product';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
+import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
+import { ProductTransferService } from 'src/app/service/product-transfer.service';
 
 @Component({
   selector: 'app-product-menu',
@@ -21,6 +23,8 @@ export class ProductMenuComponent implements OnInit, AfterViewInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private productService: ProductRequisitionService,
+    private touchEventHandlerService: TouchEventHandlerService,
+    private productTransferService: ProductTransferService,
     private router: Router,
     private shoppingCartService: ShoppingCartService
   ) { }
@@ -70,11 +74,24 @@ export class ProductMenuComponent implements OnInit, AfterViewInit {
     window.scrollTo(0, 0);
   }
 
-  private preventDefaultTouchStart(e: Event) {
+  public setInitialTouchPoint(e: TouchEvent) {
 
-    if (e.cancelable && e.type === "touchstart") {
+    this.touchEventHandlerService.setInitialTouchPoint(e);
+  }
 
-      e.preventDefault();
+  public viewProduct(e: Event, product: Product) {
+
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    this.productTransferService.setProduct(product);
+
+    if (e.type === "touchend") {
+
+      this.router.navigate(["/product"]);
     }
   }
 
@@ -82,7 +99,9 @@ export class ProductMenuComponent implements OnInit, AfterViewInit {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchStart(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     if (this.currentPage === (nextPage - 1)) return;
 
@@ -93,7 +112,9 @@ export class ProductMenuComponent implements OnInit, AfterViewInit {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchStart(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.shoppingCartService.addProduct(product);
   }
