@@ -5,6 +5,7 @@ import { Product } from 'src/app/domain/product';
 import { ProductTransferService } from 'src/app/service/product-transfer.service';
 import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
+import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 import { Page } from 'src/app/util/page';
 
 @Component({
@@ -19,12 +20,11 @@ export class SearchProductsComponent implements OnInit, AfterViewInit {
   public quantityOfProducts = 0;
   public availablePages: Array<number> = new Array();
   public currentPage = 0;
-  private initialTouch = { clientX: 0, clientY: 0 };
-  private finalTouch = { clientX: 0, clientY: 0 };
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private productService: ProductRequisitionService,
+    private touchEventHandlerService: TouchEventHandlerService,
     private productTransferService: ProductTransferService,
     private shoppingCartService: ShoppingCartService,
     private router: Router
@@ -78,40 +78,16 @@ export class SearchProductsComponent implements OnInit, AfterViewInit {
 
   public setInitialTouchPoint(e: TouchEvent) {
 
-    e.stopPropagation();
-
-    this.initialTouch.clientX = e.changedTouches.item(0)?.clientX as number;
-    this.initialTouch.clientY = e.changedTouches.item(0)?.clientY as number;
-  }
-
-  private preventDefaultTouchend(e: Event) {
-
-    if (e.cancelable && e.type === "touchend") {
-
-      e.preventDefault();
-    }
-  }
-
-  private itIsAMovingTouch(e: Event): boolean {
-
-    if (e.type === "touchend") {
-
-      this.finalTouch.clientX = (e as TouchEvent).changedTouches.item(0)?.clientX as number;
-      this.finalTouch.clientY = (e as TouchEvent).changedTouches.item(0)?.clientY as number;
-
-      if (JSON.stringify(this.finalTouch) !== JSON.stringify(this.initialTouch)) return true;
-    }
-
-    return false;
+    this.touchEventHandlerService.setInitialTouchPoint(e);
   }
 
   public viewProduct(e: Event, product: Product) {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchend(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    if (this.itIsAMovingTouch(e)) return;
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.productTransferService.setProduct(product);
 
@@ -125,20 +101,20 @@ export class SearchProductsComponent implements OnInit, AfterViewInit {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchend(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
     
-    if (this.itIsAMovingTouch(e) || this.currentPage === (nextPage - 1)) return;
+    if (this.touchEventHandlerService.itIsAMovingTouch(e) || this.currentPage === (nextPage - 1)) return;
 
     this.router.navigate(["/search"], { queryParams: { value: this.valueSearch, page: (nextPage - 1) } });
   }
 
-  public addProductToCard(e: Event, product: Product) {
+  public addProductToCart(e: Event, product: Product) {
 
     e.stopPropagation();
     
-    this.preventDefaultTouchend(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
     
-    if (this.itIsAMovingTouch(e)) return;
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.shoppingCartService.addProduct(product);
   }

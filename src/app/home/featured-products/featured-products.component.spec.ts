@@ -339,12 +339,16 @@ describe('FeaturedProductsComponent', () => {
 
     const touchEvent = new TouchEvent("touchend", { cancelable: true });
 
-    spyOn(touchEventHandlerService, "setInitialTouchPoint");
+    const touchEventHandlerServiceSpy = spyOn(touchEventHandlerService, "setInitialTouchPoint");
 
     component.setInitialTouchPoint(touchEvent);
 
     expect(touchEventHandlerService.setInitialTouchPoint)
       .toHaveBeenCalled();
+
+    expect(touchEventHandlerServiceSpy.calls.argsFor(0)[0])
+      .toEqual(touchEvent);
+
   });
 
   it("viewProduct_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
