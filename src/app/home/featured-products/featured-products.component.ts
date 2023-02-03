@@ -8,6 +8,7 @@ import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
 import { ProductTransferService } from 'src/app/service/product-transfer.service';
 import { Router } from '@angular/router';
+import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 
 registerLocaleData(localeBr, "br");
 
@@ -20,23 +21,14 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
   private featuredProducts: Map<Type, Array<Product>> = new Map();
   private limiterToAfterViewChecked = 0;
-  private initialTouch = { clientX: 0, clientY: 0 };
-  private finalTouch = { clientX: 0, clientY: 0 };
 
   constructor(
+    private touchEventHandlerService: TouchEventHandlerService,
     private productService: ProductRequisitionService,
     private shoppingCartService: ShoppingCartService,
     private productTransferService: ProductTransferService,
     private router: Router
   ) { }
-
-  private preventDefaultTouchend(e: Event) {
-
-    if (e.cancelable && e.type === "touchend") {
-
-      e.preventDefault();
-    }
-  }
 
   ngOnInit(): void {
 
@@ -106,32 +98,16 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
   public setInitialTouchPoint(e: TouchEvent) {
 
-    e.stopPropagation();
-
-    this.initialTouch.clientX = e.changedTouches.item(0)?.clientX as number;
-    this.initialTouch.clientY = e.changedTouches.item(0)?.clientY as number;
-  }
-
-  private itIsAMovingTouch(e: Event): boolean {
-
-    if (e.type === "touchend") {
-
-      this.finalTouch.clientX = (e as TouchEvent).changedTouches.item(0)?.clientX as number;
-      this.finalTouch.clientY = (e as TouchEvent).changedTouches.item(0)?.clientY as number;
-
-      if (JSON.stringify(this.finalTouch) !== JSON.stringify(this.initialTouch)) return true;
-    }
-
-    return false;
+    this.touchEventHandlerService.setInitialTouchPoint(e);
   }
 
   public viewProduct(e: Event, product: Product) {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchend(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    if (this.itIsAMovingTouch(e)) return;
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.productTransferService.setProduct(product);
 
@@ -191,9 +167,9 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchend(e);  
+    this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    if (this.itIsAMovingTouch(e)) return;
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     const clientWidth = document.documentElement.clientWidth;
     const productsHeight = products.scrollHeight;
@@ -214,9 +190,9 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchend(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    if (this.itIsAMovingTouch(e)) return;
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.shoppingCartService.addProduct(product);
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Product } from 'src/app/domain/product';
@@ -10,7 +10,7 @@ import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css']
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent implements OnInit, AfterViewInit {
 
   public product!: Product;
   private initialTouch = { clientX: 0, clientY: 0 };
@@ -34,6 +34,11 @@ export class ProductComponent implements OnInit {
         this.product = product;
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+
+    window.scrollTo(0, 0);
   }
 
   public setInitialTouchPoint(e: TouchEvent) {

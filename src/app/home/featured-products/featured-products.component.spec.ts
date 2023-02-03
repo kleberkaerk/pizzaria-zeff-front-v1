@@ -11,12 +11,15 @@ import { Product } from 'src/app/domain/product';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ProductTransferService } from 'src/app/service/product-transfer.service';
+import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 
 describe('FeaturedProductsComponent', () => {
 
   let component: FeaturedProductsComponent;
   let fixture: ComponentFixture<FeaturedProductsComponent>;
+
   let productService: ProductRequisitionService;
+  let touchEventHandlerService: TouchEventHandlerService;
   let shoppingCartService: ShoppingCartService;
   let productTransferService: ProductTransferService;
   let router: Router;
@@ -156,6 +159,7 @@ describe('FeaturedProductsComponent', () => {
     fixture.detectChanges();
 
     productService = TestBed.inject(ProductRequisitionService);
+    touchEventHandlerService = TestBed.inject(TouchEventHandlerService);
     shoppingCartService = TestBed.inject(ShoppingCartService);
     productTransferService = TestBed.inject(ProductTransferService);
     router = TestBed.inject(Router);
@@ -331,29 +335,31 @@ describe('FeaturedProductsComponent', () => {
       .toContain("auto-height-wrapper");
   });
 
-  it("setInitialTouchPoint_initializeInitialTouchPropertyWithEventObject_wheneverCalled", () => {
+  it("setInitialTouchPoint_callsTouchEventHandlerServiceAndPassesEventObjectAsArgument_wheneverCalled", () => {
 
     const touchEvent = new TouchEvent("touchend", { cancelable: true });
 
-    spyOn(touchEvent.changedTouches, "item");
+    spyOn(touchEventHandlerService, "setInitialTouchPoint");
 
     component.setInitialTouchPoint(touchEvent);
 
-    expect(touchEvent.changedTouches.item)
+    expect(touchEventHandlerService.setInitialTouchPoint)
       .toHaveBeenCalled();
   });
 
-  it("viewProduct_doesNotDoAnything_whenItIsAMovingTouchMethodReturnsTrue", () => {
+  it("viewProduct_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
 
-    const mockTouchend = new Touch({ clientX: 2, clientY: 1, identifier: 1, target: new EventTarget() });
-
-    spyOn(touchendEvent.changedTouches, "item").and.callFake(() => mockTouchend);
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
 
     spyOn(productTransferService, "setProduct");
 
     component.viewProduct(touchendEvent, productViewProduct);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
 
     expect(productTransferService.setProduct)
       .not.toHaveBeenCalled();
@@ -363,6 +369,8 @@ describe('FeaturedProductsComponent', () => {
 
     const mouseEvent = new MouseEvent("click");
 
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
     spyOn(productTransferService, "setProduct");
 
     component.viewProduct(mouseEvent, productViewProduct);
@@ -371,23 +379,20 @@ describe('FeaturedProductsComponent', () => {
       .toHaveBeenCalled();
   });
 
-  it("viewProduct_callsTheProductTransferServicePassingTheProductParameterAndNavigatesToProductRoute_whenTheEventIsOfTypeTouchend", () => {
+  it("viewProduct_callsTheProductTransferServicePassingTheProductParameterAndNavigatesToProductRoute_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndTheEventIsOfTypeTouchend", () => {
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
-    const touchstartEvent = new TouchEvent("touchstart", { cancelable: true });
 
-    const mockTouch = new Touch({ clientX: 0, clientY: 0, identifier: 1, target: new EventTarget() });
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
-    spyOn(touchendEvent.changedTouches, "item").and.callFake(() => mockTouch);
-    spyOn(touchstartEvent.changedTouches, "item").and.callFake(() => mockTouch);
-
-    component.setInitialTouchPoint(touchstartEvent);
-
-    spyOn(productTransferService, "setProduct");
+    const productTransferServiceSpy = spyOn(productTransferService, "setProduct");
 
     const routerSpy = spyOn(router, "navigate");
 
     component.viewProduct(touchendEvent, productViewProduct);
+
+    expect(productTransferServiceSpy.calls.argsFor(0)[0])
+      .toEqual(productViewProduct);
 
     expect(productTransferService.setProduct)
       .toHaveBeenCalled();
@@ -496,58 +501,67 @@ describe('FeaturedProductsComponent', () => {
       .toContain((productsMapByType.get(Type.DRINK) as Array<Product>)[0]);
   });
 
-  it("seeMoreProducts_doesNotDoAnything_whenItIsAMovingTouchMethodReturnsTrue", () => {
+  it("seeMoreProducts_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
     spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeSeeMoreProducts));
-
     component.ngOnInit();
-
     fixture.detectChanges();
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
-
-    const mockTouchend = new Touch({ clientX: 2, clientY: 1, identifier: 1, target: new EventTarget() });
-
-    spyOn(touchendEvent.changedTouches, "item").and.callFake(() => mockTouchend);
-
     const compiled = fixture.nativeElement as HTMLElement;
     const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
 
-    expect(wrapperElement.clientHeight)
-      .toEqual(650);
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
+
+    const initialHeightOfWrapper = wrapperElement.clientHeight;
 
     component.seeMoreProducts(touchendEvent, wrapperElement, productsElement, buttonElement);
 
+    fixture.detectChanges();
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
     expect(wrapperElement.clientHeight)
-      .toEqual(650);
+      .toEqual(initialHeightOfWrapper);
+
+    expect(buttonElement.getAttribute("class"))
+      .not.toContain("remove-expansion-button");
   });
 
   it("seeMoreProducts_adds1630PixelsToTheHeightOfTheWrapper_whenScreenWidthIsLessThan481AndWrapHeightIsStillLessThanProductsElement", () => {
 
     spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeSeeMoreProducts));
-
     component.ngOnInit();
-
     fixture.detectChanges();
 
-    const compiled = fixture.nativeElement as HTMLElement;
-
     let event = new MouseEvent("click");
+    const compiled = fixture.nativeElement as HTMLElement;
     const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
-    const wrapperHeight = wrapperElement.clientHeight;
+
+    const initialHeightOfWrapper = wrapperElement.clientHeight;
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
     spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
 
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
+    fixture.detectChanges();
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
     expect(wrapperElement.clientHeight)
-      .not.toEqual(wrapperHeight);
+      .not.toEqual(initialHeightOfWrapper);
 
     expect(wrapperElement.clientHeight)
       .not.toEqual(productsElement.clientHeight);
@@ -558,25 +572,28 @@ describe('FeaturedProductsComponent', () => {
 
   it("seeMoreProducts_makesTheWrapGainAnAutomaticHeightAndAddsAClassToTheExpandButton_whenScreenWidthIsLessThan481AndWrapperHeightBecomesGreaterThanOrEqualToTheHeightOfTheProductsElement", () => {
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
-
     spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeSeeMoreProducts));
-
     component.ngOnInit();
-
     fixture.detectChanges();
 
-    const compiled = fixture.nativeElement as HTMLElement;
-
     let event = new MouseEvent("click");
+    const compiled = fixture.nativeElement as HTMLElement;
     const wrapperElement = compiled.querySelector("#wrapper-salty-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-salty-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#salty-pizza-button") as Element;
 
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
+    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
+
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
 
     expect(wrapperElement.getAttribute("style"))
       .toEqual("height: auto;");
@@ -590,29 +607,33 @@ describe('FeaturedProductsComponent', () => {
 
   it("seeMoreProducts_adds650PixelsToTheHeightOfTheWrapper_whenScreenWidthIsGreaterThan480AndLessThan1024AndTheWrapperHeightIsStillLessThanTheProductsElement", () => {
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
-
     spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeSeeMoreProducts));
-
     component.ngOnInit();
-
     fixture.detectChanges();
 
-    const compiled = fixture.nativeElement as HTMLElement;
-
     let event = new MouseEvent("click");
+    const compiled = fixture.nativeElement as HTMLElement;
     const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
-    const wrapperHeight = wrapperElement.clientHeight;
+
+    const initialHeightOfWrapper = wrapperElement.clientHeight;
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
+    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
 
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
     expect(wrapperElement.clientHeight)
-      .not.toEqual(wrapperHeight);
+      .not.toEqual(initialHeightOfWrapper);
 
     expect(wrapperElement.clientHeight)
       .not.toEqual(productsElement.clientHeight);
@@ -623,25 +644,28 @@ describe('FeaturedProductsComponent', () => {
 
   it("seeMoreProducts_makesTheWrapGainAnAutomaticHeightAndAddsAClassToTheExpandButton_whenScreenWidthIsGreaterThan480AndLessThan1024AndWrapperHeightBecomesGreaterThanProductsElementHeight", () => {
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
-
     spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeSeeMoreProducts));
-
     component.ngOnInit();
-
     fixture.detectChanges();
 
-    const compiled = fixture.nativeElement as HTMLElement;
-
     let event = new MouseEvent("click");
+    const compiled = fixture.nativeElement as HTMLElement;
     const wrapperElement = compiled.querySelector("#wrapper-salty-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-salty-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#salty-pizza-button") as Element;
 
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
+    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
+
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
 
     expect(wrapperElement.getAttribute("style"))
       .toEqual("height: auto;");
@@ -655,29 +679,33 @@ describe('FeaturedProductsComponent', () => {
 
   it("seeMoreProducts_adds325PixelsToTheHeightOfTheWrapper_whenScreenWidthIsGreaterThan1024AndWrapHeightIsStillLessThanProductsElement", () => {
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
-
     spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeSeeMoreProducts));
-
     component.ngOnInit();
-
     fixture.detectChanges();
 
-    const compiled = fixture.nativeElement as HTMLElement;
-
     let event = new MouseEvent("click");
+    const compiled = fixture.nativeElement as HTMLElement;
     const wrapperElement = compiled.querySelector("#wrapper-sweet-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-sweet-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#sweet-pizza-button") as Element;
-    const wrapperHeight = wrapperElement.clientHeight;
+
+    const initialHeightOfWrapper = wrapperElement.clientHeight;
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
+    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
 
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
 
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
     expect(wrapperElement.clientHeight)
-      .not.toEqual(wrapperHeight);
+      .not.toEqual(initialHeightOfWrapper);
 
     expect(wrapperElement.clientHeight)
       .not.toEqual(productsElement.clientHeight);
@@ -688,25 +716,28 @@ describe('FeaturedProductsComponent', () => {
 
   it("seeMoreProducts_makesTheWrapTheSameHeightAsTheProductsElementAndAddsAClassToTheExpandButton_whenScreenWidthIsGreaterThan1024AndWrapperHeightBecomesGreaterThanProductsElementHeight", () => {
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
-
     spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByTypeSeeMoreProducts));
-
     component.ngOnInit();
-
     fixture.detectChanges();
 
-    const compiled = fixture.nativeElement as HTMLElement;
-
     let event = new MouseEvent("click");
+    const compiled = fixture.nativeElement as HTMLElement;
     const wrapperElement = compiled.querySelector("#wrapper-salty-pizza") as HTMLElement;
     const productsElement = compiled.querySelector("#wrapper-salty-pizza .products") as Element;
     const buttonElement = compiled.querySelector("#salty-pizza-button") as Element;
 
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
+    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
+
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
     fixture.detectChanges();
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
 
     expect(wrapperElement.getAttribute("style"))
       .toEqual("height: auto;");
@@ -718,39 +749,42 @@ describe('FeaturedProductsComponent', () => {
       .toContain("remove-expansion-button");
   });
 
-  it("addProductToCart_doesNotDoAnything_whenItIsAMovingTouchMethodReturnsTrue", () => {
+  it("addProductToCart_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
     const touchEvent = new TouchEvent("touchend", { cancelable: true });
-    const touchMock = new Touch({ clientX: 1, clientY: 2, identifier: 1, target: new EventTarget() });
 
-    spyOn(touchEvent.changedTouches, "item").and.callFake(() => touchMock);
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
 
     spyOn(shoppingCartService, "addProduct");
 
     component.addProductToCart(touchEvent, productToAddProductToCart);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
 
     expect(shoppingCartService.addProduct)
       .not.toHaveBeenCalled();
   });
 
-  it("addProductToCart_callsThePreventDefaultMethodInEventObjectCancelableAndTouchendAndCallsTheShoppingCartServiceToAddANewProduct_whenItIsAMovingTouchMethodReturnsFalse", () => {
+  it("addProductToCart_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndCallsTheShoppingCartServiceToAddANewProduct_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalse", () => {
 
     const touchEvent = new TouchEvent("touchend", { cancelable: true });
-    const touchMock = new Touch({ clientX: 1, clientY: 2, identifier: 1, target: new EventTarget() });
 
-    spyOn(touchEvent, "preventDefault");
-    spyOn(touchEvent.changedTouches, "item").and.callFake(() => touchMock);
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
-    component.setInitialTouchPoint(touchEvent);
-
-    spyOn(shoppingCartService, "addProduct");
+    const shoppingCartServiceSpy = spyOn(shoppingCartService, "addProduct");
 
     component.addProductToCart(touchEvent, productToAddProductToCart);
 
-    expect(touchEvent.preventDefault)
+    expect(touchEventHandlerService.preventDefaultTouchend)
       .toHaveBeenCalled();
 
     expect(shoppingCartService.addProduct)
       .toHaveBeenCalled();
+
+    expect(shoppingCartServiceSpy.calls.first().args[0])
+      .toEqual(productToAddProductToCart);
   });
 });

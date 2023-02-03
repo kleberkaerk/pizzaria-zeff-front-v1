@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { BehaviorSubject } from 'rxjs';
 
 import { ProductTransferService } from './product-transfer.service';
 import { Product } from '../domain/product';
@@ -18,15 +17,9 @@ describe('ProductTransferService', () => {
     productSetProduct = new Product(1, "name1", "description1", 1.00, Type.DRINK, PriceRating.REGULAR_PRICE, "drink.jpg", true);
   }
 
-  function setProductGetProduct() {
-
-    productGetProduct = new Product(1, "name2", "description2", 2.00, Type.SWEET_PIZZA, PriceRating.REGULAR_PRICE, "sweet-pizza.jpg", true);
-  }
-
   beforeEach(() => {
 
     setProductSetProduct();
-    setProductGetProduct();
   })
 
   beforeEach(() => {
