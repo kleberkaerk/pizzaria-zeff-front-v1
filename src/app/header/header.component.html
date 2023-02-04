@@ -7,7 +7,8 @@
         title="Página inicial Pizzaria Zeff"
         aria-labelledby="ir para o início"
         (click)="scrollPageToTop($event)"
-        (touchstart)="scrollPageToTop($event)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="scrollPageToTop($event)"
       >
         Pizzaria Zeff
       </a>
@@ -29,7 +30,8 @@
             class="exit-mobile-search"
             aria-label="Sair do modo pesquisa"
             (click)="exitMobileSearch($event)"
-            (touchstart)="exitMobileSearch($event)"
+            (touchstart)="setInitialTouchPoint($event)"
+            (touchend)="exitMobileSearch($event)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +64,8 @@
             class="cancel-button"
             aria-label="Limpar conteúdo de barra de pesquisa"
             (click)="clearSearchInput($event, searchInput)"
-            (touchstart)="clearSearchInput($event, searchInput)"
+            (touchstart)="setInitialTouchPoint($event)"
+            (touchend)="clearSearchInput($event, searchInput)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +108,8 @@
           aria-label="Abrir modo pesquisa"
           aria-haspopup="true"
           (click)="searchClickHandler($event, formContainerSearch, searchInput)"
-          (touchstart)="
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="
             searchClickHandler($event, formContainerSearch, searchInput)
           "
           *ngIf="!activateMobileSearch"
@@ -139,7 +143,8 @@
             aria-label="Configurações de conta"
             aria-haspopup="true"
             (click)="accountClickHandler($event, accountOptions)"
-            (touchstart)="accountClickHandler($event, accountOptions)"
+            (touchstart)="setInitialTouchPoint($event)"
+            (touchend)="accountClickHandler($event, accountOptions)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -168,8 +173,7 @@
           <ul
             class="account-options"
             [ngClass]="{
-              'block-account-options':
-                activateAccountOptions && !activateMobileSearch
+              'block-account-options': activateAccountOptions
             }"
             #accountOptions
           >
@@ -189,19 +193,18 @@
         </div>
       </div>
 
-      <div class="mobile-menu">
+      <div class="mobile-menu" *ngIf="!activateMobileSearch">
         <nav aria-label="navegação para celular ou tablet">
           <button
             class="mobile-menu-button"
             aria-label="Abrir menu"
             aria-haspopup="true"
             (click)="handlerClickMobileMenu($event, mobileMenu)"
-            (touchstart)="handlerClickMobileMenu($event, mobileMenu)"
+            (touchstart)="setInitialTouchPoint($event)"
+            (touchend)="handlerClickMobileMenu($event, mobileMenu)"
             [ngClass]="{
-              'activate-mobile-menu':
-                activateMobileMenu && !activateAccountOptions
+              'activate-mobile-menu': activateMobileMenu
             }"
-            *ngIf="!activateMobileSearch"
           >
             <div class="hamburguer"></div>
           </button>

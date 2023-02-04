@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { Product } from '../domain/product';
 import { ProductRequisitionService } from '../service/product.requisition.service'
+import { TouchEventHandlerService } from '../service/touch-event-handler.service';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +15,7 @@ export class HeaderComponent {
   public activateAccountOptions = false;
   public activateMobileMenu = false;
   public activateMobileSearch = false;
-  public logged = false;
+  public logged = true;
   public username = "Luffy";
   public searchInputValue = "";
   private enteredValue!: string;
@@ -22,19 +23,27 @@ export class HeaderComponent {
   public autocompleteCurrentFocus = -1;
 
   constructor(
+    private touchEventHandlerService: TouchEventHandlerService,
     private productService: ProductRequisitionService,
     private router: Router
   ) { }
+
+  public setInitialTouchPoint(e: TouchEvent) {
+
+    this.touchEventHandlerService.setInitialTouchPoint(e);
+  }
 
   public scrollPageToTop(e: Event) {
 
     e.stopPropagation();
 
-    this.preventDefaultTouchStart(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     window.scrollTo(0, 0);
 
-    if (e.type === "touchstart") {
+    if (e.type === "touchend") {
 
       this.router.navigate(["/"]);
     }
@@ -150,8 +159,11 @@ export class HeaderComponent {
 
   public clearSearchInput(e: Event, inputToBeCleaned: HTMLInputElement) {
 
-    this.preventDefaultTouchStart(e);
     e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.searchInputValue = "";
     this.enteredValue = "";
@@ -162,23 +174,16 @@ export class HeaderComponent {
 
   public exitMobileSearch(e: Event) {
 
-    this.preventDefaultTouchStart(e);
     e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     document.documentElement.click();
   }
 
-  private preventDefaultTouchStart(e: Event) {
-
-    if (e.cancelable && e.type === "touchstart") {
-
-      e.preventDefault();
-    }
-  }
-
   private handlerClickOutside(e: Event, focusElement: Element, callback: Function) {
-
-    this.preventDefaultTouchStart(e);
 
     const htmlElement = document.documentElement;
 
@@ -198,12 +203,22 @@ export class HeaderComponent {
       htmlElement.addEventListener("click", externalClickChecker);
       htmlElement.addEventListener("touchstart", externalClickChecker);
       focusElement.setAttribute("data-to-show", "");
-      e.stopPropagation();
       callback(true);
+    } else {
+
+      htmlElement.click();
     }
   }
 
   public accountClickHandler(e: Event, accountOptions: Element): void {
+
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.activateMobileMenu) document.documentElement.click();
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.handlerClickOutside(e, accountOptions, (value: boolean) => {
 
@@ -212,11 +227,14 @@ export class HeaderComponent {
   }
 
   public handlerClickMobileMenu(e: Event, mobileMenu: Element) {
+    
+    e.stopPropagation();
+    
+    this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    if (this.activateAccountOptions) {
-
-      return
-    };
+    if (this.activateAccountOptions) document.documentElement.click();
+    
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.handlerClickOutside(e, mobileMenu, (value: boolean) => {
 
@@ -225,6 +243,14 @@ export class HeaderComponent {
   }
 
   public searchClickHandler(e: Event, form: Element, input: HTMLInputElement) {
+
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.activateMobileMenu || this.activateAccountOptions) document.documentElement.click();
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.handlerClickOutside(e, form, (value: boolean) => {
 
