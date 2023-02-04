@@ -181,13 +181,37 @@
               <h2>{{ username }}</h2>
             </li>
             <li class="option-wrapper">
-              <a routerLink="" class="account-option">Minhas compras</a>
+              <a
+                class="account-option"
+                routerLink=""
+                (click)="accountOptionAccessHandler($event, 'purchases')"
+                (touchstart)="setInitialTouchPoint($event)"
+                (touchend)="accountOptionAccessHandler($event, 'purchases')"
+              >
+                Minhas compras</a
+              >
             </li>
             <li class="option-wrapper">
-              <a routerLink="" class="account-option">Meus endereços</a>
+              <a
+                class="account-option"
+                routerLink=""
+                (click)="accountOptionAccessHandler($event, 'addresses')"
+                (touchstart)="setInitialTouchPoint($event)"
+                (touchend)="accountOptionAccessHandler($event, 'addresses')"
+              >
+                Meus endereços</a
+              >
             </li>
             <li class="option-wrapper">
-              <a routerLink="" class="account-option">Sair</a>
+              <a
+                class="account-option"
+                routerLink=""
+                (click)="signOutOfAccount($event)"
+                (touchstart)="setInitialTouchPoint($event)"
+                (touchend)="signOutOfAccount($event)"
+              >
+                Sair</a
+              >
             </li>
           </ul>
         </div>
@@ -212,41 +236,56 @@
           <ul class="mobile-menu-options" #mobileMenu>
             <li class="option-wrapper">
               <a
+                class="mobile-menu-option"
                 [routerLink]="'/menu'"
                 [queryParams]="{ type: 'SALTY_PIZZA' }"
-                class="mobile-menu-option"
+                (click)="menuAccessHandler($event, 'SALTY_PIZZA')"
+                (touchstart)="setInitialTouchPoint($event)"
+                (touchend)="menuAccessHandler($event, 'SALTY_PIZZA')"
                 >Pizzas salgadas</a
               >
             </li>
             <li class="option-wrapper">
               <a
+                class="mobile-menu-option"
                 [routerLink]="'/menu'"
                 [queryParams]="{ type: 'SWEET_PIZZA' }"
-                class="mobile-menu-option"
+                (click)="menuAccessHandler($event, 'SWEET_PIZZA')"
+                (touchstart)="setInitialTouchPoint($event)"
+                (touchend)="menuAccessHandler($event, 'SWEET_PIZZA')"
                 >Pizzas doces</a
               >
             </li>
             <li class="option-wrapper">
               <a
+                class="mobile-menu-option"
                 [routerLink]="'/menu'"
                 [queryParams]="{ type: 'SALTY_ESFIHA' }"
-                class="mobile-menu-option"
+                (click)="menuAccessHandler($event, 'SALTY_ESFIHA')"
+                (touchstart)="setInitialTouchPoint($event)"
+                (touchend)="menuAccessHandler($event, 'SALTY_ESFIHA')"
                 >Esfihas salgadas</a
               >
             </li>
             <li class="option-wrapper">
               <a
+                class="mobile-menu-option"
                 [routerLink]="'/menu'"
                 [queryParams]="{ type: 'SWEET_ESFIHA' }"
-                class="mobile-menu-option"
+                (click)="menuAccessHandler($event, 'SWEET_ESFIHA')"
+                (touchstart)="setInitialTouchPoint($event)"
+                (touchend)="menuAccessHandler($event, 'SWEET_ESFIHA')"
                 >Esfihas doces</a
               >
             </li>
             <li class="option-wrapper">
               <a
+                class="mobile-menu-option"
                 [routerLink]="'/menu'"
                 [queryParams]="{ type: 'DRINK' }"
-                class="mobile-menu-option"
+                (click)="menuAccessHandler($event, 'DRINK')"
+                (touchstart)="setInitialTouchPoint($event)"
+                (touchend)="menuAccessHandler($event, 'DRINK')"
                 >Bebidas</a
               >
             </li>
@@ -264,41 +303,41 @@
     <ul class="computer-menu">
       <li>
         <a
+          class="menu-option"
           [routerLink]="'/menu'"
           [queryParams]="{ type: 'SALTY_PIZZA' }"
-          class="menu-option"
           >Pizzas salgadas</a
         >
       </li>
       <li>
         <a
+          class="menu-option"
           [routerLink]="'/menu'"
           [queryParams]="{ type: 'SWEET_PIZZA' }"
-          class="menu-option"
           >Pizzas doces</a
         >
       </li>
       <li>
         <a
+          class="menu-option"
           [routerLink]="'/menu'"
           [queryParams]="{ type: 'SALTY_ESFIHA' }"
-          class="menu-option"
           >Esfihas salgadas</a
         >
       </li>
       <li>
         <a
+          class="menu-option"
           [routerLink]="'/menu'"
           [queryParams]="{ type: 'SWEET_ESFIHA' }"
-          class="menu-option"
           >Esfihas doces</a
         >
       </li>
       <li>
         <a
+          class="menu-option"
           [routerLink]="'/menu'"
           [queryParams]="{ type: 'DRINK' }"
-          class="menu-option"
           >Bebidas</a
         >
       </li>

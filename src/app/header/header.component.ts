@@ -210,38 +210,6 @@ export class HeaderComponent {
     }
   }
 
-  public accountClickHandler(e: Event, accountOptions: Element): void {
-
-    e.stopPropagation();
-
-    this.touchEventHandlerService.preventDefaultTouchend(e);
-
-    if (this.activateMobileMenu) document.documentElement.click();
-
-    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
-
-    this.handlerClickOutside(e, accountOptions, (value: boolean) => {
-
-      this.activateAccountOptions = value;
-    });
-  }
-
-  public handlerClickMobileMenu(e: Event, mobileMenu: Element) {
-    
-    e.stopPropagation();
-    
-    this.touchEventHandlerService.preventDefaultTouchend(e);
-
-    if (this.activateAccountOptions) document.documentElement.click();
-    
-    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
-
-    this.handlerClickOutside(e, mobileMenu, (value: boolean) => {
-
-      this.activateMobileMenu = value;
-    });
-  }
-
   public searchClickHandler(e: Event, form: Element, input: HTMLInputElement) {
 
     e.stopPropagation();
@@ -271,5 +239,80 @@ export class HeaderComponent {
         input.classList.remove("focusable-search-input");
       }
     });
+  }
+
+  public accountClickHandler(e: Event, accountOptions: Element): void {
+
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.activateMobileMenu) document.documentElement.click();
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    this.handlerClickOutside(e, accountOptions, (value: boolean) => {
+
+      this.activateAccountOptions = value;
+    });
+  }
+
+  public accountOptionAccessHandler(e: Event, accountOption: string) {
+
+    // e.stopPropagation();
+
+    // this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    // if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    // // if (e.type === "touchend") { this.router.navigate([accountOption]); }
+
+    // document.documentElement.click();
+  }
+
+  public signOutOfAccount(e: Event) {
+
+    // e.stopPropagation();
+
+    // this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    // if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    // document.documentElement.click();
+  }
+
+  public handlerClickMobileMenu(e: Event, mobileMenu: Element) {
+
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.activateAccountOptions) document.documentElement.click();
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    this.handlerClickOutside(e, mobileMenu, (value: boolean) => {
+
+      this.activateMobileMenu = value;
+    });
+  }
+
+  public menuAccessHandler(e: Event, productType: string) {
+
+    e.stopPropagation();
+
+    if (this.activateMobileMenu) {
+
+      this.touchEventHandlerService.preventDefaultTouchend(e);
+
+      if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+      if (e.type === "touchend") {
+
+        this.router.navigate(["/menu"], { queryParams: { type: productType } });
+      }
+
+      document.documentElement.click();
+    }
   }
 }
