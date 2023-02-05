@@ -15,7 +15,7 @@ export class HeaderComponent {
   public activateAccountOptions = false;
   public activateMobileMenu = false;
   public activateMobileSearch = false;
-  public logged = true;
+  public logged = false;
   public username = "Luffy";
   public searchInputValue = "";
   private enteredValue!: string;
@@ -172,18 +172,7 @@ export class HeaderComponent {
     inputToBeCleaned.focus();
   }
 
-  public exitMobileSearch(e: Event) {
-
-    e.stopPropagation();
-
-    this.touchEventHandlerService.preventDefaultTouchend(e);
-
-    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
-
-    document.documentElement.click();
-  }
-
-  private handlerClickOutside(e: Event, focusElement: Element, callback: Function) {
+  private handlerClickOutside(focusElement: Element, callback: Function) {
 
     const htmlElement = document.documentElement;
 
@@ -210,7 +199,7 @@ export class HeaderComponent {
     }
   }
 
-  public searchClickHandler(e: Event, form: Element, input: HTMLInputElement) {
+  public mobileSearchClickHandler(e: Event, form: Element, input: HTMLInputElement) {
 
     e.stopPropagation();
 
@@ -220,7 +209,7 @@ export class HeaderComponent {
 
     if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
-    this.handlerClickOutside(e, form, (value: boolean) => {
+    this.handlerClickOutside(form, (value: boolean) => {
 
       /*
       The focusable-search-input class was added with javascript, because the input needed to be made visible before receiving focus.
@@ -251,7 +240,7 @@ export class HeaderComponent {
 
     if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
-    this.handlerClickOutside(e, accountOptions, (value: boolean) => {
+    this.handlerClickOutside(accountOptions, (value: boolean) => {
 
       this.activateAccountOptions = value;
     });
@@ -291,7 +280,7 @@ export class HeaderComponent {
 
     if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
-    this.handlerClickOutside(e, mobileMenu, (value: boolean) => {
+    this.handlerClickOutside(mobileMenu, (value: boolean) => {
 
       this.activateMobileMenu = value;
     });

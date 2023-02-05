@@ -29,9 +29,13 @@
             type="button"
             class="exit-mobile-search"
             aria-label="Sair do modo pesquisa"
-            (click)="exitMobileSearch($event)"
+            (click)="
+              mobileSearchClickHandler($event, formContainerSearch, searchInput)
+            "
             (touchstart)="setInitialTouchPoint($event)"
-            (touchend)="exitMobileSearch($event)"
+            (touchend)="
+              mobileSearchClickHandler($event, formContainerSearch, searchInput)
+            "
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -107,10 +111,12 @@
           class="mobile-search-button"
           aria-label="Abrir modo pesquisa"
           aria-haspopup="true"
-          (click)="searchClickHandler($event, formContainerSearch, searchInput)"
+          (click)="
+            mobileSearchClickHandler($event, formContainerSearch, searchInput)
+          "
           (touchstart)="setInitialTouchPoint($event)"
           (touchend)="
-            searchClickHandler($event, formContainerSearch, searchInput)
+            mobileSearchClickHandler($event, formContainerSearch, searchInput)
           "
           *ngIf="!activateMobileSearch"
           aria-haspopup="true"
