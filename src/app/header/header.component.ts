@@ -176,30 +176,35 @@ export class HeaderComponent {
     }
   }
 
-  private searchProduct(productName: string, searchInput: HTMLInputElement) {
+  private searchProduct(e: Event, productName: string, searchInput: HTMLInputElement) {
 
     this.searchInputValue = productName;
 
     this.router.navigate(["/search"], { queryParams: { value: productName } });
 
     searchInput.blur();
+
+    if (e.type === "touchend") {
+
+      document.documentElement.click();
+    }
   }
 
   public clickSearch(e: Event, productName: string, searchInput: HTMLInputElement) {
 
     e.stopPropagation();
 
-    if(e.type === "mouseup") {
+    if (e.type === "mouseup") {
 
       e.preventDefault();
       if (this.itIsAMovingClick(e)) return;
     } else {
 
       this.touchEventHandlerService.preventDefaultTouchend(e);
-      if(this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+      if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
     }
 
-    this.searchProduct(productName, searchInput);
+    this.searchProduct(e, productName, searchInput);
   }
 
   public clearSearchInput(e: Event, inputToBeCleaned: HTMLInputElement) {

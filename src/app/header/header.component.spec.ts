@@ -474,6 +474,37 @@ describe("HeaderComponent", () => {
       .toHaveBeenCalled();
   });
 
+  it("clickSearch_setsTheValueOfTheProductNameParameterInTheSearchInputValuePropertyAndNavigatesToTheSearchRouteAndPutsTheValueOfTheProductNameParameterOnValueQueryParamAndCallBlurFunctionOfSearchInputParameterAndTriggersAClickEventOnTheHTMLTag_whenPreventDefaultFunctionFromEventObjectOrIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndEventIsOfTypeTouchend", () => {
+
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+
+    const searchInput = document.querySelector(".search-input") as HTMLInputElement;
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
+
+    const routerSpy = spyOn(router, "navigate");
+    spyOn(searchInput, "blur");
+    spyOn(document.documentElement, "click");
+
+    component.clickSearch(touchendEvent, "name", searchInput);
+
+    expect(component.searchInputValue)
+      .toEqual("name");
+
+    expect(routerSpy.calls.first().args[0])
+      .toContain("/search");
+
+    expect(routerSpy.calls.first().args[1]?.queryParams)
+      .toEqual({ value: "name" });
+
+    expect(searchInput.blur)
+      .toHaveBeenCalled();
+
+    expect(document.documentElement.click)
+      .toHaveBeenCalled();
+  });
+
   it("clearSearchInput_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
     const event = new TouchEvent("touchend", { cancelable: true });
