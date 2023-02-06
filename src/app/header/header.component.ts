@@ -21,6 +21,8 @@ export class HeaderComponent {
   private enteredValue!: string;
   public searchResults: Array<Product> = new Array();
   public autocompleteCurrentFocus = -1;
+  private initialClick = { clientX: 0, clientY: 0 };
+  private finalClick = { clientX: 0, clientY: 0 };
 
   constructor(
     private touchEventHandlerService: TouchEventHandlerService,
@@ -150,11 +152,54 @@ export class HeaderComponent {
     this.router.navigate(["/search"], { queryParams: { value: this.searchInputValue } });
   }
 
-  public clickSearch(productName: string) {
+  public setInitialClickPoint(e: MouseEvent) {
+
+    e.stopPropagation();
+
+    e.preventDefault();
+
+    this.initialClick.clientX = e.clientX;
+    this.initialClick.clientY = e.clientY;
+  }
+
+  private itIsAMovingClick(e: Event): boolean {
+
+    this.finalClick.clientX = (e as MouseEvent).clientX;
+    this.finalClick.clientY = (e as MouseEvent).clientY;
+
+    if (JSON.stringify(this.finalClick) !== JSON.stringify(this.initialClick)) {
+
+      return true;
+    } else {
+
+      return false;
+    }
+  }
+
+  private searchProduct(productName: string, searchInput: HTMLInputElement) {
 
     this.searchInputValue = productName;
 
     this.router.navigate(["/search"], { queryParams: { value: productName } });
+
+    searchInput.blur();
+  }
+
+  public clickSearch(e: Event, productName: string, searchInput: HTMLInputElement) {
+
+    e.stopPropagation();
+
+    if(e.type === "mouseup") {
+
+      e.preventDefault();
+      if (this.itIsAMovingClick(e)) return;
+    } else {
+
+      this.touchEventHandlerService.preventDefaultTouchend(e);
+      if(this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+    }
+
+    this.searchProduct(productName, searchInput);
   }
 
   public clearSearchInput(e: Event, inputToBeCleaned: HTMLInputElement) {
@@ -248,26 +293,26 @@ export class HeaderComponent {
 
   public accountOptionAccessHandler(e: Event, accountOption: string) {
 
-    // e.stopPropagation();
+    // // e.stopPropagation();
 
-    // this.touchEventHandlerService.preventDefaultTouchend(e);
+    // // this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    // if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+    // // if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     // // if (e.type === "touchend") { this.router.navigate([accountOption]); }
 
-    // document.documentElement.click();
+    // // document.documentElement.click();
   }
 
   public signOutOfAccount(e: Event) {
 
-    // e.stopPropagation();
+    // // e.stopPropagation();
 
-    // this.touchEventHandlerService.preventDefaultTouchend(e);
+    // // this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    // if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+    // // if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
-    // document.documentElement.click();
+    // // document.documentElement.click();
   }
 
   public handlerClickMobileMenu(e: Event, mobileMenu: Element) {

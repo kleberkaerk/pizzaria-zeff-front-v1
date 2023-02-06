@@ -98,7 +98,14 @@
                 }"
                 (mouseover)="setCurrentFocusOfAutocompleteWithMouse(i)"
                 (mouseout)="setCurrentFocusOfAutocompleteWithMouse(-1)"
-                (mousedown)="clickSearch(searchResult.getName)"
+                (mousedown)="setInitialClickPoint($event)"
+                (touchstart)="setInitialTouchPoint($event)"
+                (mouseup)="
+                  clickSearch($event, searchResult.getName, searchInput)
+                "
+                (touchend)="
+                  clickSearch($event, searchResult.getName, searchInput)
+                "
               >
                 {{ searchResult.getName }}
               </div>

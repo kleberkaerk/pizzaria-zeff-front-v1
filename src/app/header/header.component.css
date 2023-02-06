@@ -160,6 +160,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     cursor: pointer;
+    user-select: none;
 }
 
 .autocomplete-item-on-focus {

@@ -1,19 +1,19 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { of } from 'rxjs';
-import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { FormsModule } from "@angular/forms";
+import { of } from "rxjs";
+import { RouterTestingModule } from "@angular/router/testing";
 
-import { HeaderComponent } from './header.component';
-import { ProductRequisitionService } from '../service/product.requisition.service'
-import { Router } from '@angular/router';
-import { Page } from '../util/page';
-import { Product } from '../domain/product';
-import { Type } from '../domain/type';
-import { PriceRating } from '../domain/price-rating';
-import { TouchEventHandlerService } from '../service/touch-event-handler.service';
+import { HeaderComponent } from "./header.component";
+import { ProductRequisitionService } from "../service/product.requisition.service"
+import { Router } from "@angular/router";
+import { Page } from "../util/page";
+import { Product } from "../domain/product";
+import { Type } from "../domain/type";
+import { PriceRating } from "../domain/price-rating";
+import { TouchEventHandlerService } from "../service/touch-event-handler.service";
 
-describe('HeaderComponent', () => {
+describe("HeaderComponent", () => {
 
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
@@ -92,7 +92,7 @@ describe('HeaderComponent', () => {
     router = TestBed.inject(Router);
   });
 
-  it('should create', () => {
+  it("should create", () => {
 
     expect(component)
       .toBeTruthy();
@@ -318,10 +318,10 @@ describe('HeaderComponent', () => {
 
   it("search_triggersAnClickEventAttachedToTheHtmlElementThatSetsTheActivateMobileSearchPropertyToFalse_ whenPropertyActivateMobileSearchIsTrue", () => {
 
-    const event = new MouseEvent('click');
+    const event = new MouseEvent("click");
     const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector('.search-form') as Element;
-    const input = compiled.querySelector('.search-input') as HTMLInputElement;
+    const form = compiled.querySelector(".search-form") as Element;
+    const input = compiled.querySelector(".search-input") as HTMLInputElement;
 
     component.mobileSearchClickHandler(event, form, input);
 
@@ -365,11 +365,101 @@ describe('HeaderComponent', () => {
       .toEqual({ value: "name" });
   });
 
-  it("clickSearch_setsTheValueOfTheProductNameParameterInTheSearchInputValuePropertyAndNavigatesToTheSearchRouteAndPutsTheValueOfTheProductNameParameterOnValueQueryParam_wheneverCalled", () => {
+  it("setInitialClickPoint_callsTheStopPropagationAndPreventDefaultMethodOfTheEventObjectAndInitializeInitialClickPropertyWithEventObject_wheneverCalled", () => {
+
+    const mousedownEvent = new MouseEvent("mousedown");
+
+    spyOn(mousedownEvent, "stopPropagation");
+    spyOn(mousedownEvent, "preventDefault");
+
+    const clientXSpy = spyOnProperty(mousedownEvent, "clientX");
+    const clientYSpy = spyOnProperty(mousedownEvent, "clientY");
+
+    component.setInitialClickPoint(mousedownEvent);
+
+    expect(mousedownEvent.stopPropagation)
+      .toHaveBeenCalled();
+
+    expect(mousedownEvent.preventDefault)
+      .toHaveBeenCalled();
+
+    expect(clientXSpy.calls.count())
+      .toEqual(1);
+
+    expect(clientYSpy.calls.count())
+      .toEqual(1);
+  });
+
+  it("clickSearch_callPreventDefaultFunctionFromEventObjectAndDoesNotDoAnything_whenEventIsMouseupTypeAndItIsAMovingClickMethodReturnsTrue", () => {
+
+    const mousedownEvent = new MouseEvent("mousedown");
+    spyOnProperty(mousedownEvent, "clientX").and.returnValue(1);
+    spyOnProperty(mousedownEvent, "clientY").and.returnValue(1);
+
+    component.setInitialClickPoint(mousedownEvent);
+
+    const mouseupEvent = new MouseEvent("mouseup");
+
+    const searchInput = document.querySelector(".search-input") as HTMLInputElement;
+
+    spyOn(router, "navigate");
+    spyOn(searchInput, "blur");
+
+    component.clickSearch(mouseupEvent, "name", searchInput);
+
+    expect(component.searchInputValue)
+      .toEqual("");
+
+    expect(router.navigate)
+      .not.toHaveBeenCalled();
+
+    expect(searchInput.blur)
+      .not.toHaveBeenCalled();
+  });
+
+  it("clickSearch_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenEventIsNotMouseupTypeAndItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
+
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+
+    const searchInput = document.querySelector(".search-input") as HTMLInputElement;
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
+
+    spyOn(router, "navigate");
+    spyOn(searchInput, "blur");
+
+    component.clickSearch(touchendEvent, "name", searchInput);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
+    expect(component.searchInputValue)
+      .toEqual("");
+
+    expect(router.navigate)
+      .not.toHaveBeenCalled();
+
+    expect(searchInput.blur)
+      .not.toHaveBeenCalled();
+  });
+
+  it("clickSearch_setsTheValueOfTheProductNameParameterInTheSearchInputValuePropertyAndNavigatesToTheSearchRouteAndPutsTheValueOfTheProductNameParameterOnValueQueryParamAndCallBlurFunctionOfSearchInputParameter_whenPreventDefaultFunctionFromEventObjectOrIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalse", () => {
+
+    const mousedownEvent = new MouseEvent("mousedown");
+    spyOnProperty(mousedownEvent, "clientX").and.returnValue(0);
+    spyOnProperty(mousedownEvent, "clientY").and.returnValue(0);
+
+    component.setInitialClickPoint(mousedownEvent);
+
+    const mouseupEvent = new MouseEvent("mouseup");
+
+    const searchInput = document.querySelector(".search-input") as HTMLInputElement;
 
     const routerSpy = spyOn(router, "navigate");
+    spyOn(searchInput, "blur");
 
-    component.clickSearch("name");
+    component.clickSearch(mouseupEvent, "name", searchInput);
 
     expect(component.searchInputValue)
       .toEqual("name");
@@ -379,6 +469,9 @@ describe('HeaderComponent', () => {
 
     expect(routerSpy.calls.first().args[1]?.queryParams)
       .toEqual({ value: "name" });
+
+    expect(searchInput.blur)
+      .toHaveBeenCalled();
   });
 
   it("clearSearchInput_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
@@ -422,6 +515,8 @@ describe('HeaderComponent', () => {
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
+    spyOn(searchInput, "focus");
+
     component.clearSearchInput(event, searchInput);
 
     expect(touchEventHandlerService.preventDefaultTouchend)
@@ -435,14 +530,17 @@ describe('HeaderComponent', () => {
 
     expect(component.searchResults)
       .toEqual(new Array());
+
+    expect(searchInput.focus)
+      .toHaveBeenCalled();
   });
 
   it("handlerClickOutside_triggersAClickOnTheHtmlElement_whenFocusElementParameterHasDataToShowAtribute", () => {
 
-    const event = new MouseEvent('click');
+    const event = new MouseEvent("click");
     const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector('.search-form') as Element;
-    const input = compiled.querySelector('.search-input') as HTMLInputElement;
+    const form = compiled.querySelector(".search-form") as Element;
+    const input = compiled.querySelector(".search-input") as HTMLInputElement;
 
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
@@ -464,14 +562,14 @@ describe('HeaderComponent', () => {
 
   });
 
-  it("mobileSearchClickHandler_triggersAClickOnTheHtmlElement_whenActivateMobileMenuPropertyOrActivateAccountOptionsPropertyIsTrue", () => {
+  it("mobileSearchClickHandler_triggersAClickOnTheHtmlElementAndCallsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenActivateMobileMenuPropertyOrActivateAccountOptionsPropertyIsTrueAndItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
     component.activateMobileMenu = true;
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
     const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector('.search-form') as Element;
-    const input = compiled.querySelector('.search-input') as HTMLInputElement;
+    const form = compiled.querySelector(".search-form") as Element;
+    const input = compiled.querySelector(".search-input") as HTMLInputElement;
 
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
 
@@ -492,8 +590,8 @@ describe('HeaderComponent', () => {
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
     const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector('.search-form') as Element;
-    const input = compiled.querySelector('.search-input') as HTMLInputElement;
+    const form = compiled.querySelector(".search-form") as Element;
+    const input = compiled.querySelector(".search-input") as HTMLInputElement;
 
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
@@ -513,12 +611,12 @@ describe('HeaderComponent', () => {
       .not.toContain("focusable-search-input");
   });
 
-  it('mobileSearchClickHandler_updateActivateMobileSearchToTrueAndAddAAttributeOnElementFormAndAddAClassToTheInputElement_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndFormDoesNotHaveAttributeDataToShow', () => {
+  it("mobileSearchClickHandler_updateActivateMobileSearchToTrueAndAddAAttributeOnElementFormAndAddAClassToTheInputElement_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndFormDoesNotHaveAttributeDataToShow", () => {
 
-    const event = new MouseEvent('click');
+    const event = new MouseEvent("click");
     const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector('.search-form') as Element;
-    const input = compiled.querySelector('.search-input') as HTMLInputElement;
+    const form = compiled.querySelector(".search-form") as Element;
+    const input = compiled.querySelector(".search-input") as HTMLInputElement;
 
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
@@ -546,17 +644,42 @@ describe('HeaderComponent', () => {
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
     const compiled = fixture.nativeElement as HTMLElement;
-    const accountOptions = compiled.querySelector('.account-options') as Element;
+    const accountOptions = compiled.querySelector(".account-options") as Element;
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
 
     spyOn(document.documentElement, "click");
+
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
+
+    component.accountClickHandler(touchendEvent, accountOptions);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
+    expect(document.documentElement.click)
+      .toHaveBeenCalled();
+
+    expect(component.activateAccountOptions)
+      .toBeFalse();
+
+    expect(accountOptions?.hasAttribute("data-to-show"))
+      .toBeFalse();
+  });
+
+  it("accountClickHandler_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
+
+    component.logged = true;
+    fixture.autoDetectChanges();
+
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
+    const compiled = fixture.nativeElement as HTMLElement;
+    const accountOptions = compiled.querySelector(".account-options") as Element;
 
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
 
     component.accountClickHandler(touchendEvent, accountOptions);
-
-    expect(document.documentElement.click)
-      .toHaveBeenCalled();
 
     expect(touchEventHandlerService.preventDefaultTouchend)
       .toHaveBeenCalled();
@@ -564,18 +687,18 @@ describe('HeaderComponent', () => {
     expect(component.activateAccountOptions)
       .toBeFalse();
 
-    expect(accountOptions?.hasAttribute('data-to-show'))
+    expect(accountOptions?.hasAttribute("data-to-show"))
       .toBeFalse();
   });
 
-  it('accountClickHandler_updateActivateAccountOptionsToTrueAndAddAAttributeOnElementAccountOptions_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndAccountOptionsElementDoesNotHaveAttributeDataToShow', () => {
+  it("accountClickHandler_updateActivateAccountOptionsToTrueAndAddAAttributeOnElementAccountOptions_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndAccountOptionsElementDoesNotHaveAttributeDataToShow", () => {
 
     component.logged = true;
     fixture.autoDetectChanges();
 
-    const event = new MouseEvent('click');
+    const event = new MouseEvent("click");
     const compiled = fixture.nativeElement as HTMLElement;
-    const accountOptions = compiled.querySelector('.account-options') as Element;
+    const accountOptions = compiled.querySelector(".account-options") as Element;
 
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
@@ -588,7 +711,7 @@ describe('HeaderComponent', () => {
     expect(component.activateAccountOptions)
       .toBeTrue();
 
-    expect(accountOptions?.hasAttribute('data-to-show'))
+    expect(accountOptions?.hasAttribute("data-to-show"))
       .toBeTrue();
   });
 
@@ -616,13 +739,13 @@ describe('HeaderComponent', () => {
 
   // ----------------------------------------------------------------------
 
-  it('handlerClickMobileMenu_triggersAClickOnTheHtmlElementAndCallsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenActivateAccountOptionsPropertyIsTrueAndItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue', () => {
+  it("handlerClickMobileMenu_triggersAClickOnTheHtmlElementAndCallsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenActivateAccountOptionsPropertyIsTrueAndItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
     component.activateAccountOptions = true;
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
     const compiled = fixture.nativeElement as HTMLElement;
-    const menu = compiled.querySelector('.mobile-menu-options') as Element;
+    const menu = compiled.querySelector(".mobile-menu-options") as Element;
 
     spyOn(document.documentElement, "click");
 
@@ -644,11 +767,32 @@ describe('HeaderComponent', () => {
       .toBeFalse();
   });
 
-  it('handlerClickMobileMenu_updateActivateMobileMenuToTrueAndAddAAttributeOnElementMobileMenu_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndMenuElementDoesNotHaveAttributeDataToShow', () => {
+  it("handlerClickMobileMenu_callsPreventDefaultTouchendMethodOfTouchEventHandlerServiceAndDoesNotDoAnything_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsTrue", () => {
 
-    const event = new MouseEvent('click');
+    const touchendEvent = new TouchEvent("touchend", { cancelable: true });
     const compiled = fixture.nativeElement as HTMLElement;
-    const mobileMenu = compiled.querySelector('.mobile-menu-options') as Element;
+    const menu = compiled.querySelector(".mobile-menu-options") as Element;
+
+    spyOn(touchEventHandlerService, "preventDefaultTouchend");
+    spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
+
+    component.handlerClickMobileMenu(touchendEvent, menu);
+
+    expect(touchEventHandlerService.preventDefaultTouchend)
+      .toHaveBeenCalled();
+
+    expect(component.activateMobileMenu)
+      .toBeFalse();
+
+    expect(menu.hasAttribute("data-to-show"))
+      .toBeFalse();
+  });
+
+  it("handlerClickMobileMenu_updateActivateMobileMenuToTrueAndAddAAttributeOnElementMobileMenu_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndMenuElementDoesNotHaveAttributeDataToShow", () => {
+
+    const event = new MouseEvent("click");
+    const compiled = fixture.nativeElement as HTMLElement;
+    const mobileMenu = compiled.querySelector(".mobile-menu-options") as Element;
 
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
@@ -665,9 +809,9 @@ describe('HeaderComponent', () => {
       .toBeTrue();
   });
 
-  it("menuAccessHandler_callsTheStopPropagationOfTheEventObjectAndDoesNothing_whenActivateMobileMenuPropertyIsTrue", () => {
+  it("menuAccessHandler_callsTheStopPropagationOfTheEventObjectAndDoesNothing_whenActivateMobileMenuPropertyIsFalse", () => {
 
-    const event = new MouseEvent('click');
+    const event = new MouseEvent("click");
 
     component.activateMobileMenu = false;
 
@@ -706,7 +850,7 @@ describe('HeaderComponent', () => {
 
   it("menuAccessHandler_triggersAClickOnTheHtmlElement_whenActivateMobileMenuPropertyIsTrueAndItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndEventObjectIsNotTouchendType", () => {
 
-    const event = new MouseEvent('click');
+    const event = new MouseEvent("click");
 
     component.activateMobileMenu = true;
 
