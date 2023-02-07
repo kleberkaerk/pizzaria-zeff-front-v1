@@ -776,7 +776,7 @@ describe("HeaderComponent", () => {
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
     const compiled = fixture.nativeElement as HTMLElement;
-    const menu = compiled.querySelector(".mobile-menu-options") as Element;
+    const menu = compiled.querySelector(".menu") as Element;
 
     spyOn(document.documentElement, "click");
 
@@ -802,7 +802,7 @@ describe("HeaderComponent", () => {
 
     const touchendEvent = new TouchEvent("touchend", { cancelable: true });
     const compiled = fixture.nativeElement as HTMLElement;
-    const menu = compiled.querySelector(".mobile-menu-options") as Element;
+    const menu = compiled.querySelector(".menu") as Element;
 
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(true);
@@ -823,7 +823,7 @@ describe("HeaderComponent", () => {
 
     const event = new MouseEvent("click");
     const compiled = fixture.nativeElement as HTMLElement;
-    const mobileMenu = compiled.querySelector(".mobile-menu-options") as Element;
+    const mobileMenu = compiled.querySelector(".menu") as Element;
 
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
