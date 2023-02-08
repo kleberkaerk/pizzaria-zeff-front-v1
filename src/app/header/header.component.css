@@ -13,7 +13,8 @@
     src: url("../../assets/fonts/content-font/NotoSans-Medium.ttf") format("truetype");
 }
 
-.mobile-search-button,
+.mobile-search-button, 
+.exit-mobile-search,
 .logged-in-username-mobile,
 .mobile-menu-button {
     display: none;
@@ -84,14 +85,6 @@
     display: flex;
     align-items: center;
     position: relative;
-}
-
-.exit-mobile-search {
-    display: none;
-}
-
-.exit-mobile-search svg {
-    fill: var(--light-yellow-color);
 }
 
 .search-input {
@@ -390,6 +383,10 @@
         cursor: pointer;
         visibility: hidden;
         overflow: hidden;
+    }
+
+    .exit-mobile-search svg {
+        fill: var(--light-yellow-color);
     }
 
     .search-input {

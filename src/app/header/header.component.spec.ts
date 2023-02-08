@@ -819,7 +819,7 @@ describe("HeaderComponent", () => {
       .toBeFalse();
   });
 
-  it("handlerClickMobileMenu_updateActivateMobileMenuToTrueAndAddAAttributeOnElementMobileMenu_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndMenuElementDoesNotHaveAttributeDataToShow", () => {
+  it("handlerClickMobileMenu_updateActivateMobileMenuToTrueAndAddAAttributeOnMenuElement_whenItIsAMovingTouchMethodOfTouchEventHandlerServiceReturnsFalseAndMenuElementDoesNotHaveAttributeDataToShow", () => {
 
     const event = new MouseEvent("click");
     const compiled = fixture.nativeElement as HTMLElement;

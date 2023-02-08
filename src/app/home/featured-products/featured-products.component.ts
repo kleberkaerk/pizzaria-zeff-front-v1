@@ -85,7 +85,7 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
     }
     this.limiterToAfterViewChecked++;
 
-    const clientWidth = document.documentElement.clientWidth;
+    const clientWidth = window.innerWidth;
 
     if (clientWidth >= 481 && clientWidth <= 1023) {
 
@@ -171,7 +171,7 @@ export class FeaturedProductsComponent implements OnInit, AfterViewChecked {
 
     if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
-    const clientWidth = document.documentElement.clientWidth;
+    const clientWidth = window.innerWidth;
     const productsHeight = products.scrollHeight;
 
     if (clientWidth <= 480) {

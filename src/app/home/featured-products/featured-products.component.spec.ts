@@ -257,7 +257,7 @@ describe('FeaturedProductsComponent', () => {
 
   it("ngAfterViewChecked_addsAClassToACertainExpansionButtonAndToTheWrapperThatHoldsTheProductsContainer_whenAGivenFeaturedProductsMapArrayIsLessThanOrEqualTo5ElementsAndTheBodyElementWidthIsLessThan481OrGreaterThan1023", () => {
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
+    spyOnProperty(window, "innerWidth").and.returnValue(1024);
 
     spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByType));
@@ -297,7 +297,7 @@ describe('FeaturedProductsComponent', () => {
 
   it("ngAfterViewChecked_addsAClassToACertainExpansionButtonAndToTheWrapperThatHoldsTheProductsContainer_whenAGivenFeaturedProductsMapArrayIsLessThanOrEqualTo4ElementsAndTheBodyElementWidthIsGreaterThan480AndLessThan1024", () => {
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1000);
+    spyOnProperty(window, "innerWidth").and.returnValue(1000);
 
     spyOn(productService, "findProductsInPromotion")
       .and.returnValue(of(productsMapByType));
@@ -555,7 +555,7 @@ describe('FeaturedProductsComponent', () => {
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
+    spyOnProperty(window, "innerWidth").and.returnValue(480);
 
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
@@ -590,7 +590,7 @@ describe('FeaturedProductsComponent', () => {
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(480);
+    spyOnProperty(window, "innerWidth").and.returnValue(480);
 
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
@@ -627,7 +627,7 @@ describe('FeaturedProductsComponent', () => {
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
+    spyOnProperty(window, "innerWidth").and.returnValue(1023);
 
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
@@ -662,7 +662,7 @@ describe('FeaturedProductsComponent', () => {
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1023);
+    spyOnProperty(window, "innerWidth").and.returnValue(1023);
 
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
@@ -699,7 +699,7 @@ describe('FeaturedProductsComponent', () => {
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
+    spyOnProperty(window, "innerWidth").and.returnValue(1024);
 
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
@@ -734,7 +734,7 @@ describe('FeaturedProductsComponent', () => {
     spyOn(touchEventHandlerService, "preventDefaultTouchend");
     spyOn(touchEventHandlerService, "itIsAMovingTouch").and.returnValue(false);
 
-    spyOnProperty(document.documentElement, "clientWidth").and.returnValue(1024);
+    spyOnProperty(window, "innerWidth").and.returnValue(1024);
 
     component.seeMoreProducts(event, wrapperElement, productsElement, buttonElement);
 
