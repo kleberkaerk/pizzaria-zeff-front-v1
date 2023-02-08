@@ -105,13 +105,15 @@ main {
     color: var(--white-color);
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1023px), (max-height: 1023px) and (pointer: coarse) {
 
     .products {
         padding: 0px;
+        align-items: center;
     }
 
     .product {
+        max-width: 600px;
         flex-direction: column;
         padding: 20px 0px;
         border-bottom: none;
@@ -141,7 +143,7 @@ main {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px), (max-height: 480px) and (pointer: coarse) {
 
     .product {
         padding: 10px 0px;

@@ -167,7 +167,7 @@
     }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1023px), (max-height: 1023px) and (pointer: coarse) {
 
     .welcome-message {
         top: 380px;
@@ -186,7 +186,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px), (max-height: 480px) and (pointer: coarse) {
 
     .slide-message {
         font-size: 2rem;

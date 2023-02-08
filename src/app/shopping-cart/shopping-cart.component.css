@@ -178,7 +178,7 @@
     cursor: pointer;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1023px), (max-height: 1023px) and (pointer: coarse) {
 
     .cart-of-products-on-display~.shopping-cart {
         width: calc(100% - 2px);
@@ -186,7 +186,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px), (max-height: 480px) and (pointer: coarse) {
 
     .shopping-cart-button {
         bottom: 20px;

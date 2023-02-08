@@ -139,7 +139,6 @@ main {
     color: var(--white-color);
 }
 
-/* @media (max-width: 1023px), (max-height: 1023px) and (pointer: coarse) { */
 @media (max-width: 1023px) {
 
     .products {
