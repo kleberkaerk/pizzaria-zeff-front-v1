@@ -3,6 +3,10 @@
     src: url("../../../assets/fonts/slider-font/DancingScript-Regular.ttf") format("truetype");
 }
 
+.content {
+    min-height: calc(100vh - 288px);
+}
+
 .slider {
     width: 100%;
     max-width: 1920px;

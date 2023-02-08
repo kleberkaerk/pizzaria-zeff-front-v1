@@ -1,192 +1,196 @@
-<div class="slider">
-  <div class="slides">
-    <input
-      type="radio"
-      name="slide-picker"
-      id="slide-1"
-      class="picker"
-      checked
-    />
-    <input type="radio" name="slide-picker" id="slide-2" class="picker" />
-    <input type="radio" name="slide-picker" id="slide-3" class="picker" />
-    <input type="radio" name="slide-picker" id="slide-4" class="picker" />
+<div class="content">
+  <div class="slider">
+    <div class="slides">
+      <input
+        type="radio"
+        name="slide-picker"
+        id="slide-1"
+        class="picker"
+        checked
+      />
+      <input type="radio" name="slide-picker" id="slide-2" class="picker" />
+      <input type="radio" name="slide-picker" id="slide-3" class="picker" />
+      <input type="radio" name="slide-picker" id="slide-4" class="picker" />
 
-    <div class="slide" id="mover">
-      <picture>
-        <source
-          media="(max-width: 480px)"
-          srcset="../../../assets/slider/mobile/slide-1.jpg"
-        />
-        <source
-          media="(max-width: 1023px)"
-          srcset="../../../assets/slider/tablet/slide-1.jpg"
-        />
-        <img
-          src="../../../assets/slider/monitors-and-televisors/slide-1.jpg"
-          alt="Bancada do restaurante"
-        />
-      </picture>
-      <h1 class="slide-message welcome-message">
-        Bem Vindo(a) a Pizzaria Zeff
-      </h1>
+      <div class="slide" id="mover">
+        <picture>
+          <source
+            media="(max-width: 480px)"
+            srcset="../../../assets/slider/mobile/slide-1.jpg"
+          />
+          <source
+            media="(max-width: 1023px)"
+            srcset="../../../assets/slider/tablet/slide-1.jpg"
+          />
+          <img
+            src="../../../assets/slider/monitors-and-televisors/slide-1.jpg"
+            alt="Bancada do restaurante"
+          />
+        </picture>
+        <h1 class="slide-message welcome-message">
+          Bem Vindo(a) a Pizzaria Zeff
+        </h1>
+      </div>
+
+      <div class="slide">
+        <picture>
+          <source
+            media="(max-width: 480px)"
+            srcset="../../../assets/slider/mobile/slide-2.jpg"
+          />
+          <source
+            media="(max-width: 1023px)"
+            srcset="../../../assets/slider/tablet/slide-2.jpg"
+          />
+          <img
+            src="../../../assets/slider/monitors-and-televisors/slide-2.jpg"
+            alt="Chefe cortando pizza"
+          />
+        </picture>
+        <h1 class="slide-message traditional-pizza-message">
+          Pizzas tradicionais feitas no forno a lenha
+        </h1>
+      </div>
+
+      <div class="slide">
+        <picture>
+          <source
+            media="(max-width: 480px)"
+            srcset="../../../assets/slider/mobile/slide-3.jpg"
+          />
+          <source
+            media="(max-width: 1023px)"
+            srcset="../../../assets/slider/tablet/slide-3.jpg"
+          />
+          <img
+            src="../../../assets/slider/monitors-and-televisors/slide-3.jpg"
+            alt="Pizza no forno"
+          />
+        </picture>
+        <h1 class="slide-message cheff-message">
+          Chefs com uma culinária excepcional
+        </h1>
+      </div>
+
+      <div class="slide">
+        <picture>
+          <source
+            media="(max-width: 480px)"
+            srcset="../../../assets/slider/mobile/slide-4.jpg"
+          />
+          <source
+            media="(max-width: 1023px)"
+            srcset="../../../assets/slider/tablet/slide-4.jpg"
+          />
+          <img
+            src="../../../assets/slider/monitors-and-televisors/slide-4.jpg"
+            alt="Pizza sendo compartilhada"
+          />
+        </picture>
+        <h1 class="slide-message client-message">
+          Tudo para fazer com que seus momentos inesquecíveis, fiquem ainda mais
+          inesquecíveis
+        </h1>
+      </div>
+
+      <div class="navigation">
+        <label
+          for="slide-1"
+          class="picker-button"
+          id="label-slide-1"
+          aria-disabled="true"
+          (click)="setSlide($event, 1)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="setSlide($event, 1)"
+        >
+        </label>
+        <label
+          for="slide-2"
+          class="picker-button"
+          id="label-slide-2"
+          aria-disabled="true"
+          (click)="setSlide($event, 2)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="setSlide($event, 2)"
+        >
+        </label>
+        <label
+          for="slide-3"
+          class="picker-button"
+          id="label-slide-3"
+          aria-disabled="true"
+          (click)="setSlide($event, 3)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="setSlide($event, 3)"
+        >
+        </label>
+        <label
+          for="slide-4"
+          class="picker-button"
+          id="label-slide-4"
+          aria-disabled="true"
+          (click)="setSlide($event, 4)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="setSlide($event, 4)"
+        >
+        </label>
+
+        <div class="option-divider"></div>
+
+        <button
+          class="pause-slide-button"
+          *ngIf="!pausedSlides"
+          (click)="stopAutomaticSlideAdvance($event)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="stopAutomaticSlideAdvance($event)"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20">
+            <path d="M12.125 14.75v-9.5h2.417v9.5Zm-6.667 0v-9.5h2.417v9.5Z" />
+          </svg>
+        </button>
+
+        <button
+          class="play-slide-button"
+          *ngIf="pausedSlides"
+          (click)="resumeAutomaticSlideAdvance($event)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="resumeAutomaticSlideAdvance($event)"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20">
+            <path d="M6.833 15.812V4.188L15.812 10Z" />
+          </svg>
+        </button>
+      </div>
     </div>
 
-    <div class="slide">
-      <picture>
-        <source
-          media="(max-width: 480px)"
-          srcset="../../../assets/slider/mobile/slide-2.jpg"
+    <button
+      class="slide-back-button"
+      (click)="slideBack($event)"
+      (touchstart)="setInitialTouchPoint($event)"
+      (touchend)="slideBack($event)"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
+        <path
+          d="M26.792 35.167 11.625 20 26.792 4.833l1.291 1.292L14.208 20l13.875 13.875Z"
         />
-        <source
-          media="(max-width: 1023px)"
-          srcset="../../../assets/slider/tablet/slide-2.jpg"
-        />
-        <img
-          src="../../../assets/slider/monitors-and-televisors/slide-2.jpg"
-          alt="Chefe cortando pizza"
-        />
-      </picture>
-      <h1 class="slide-message traditional-pizza-message">
-        Pizzas tradicionais feitas no forno a lenha
-      </h1>
-    </div>
+      </svg>
+    </button>
 
-    <div class="slide">
-      <picture>
-        <source
-          media="(max-width: 480px)"
-          srcset="../../../assets/slider/mobile/slide-3.jpg"
+    <button
+      class="slide-advance-button"
+      (click)="slideAdvance($event)"
+      (touchstart)="setInitialTouchPoint($event)"
+      (touchend)="slideAdvance($event)"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
+        <path
+          d="m13.208 35.125-1.333-1.25 13.917-13.917L11.875 6.125l1.333-1.333 15.167 15.166Z"
         />
-        <source
-          media="(max-width: 1023px)"
-          srcset="../../../assets/slider/tablet/slide-3.jpg"
-        />
-        <img
-          src="../../../assets/slider/monitors-and-televisors/slide-3.jpg"
-          alt="Pizza no forno"
-        />
-      </picture>
-      <h1 class="slide-message cheff-message">
-        Chefs com uma culinária excepcional
-      </h1>
-    </div>
-
-    <div class="slide">
-      <picture>
-        <source
-          media="(max-width: 480px)"
-          srcset="../../../assets/slider/mobile/slide-4.jpg"
-        />
-        <source
-          media="(max-width: 1023px)"
-          srcset="../../../assets/slider/tablet/slide-4.jpg"
-        />
-        <img
-          src="../../../assets/slider/monitors-and-televisors/slide-4.jpg"
-          alt="Pizza sendo compartilhada"
-        />
-      </picture>
-      <h1 class="slide-message client-message">
-        Tudo para fazer com que seus momentos inesquecíveis, fiquem ainda mais
-        inesquecíveis
-      </h1>
-    </div>
-
-    <div class="navigation">
-      <label
-        for="slide-1"
-        class="picker-button"
-        id="label-slide-1"
-        aria-disabled="true"
-        (click)="setSlide($event, 1)"
-        (touchstart)="setInitialTouchPoint($event)"
-        (touchend)="setSlide($event, 1)"
-      >
-      </label>
-      <label
-        for="slide-2"
-        class="picker-button"
-        id="label-slide-2"
-        aria-disabled="true"
-        (click)="setSlide($event, 2)"
-        (touchstart)="setInitialTouchPoint($event)"
-        (touchend)="setSlide($event, 2)"
-      >
-      </label>
-      <label
-        for="slide-3"
-        class="picker-button"
-        id="label-slide-3"
-        aria-disabled="true"
-        (click)="setSlide($event, 3)"
-        (touchstart)="setInitialTouchPoint($event)"
-        (touchend)="setSlide($event, 3)"
-      >
-      </label>
-      <label
-        for="slide-4"
-        class="picker-button"
-        id="label-slide-4"
-        aria-disabled="true"
-        (click)="setSlide($event, 4)"
-        (touchstart)="setInitialTouchPoint($event)"
-        (touchend)="setSlide($event, 4)"
-      >
-      </label>
-
-      <div class="option-divider"></div>
-
-      <button
-        class="pause-slide-button"
-        *ngIf="!pausedSlides"
-        (click)="stopAutomaticSlideAdvance($event)"
-        (touchstart)="setInitialTouchPoint($event)"
-        (touchend)="stopAutomaticSlideAdvance($event)"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20">
-          <path d="M12.125 14.75v-9.5h2.417v9.5Zm-6.667 0v-9.5h2.417v9.5Z" />
-        </svg>
-      </button>
-
-      <button
-        class="play-slide-button"
-        *ngIf="pausedSlides"
-        (click)="resumeAutomaticSlideAdvance($event)"
-        (touchstart)="setInitialTouchPoint($event)"
-        (touchend)="resumeAutomaticSlideAdvance($event)"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20">
-          <path d="M6.833 15.812V4.188L15.812 10Z" />
-        </svg>
-      </button>
-    </div>
+      </svg>
+    </button>
   </div>
 
-  <button
-    class="slide-back-button"
-    (click)="slideBack($event)"
-    (touchstart)="setInitialTouchPoint($event)"
-    (touchend)="slideBack($event)"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
-      <path
-        d="M26.792 35.167 11.625 20 26.792 4.833l1.291 1.292L14.208 20l13.875 13.875Z"
-      />
-    </svg>
-  </button>
-
-  <button
-    class="slide-advance-button"
-    (click)="slideAdvance($event)"
-    (touchstart)="setInitialTouchPoint($event)"
-    (touchend)="slideAdvance($event)"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
-      <path
-        d="m13.208 35.125-1.333-1.25 13.917-13.917L11.875 6.125l1.333-1.333 15.167 15.166Z"
-      />
-    </svg>
-  </button>
+  <app-featured-products></app-featured-products>
 </div>
 
-<app-featured-products></app-featured-products>
+<app-footer></app-footer>

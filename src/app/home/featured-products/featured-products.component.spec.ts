@@ -9,7 +9,6 @@ import { PriceRating } from 'src/app/domain/price-rating'
 import { of } from 'rxjs';
 import { Product } from 'src/app/domain/product';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { ProductTransferService } from 'src/app/service/product-transfer.service';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 
@@ -148,8 +147,7 @@ describe('FeaturedProductsComponent', () => {
         FeaturedProductsComponent
       ],
       imports: [
-        HttpClientTestingModule,
-        SharedModule
+        HttpClientTestingModule
       ]
     })
       .compileComponents();
