@@ -99,7 +99,8 @@
         id="label-slide-1"
         aria-disabled="true"
         (click)="setSlide($event, 1)"
-        (touchstart)="setSlide($event, 1)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="setSlide($event, 1)"
       >
       </label>
       <label
@@ -108,7 +109,8 @@
         id="label-slide-2"
         aria-disabled="true"
         (click)="setSlide($event, 2)"
-        (touchstart)="setSlide($event, 2)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="setSlide($event, 2)"
       >
       </label>
       <label
@@ -117,7 +119,8 @@
         id="label-slide-3"
         aria-disabled="true"
         (click)="setSlide($event, 3)"
-        (touchstart)="setSlide($event, 3)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="setSlide($event, 3)"
       >
       </label>
       <label
@@ -126,11 +129,64 @@
         id="label-slide-4"
         aria-disabled="true"
         (click)="setSlide($event, 4)"
-        (touchstart)="setSlide($event, 4)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="setSlide($event, 4)"
       >
       </label>
+
+      <div class="option-divider"></div>
+
+      <button
+        class="pause-slide-button"
+        *ngIf="!pausedSlides"
+        (click)="stopAutomaticSlideAdvance($event)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="stopAutomaticSlideAdvance($event)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20">
+          <path d="M12.125 14.75v-9.5h2.417v9.5Zm-6.667 0v-9.5h2.417v9.5Z" />
+        </svg>
+      </button>
+
+      <button
+        class="play-slide-button"
+        *ngIf="pausedSlides"
+        (click)="resumeAutomaticSlideAdvance($event)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="resumeAutomaticSlideAdvance($event)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20">
+          <path d="M6.833 15.812V4.188L15.812 10Z" />
+        </svg>
+      </button>
     </div>
   </div>
+
+  <button
+    class="slide-back-button"
+    (click)="slideBack($event)"
+    (touchstart)="setInitialTouchPoint($event)"
+    (touchend)="slideBack($event)"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
+      <path
+        d="M26.792 35.167 11.625 20 26.792 4.833l1.291 1.292L14.208 20l13.875 13.875Z"
+      />
+    </svg>
+  </button>
+
+  <button
+    class="slide-advance-button"
+    (click)="slideAdvance($event)"
+    (touchstart)="setInitialTouchPoint($event)"
+    (touchend)="slideAdvance($event)"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
+      <path
+        d="m13.208 35.125-1.333-1.25 13.917-13.917L11.875 6.125l1.333-1.333 15.167 15.166Z"
+      />
+    </svg>
+  </button>
 </div>
 
 <app-featured-products></app-featured-products>

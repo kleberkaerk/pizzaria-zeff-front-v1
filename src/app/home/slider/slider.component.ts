@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
+
 @Component({
   selector: 'app-slider',
   templateUrl: './slider.component.html',
@@ -7,40 +9,121 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SliderComponent implements OnInit {
 
-  private nextSlide = 2;
+  public currentSlide = 1;
   public intervalId!: number;
+  public pausedSlides = false;
 
-  ngOnInit(): void {
+  constructor(private touchEventHandlerService: TouchEventHandlerService) { }
+
+  private viewSlide(slideNumber: number) {
+
+    let slideButton = document.getElementById("slide-" + slideNumber) as HTMLInputElement;
+    slideButton.checked = true
+  }
+
+  private automaticSlideAdvance() {
 
     this.intervalId = window.setInterval(() => {
 
-      let slideButton = document.getElementById("slide-" + this.nextSlide) as HTMLInputElement;
+      if (this.currentSlide <= 3) {
 
-      slideButton.checked = true
+        ++this.currentSlide;
+      } else {
 
-      this.nextSlide++;
-
-      if (this.nextSlide > 4) {
-        this.nextSlide = 1
+        this.currentSlide = 1
       }
-    }, 8000)
+
+      this.viewSlide(this.currentSlide);
+    }, 8000);
+  }
+
+  ngOnInit(): void {
+
+    this.automaticSlideAdvance();
+  }
+
+  public stopAutomaticSlideAdvance(e: Event) {
+
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    window.clearInterval(this.intervalId);
+
+    this.pausedSlides = true;
+  }
+
+  public resumeAutomaticSlideAdvance(e: Event) {
+
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    this.automaticSlideAdvance();
+
+    this.pausedSlides = false;
+  }
+
+  public setInitialTouchPoint(e: TouchEvent) {
+
+    this.touchEventHandlerService.setInitialTouchPoint(e);
+  }
+
+  public slideBack(e: Event) {
+
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    if (this.currentSlide >= 2) {
+
+      --this.currentSlide;
+    } else {
+
+      this.currentSlide = 4;
+    }
+
+    this.viewSlide(this.currentSlide);
+  }
+
+  public slideAdvance(e: Event) {
+
+    e.stopPropagation();
+
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    if (this.currentSlide <= 3) {
+
+      ++this.currentSlide;
+    } else {
+
+      this.currentSlide = 1;
+    }
+
+    this.viewSlide(this.currentSlide);
   }
 
   public setSlide(e: Event, currentSlide: number) {
 
-    if (e.cancelable && e.type === "touchstart") {
+    e.stopPropagation();
 
-      e.preventDefault();
-      const selectedSlide = document.getElementById("slide-" + currentSlide) as HTMLInputElement;
-      selectedSlide.checked = true;
+    this.touchEventHandlerService.preventDefaultTouchend(e);
+
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+
+    if (e.type === "touchend") {
+
+      this.viewSlide(currentSlide);
     }
 
-    if (currentSlide < 4) {
-
-      this.nextSlide = ++currentSlide;
-    } else {
-
-      this.nextSlide = 1;
-    }
+    this.currentSlide = currentSlide;
   }
 }
