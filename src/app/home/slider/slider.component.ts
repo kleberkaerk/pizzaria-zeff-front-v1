@@ -9,7 +9,7 @@ import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.se
 })
 export class SliderComponent implements OnInit {
 
-  public currentSlide = 1;
+  private currentSlide = 1;
   public intervalId!: number;
   public pausedSlides = false;
 
