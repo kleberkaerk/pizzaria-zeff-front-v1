@@ -466,6 +466,10 @@
         height: 56px;
     }
 
+    .login-link:hover {
+        background-color: var(--dark-red-color);
+    }
+
     .user-account {
         position: static;
     }

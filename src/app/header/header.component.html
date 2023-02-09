@@ -159,7 +159,9 @@
         </div>
 
         <div class="account" *ngIf="!activateMobileSearch">
-          <a routerLink="" class="login-link" *ngIf="!logged">Fazer login</a>
+          <a class="login-link" routerLink="/signin" *ngIf="!logged"
+            >Fazer login</a
+          >
 
           <div class="user-account" *ngIf="logged">
             <button
