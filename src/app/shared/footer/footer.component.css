@@ -29,7 +29,7 @@
     color: var(--dark-yellow-color);
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1023px), (max-height: 1023px) and (pointer: coarse) {
 
     .link:hover,
     .link:active {
