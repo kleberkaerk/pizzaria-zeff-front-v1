@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Product } from '../domain/product';
-import { ProductRequisitionService } from '../service/product.requisition.service'
+import { ProductRequisitionService } from '../service/product-requisition.service'
 import { TouchEventHandlerService } from '../service/touch-event-handler.service';
 
 @Component({

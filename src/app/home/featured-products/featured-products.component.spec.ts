@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
 import { FeaturedProductsComponent } from './featured-products.component';
-import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
+import { ProductRequisitionService } from 'src/app/service/product-requisition.service';
 import { Type } from 'src/app/domain/type'
 import { PriceRating } from 'src/app/domain/price-rating'
 import { of } from 'rxjs';

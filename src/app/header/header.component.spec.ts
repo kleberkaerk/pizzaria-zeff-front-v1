@@ -5,7 +5,7 @@ import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
 
 import { HeaderComponent } from "./header.component";
-import { ProductRequisitionService } from "../service/product.requisition.service"
+import { ProductRequisitionService } from "../service/product-requisition.service"
 import { Router } from "@angular/router";
 import { Page } from "../util/page";
 import { Product } from "../domain/product";

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Product } from 'src/app/domain/product';
 import { ProductTransferService } from 'src/app/service/product-transfer.service';
-import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
+import { ProductRequisitionService } from 'src/app/service/product-requisition.service';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 import { Page } from 'src/app/util/page';

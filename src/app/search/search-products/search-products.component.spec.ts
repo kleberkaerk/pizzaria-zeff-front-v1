@@ -8,7 +8,7 @@ import { PriceRating } from 'src/app/domain/price-rating';
 import { Product } from 'src/app/domain/product';
 import { Type } from 'src/app/domain/type';
 import { ProductTransferService } from 'src/app/service/product-transfer.service';
-import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
+import { ProductRequisitionService } from 'src/app/service/product-requisition.service';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 import { SharedModule } from 'src/app/shared/shared.module';

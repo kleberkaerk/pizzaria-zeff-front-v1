@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ProductMenuComponent } from './product-menu.component';
 import { FooterComponent } from 'src/app/shared/footer/footer.component';
 import { of } from 'rxjs';
-import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
+import { ProductRequisitionService } from 'src/app/service/product-requisition.service';
 import { Product } from 'src/app/domain/product';
 import { Type } from 'src/app/domain/type';
 import { PriceRating } from 'src/app/domain/price-rating';

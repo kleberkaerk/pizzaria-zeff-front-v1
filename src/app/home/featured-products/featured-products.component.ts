@@ -5,7 +5,7 @@ import { Product } from 'src/app/domain/product';
 import { Type } from 'src/app/domain/type';
 import { registerLocaleData } from '@angular/common';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';
-import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
+import { ProductRequisitionService } from 'src/app/service/product-requisition.service';
 import { ProductTransferService } from 'src/app/service/product-transfer.service';
 import { Router } from '@angular/router';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';

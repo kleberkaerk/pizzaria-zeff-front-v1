@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ProductRequisitionService } from 'src/app/service/product.requisition.service';
+import { ProductRequisitionService } from 'src/app/service/product-requisition.service';
 import { Page } from 'src/app/util/page';
 import { Product } from 'src/app/domain/product';
 import { ShoppingCartService } from 'src/app/service/shopping-cart.service';

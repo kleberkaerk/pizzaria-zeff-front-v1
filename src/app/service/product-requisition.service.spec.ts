@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 
-import { ProductRequisitionService } from './product.requisition.service';
+import { ProductRequisitionService } from './product-requisition.service';
 
 import { ProductDTO } from '../dto/product-dto';
 import { ProductsMapByTypeDTO } from '../dto/product-by-type-map-dto';
