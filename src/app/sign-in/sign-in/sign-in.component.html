@@ -1,1 +1,60 @@
-<p>signin works!</p>
+<main>
+  <form [formGroup]="credentials">
+    <ul>
+      <li>
+        <label for="email">E-mail </label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          maxlength="150"
+          (keydown)="changeToPassword($event, password)"
+        />
+
+        <ng-template [ngIf]="credentials.controls.email.touched">
+          <p *ngIf="credentials.controls.email.errors?.['required']">
+            Por favor, insira o seu e-mail
+          </p>
+          <p
+            *ngIf="!credentials.controls.email.errors?.['required'] && (credentials.controls.email.errors?.['pattern'] !== null || credentials.controls.email.errors?.['maxlength'])"
+          >
+            Por favor, insira um endereço de e-mail válido
+          </p>
+        </ng-template>
+      </li>
+
+      <li>
+        <label for="password">Senha </label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          maxlength="150"
+          #password
+          (keydown)="loginWithKeyboard($event)"
+        />
+
+        <ng-template [ngIf]="credentials.controls.password.touched">
+          <p *ngIf="credentials.controls.password.errors?.['required']">
+            Por favor, insira a sua senha
+          </p>
+          <p
+            *ngIf="!credentials.controls.password.errors?.['required'] && (credentials.controls.password.errors?.['minlength'] !== null || credentials.controls.password.errors?.['maxlength'])"
+          >
+            Por favor, insira uma senha válida
+          </p>
+        </ng-template>
+      </li>
+
+      <li>
+        <button 
+        type="button"
+        (click)="loginWithButton($event)"
+        (touchstart)="setInitialTouchPoint($event)"
+        (touchend)="loginWithButton($event)"
+        >Fazer login</button>
+      </li>
+
+    </ul>
+  </form>
+</main>
