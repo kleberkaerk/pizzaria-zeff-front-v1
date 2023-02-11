@@ -50,6 +50,10 @@
         <p>Email e/ou senha inválidos</p>
       </li>
 
+      <li *ngIf="errorInRequest">
+        <p>Ocorreu um erro, tente novamente mais tarde</p>
+      </li>
+
       <li>
         <button
           type="button"

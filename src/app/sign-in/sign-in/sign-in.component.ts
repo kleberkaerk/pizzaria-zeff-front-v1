@@ -1,7 +1,7 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 import { UserRequisitionService } from 'src/app/service/user-requisition.service';
 
@@ -12,10 +12,11 @@ import { UserRequisitionService } from 'src/app/service/user-requisition.service
 })
 export class SignInComponent implements OnInit {
 
-  public invalidUser: boolean = false;
+  public redirect = "";
   // será utilizado para criar um loading no botão de fazer login. Este loading ficará visível enquanto a requisição não retornar.
   public openRequisition: boolean = false;
-  public redirect = "";
+  public invalidUser: boolean = false;
+  public errorInRequest = false;
 
   public credentials = this.formBuilder.group({
     email: ["", [
@@ -31,14 +32,15 @@ export class SignInComponent implements OnInit {
   });
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
     private userRequisitionService: UserRequisitionService,
+    private router: Router,
     private touchEventHandlerService: TouchEventHandlerService
   ) { }
 
   ngOnInit(): void {
-      
+
     this.activatedRoute.queryParams.subscribe(queryParam => {
 
       this.redirect = queryParam["redirect"];
@@ -50,6 +52,33 @@ export class SignInComponent implements OnInit {
     if (e.key !== "Enter") return;
 
     password.focus();
+  }
+
+  private successHandling(httpResponse: HttpResponse<void>) {
+
+    this.openRequisition = false;
+
+    if (httpResponse.status === 204) {
+
+      this.invalidUser = false;
+      this.router.navigate([this.redirect]);
+    } else {
+
+      this.errorInRequest = true;
+    }
+  }
+
+  private errorHandling(httpResponse: HttpErrorResponse) {
+
+    this.openRequisition = false;
+
+    if (httpResponse.status === 401) {
+
+      this.invalidUser = true;
+    } else {
+
+      this.errorInRequest = true;
+    }
   }
 
   private login() {
@@ -65,19 +94,11 @@ export class SignInComponent implements OnInit {
         .subscribe({
           next: httpResponse => {
 
-            if(httpResponse.status === 204) {
-
-              this.invalidUser = false;
-            }
-            this.openRequisition = false;
+            this.successHandling(httpResponse);
           },
           error: (httpResponse: HttpErrorResponse) => {
 
-            if(httpResponse.status === 401) {
-
-              this.invalidUser = true;
-            }
-            this.openRequisition = false;
+            this.errorHandling(httpResponse);
           }
         });
     }
