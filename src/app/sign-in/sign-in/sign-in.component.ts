@@ -1,6 +1,9 @@
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { catchError, throwError } from 'rxjs';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
+import { UserRequisitionService } from 'src/app/service/user-requisition.service';
 
 @Component({
   selector: 'app-signin',
@@ -24,6 +27,7 @@ export class SignInComponent {
 
   constructor(
     private formBuilder: FormBuilder,
+    private userRequisitionService: UserRequisitionService,
     private touchEventHandlerService: TouchEventHandlerService
   ) { }
 
@@ -38,7 +42,20 @@ export class SignInComponent {
 
     if (this.credentials.valid) {
 
-      console.log("Executou");
+      this.userRequisitionService.signIn(
+        this.credentials.value.email as string,
+        this.credentials.value.password as string
+      )
+        .subscribe({
+          next: httpResponse => {
+
+            console.log(httpResponse);
+          },
+          error: httpResponse => {
+
+            // console.log(httpResponse);
+          }
+        });
     }
   }
 
@@ -59,7 +76,7 @@ export class SignInComponent {
     e.stopPropagation();
 
     this.touchEventHandlerService.preventDefaultTouchend(e);
-    
+
     if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     this.login();
