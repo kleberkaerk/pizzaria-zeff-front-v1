@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Buffer } from 'buffer';
 
 import { environment } from 'src/environments/environment';
 
@@ -17,7 +16,7 @@ export class UserRequisitionService {
 
   private encodeCredentials(username: string, password: string): string {
 
-    return Buffer.from(username + ":" + password, "utf8").toString("base64");
+    return window.btoa(username + ":" + password);
   }
 
   signIn(username: string, password: string) {
