@@ -46,15 +46,24 @@
         </ng-template>
       </li>
 
-      <li>
-        <button 
-        type="button"
-        (click)="loginWithButton($event)"
-        (touchstart)="setInitialTouchPoint($event)"
-        (touchend)="loginWithButton($event)"
-        >Fazer login</button>
+      <li *ngIf="invalidUser">
+        <p>Email e/ou senha inválidos</p>
       </li>
 
+      <li>
+        <button
+          type="button"
+          (click)="loginWithButton($event)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (touchend)="loginWithButton($event)"
+        >
+          Fazer login
+        </button>
+      </li>
     </ul>
   </form>
+
+  <div>
+    <p>Ainda não está cadastrado? <a routerLink="">Cadastre-se</a></p>
+  </div>
 </main>

@@ -1,7 +1,6 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { catchError, throwError } from 'rxjs';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 import { UserRequisitionService } from 'src/app/service/user-requisition.service';
 
@@ -11,6 +10,10 @@ import { UserRequisitionService } from 'src/app/service/user-requisition.service
   styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent {
+
+  public invalidUser: boolean = false;
+  // será utilizado para criar um loading no botão de fazer login. Este loading ficará visível enquanto a requisição não retornar.
+  public openRequisition: boolean = false;
 
   public credentials = this.formBuilder.group({
     email: ["", [
@@ -42,6 +45,8 @@ export class SignInComponent {
 
     if (this.credentials.valid) {
 
+      this.openRequisition = true;
+
       this.userRequisitionService.signIn(
         this.credentials.value.email as string,
         this.credentials.value.password as string
@@ -49,11 +54,19 @@ export class SignInComponent {
         .subscribe({
           next: httpResponse => {
 
-            console.log(httpResponse);
-          },
-          error: httpResponse => {
+            if(httpResponse.status === 204) {
 
-            // console.log(httpResponse);
+              this.invalidUser = false;
+            }
+            this.openRequisition = false;
+          },
+          error: (httpResponse: HttpErrorResponse) => {
+
+            if(httpResponse.status === 401) {
+
+              this.invalidUser = true;
+            }
+            this.openRequisition = false;
           }
         });
     }
