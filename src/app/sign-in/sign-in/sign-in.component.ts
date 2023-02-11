@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 import { UserRequisitionService } from 'src/app/service/user-requisition.service';
 
@@ -9,11 +10,12 @@ import { UserRequisitionService } from 'src/app/service/user-requisition.service
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css']
 })
-export class SignInComponent {
+export class SignInComponent implements OnInit {
 
   public invalidUser: boolean = false;
   // será utilizado para criar um loading no botão de fazer login. Este loading ficará visível enquanto a requisição não retornar.
   public openRequisition: boolean = false;
+  public redirect = "";
 
   public credentials = this.formBuilder.group({
     email: ["", [
@@ -29,10 +31,19 @@ export class SignInComponent {
   });
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private userRequisitionService: UserRequisitionService,
     private touchEventHandlerService: TouchEventHandlerService
   ) { }
+
+  ngOnInit(): void {
+      
+    this.activatedRoute.queryParams.subscribe(queryParam => {
+
+      this.redirect = queryParam["redirect"];
+    });
+  }
 
   public changeToPassword(e: KeyboardEvent, password: HTMLInputElement) {
 
