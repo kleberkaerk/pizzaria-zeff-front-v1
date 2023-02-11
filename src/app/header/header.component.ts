@@ -15,7 +15,7 @@ export class HeaderComponent {
   public activateAccountOptions = false;
   public activateMobileMenu = false;
   public activateMobileSearch = false;
-  public logged = false;
+  public logged = true;
   public username = "Luffy";
   public searchInputValue = "";
   private enteredValue!: string;

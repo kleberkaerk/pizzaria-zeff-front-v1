@@ -159,7 +159,11 @@
         </div>
 
         <div class="account" *ngIf="!activateMobileSearch">
-          <a class="login-link" routerLink="/signin" [queryParams]="{redirect: '/'}" *ngIf="!logged"
+          <a
+            class="login-link"
+            routerLink="/signin"
+            [queryParams]="{ redirect: '/' }"
+            *ngIf="!logged"
             >Fazer login</a
           >
 
@@ -188,15 +192,6 @@
                   />
                 </g>
               </svg>
-
-              <p
-                class="logged-in-username"
-                [ngClass]="{
-                  'block-logged-in-username': activateAccountOptions
-                }"
-              >
-                {{ username }}
-              </p>
             </button>
 
             <ul
@@ -206,9 +201,6 @@
               }"
               #accountOptions
             >
-              <li class="option-wrapper logged-in-username-mobile">
-                <h2>{{ username }}</h2>
-              </li>
               <li class="option-wrapper">
                 <a
                   class="account-option"
