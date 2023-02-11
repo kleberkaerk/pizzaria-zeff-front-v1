@@ -96,8 +96,6 @@ export class SignInComponent implements OnInit {
       this.userRequisitionService.signIn(username.trim(), password).subscribe({
         next: httpResponse => {
 
-          // Avisar header de que existe um usuário logado
-
           this.successHandling(httpResponse, username, password);
         },
         error: (httpResponse: HttpErrorResponse) => {

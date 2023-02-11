@@ -322,13 +322,20 @@ export class HeaderComponent implements OnInit {
 
   public signOutOfAccount(e: Event) {
 
-    // // e.stopPropagation();
+    e.stopPropagation();
 
-    // // this.touchEventHandlerService.preventDefaultTouchend(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    // // if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
-    // // document.documentElement.click();
+    this.userSessionService.signOutTheUser();
+
+    if (e.type === "touchend") {
+
+      this.router.navigate(["/"]);
+    }
+
+    document.documentElement.click();
   }
 
   public handlerClickMobileMenu(e: Event, mobileMenu: Element) {
