@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 import { UserRequisitionService } from 'src/app/service/user-requisition.service';
+import { UserSessionService } from 'src/app/service/user-session.service';
 
 @Component({
   selector: 'app-signin',
@@ -35,6 +36,7 @@ export class SignInComponent implements OnInit {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private userRequisitionService: UserRequisitionService,
+    private userSessionService: UserSessionService,
     private router: Router,
     private touchEventHandlerService: TouchEventHandlerService
   ) { }
@@ -54,13 +56,14 @@ export class SignInComponent implements OnInit {
     password.focus();
   }
 
-  private successHandling(httpResponse: HttpResponse<void>) {
+  private successHandling(httpResponse: HttpResponse<void>, username: string, password: string) {
 
     this.openRequisition = false;
 
     if (httpResponse.status === 204) {
 
       this.invalidUser = false;
+      this.userSessionService.setUserSession(username, password);
       this.router.navigate([this.redirect]);
     } else {
 
@@ -87,22 +90,21 @@ export class SignInComponent implements OnInit {
 
       this.openRequisition = true;
 
-      this.userRequisitionService.signIn(
-        this.credentials.value.email as string,
-        this.credentials.value.password as string
-      )
-        .subscribe({
-          next: httpResponse => {
+      const username = this.credentials.value.email as string;
+      const password = this.credentials.value.password as string;
 
-            // Avisar header de que existe um usuário logado
+      this.userRequisitionService.signIn(username.trim(), password).subscribe({
+        next: httpResponse => {
 
-            this.successHandling(httpResponse);
-          },
-          error: (httpResponse: HttpErrorResponse) => {
+          // Avisar header de que existe um usuário logado
 
-            this.errorHandling(httpResponse);
-          }
-        });
+          this.successHandling(httpResponse, username, password);
+        },
+        error: (httpResponse: HttpErrorResponse) => {
+
+          this.errorHandling(httpResponse);
+        }
+      });
     }
   }
 
