@@ -1,22 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Product } from '../domain/product';
 import { ProductRequisitionService } from '../service/product-requisition.service'
 import { TouchEventHandlerService } from '../service/touch-event-handler.service';
+import { UserSessionService } from '../service/user-session.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
   public activateAccountOptions = false;
   public activateMobileMenu = false;
   public activateMobileSearch = false;
-  public logged = true;
-  public username = "Luffy";
+  public logged = false;
   public searchInputValue = "";
   private enteredValue!: string;
   public searchResults: Array<Product> = new Array();
@@ -25,10 +25,21 @@ export class HeaderComponent {
   private finalClick = { clientX: 0, clientY: 0 };
 
   constructor(
+    private userSessionService: UserSessionService,
     private touchEventHandlerService: TouchEventHandlerService,
     private productService: ProductRequisitionService,
     private router: Router
   ) { }
+
+  ngOnInit(): void {
+
+    this.logged = this.userSessionService.checkUserSession();
+
+    this.userSessionService.userInSessionSubject.subscribe(userInSession => {
+
+      this.logged = userInSession;
+    });
+  }
 
   public setInitialTouchPoint(e: TouchEvent) {
 
