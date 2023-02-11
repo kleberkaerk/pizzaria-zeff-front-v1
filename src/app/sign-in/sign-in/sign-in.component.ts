@@ -94,6 +94,8 @@ export class SignInComponent implements OnInit {
         .subscribe({
           next: httpResponse => {
 
+            // Avisar header de que existe um usuário logado
+
             this.successHandling(httpResponse);
           },
           error: (httpResponse: HttpErrorResponse) => {
