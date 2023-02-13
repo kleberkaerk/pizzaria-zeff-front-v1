@@ -6,6 +6,7 @@ import { UserRequisitionService } from 'src/app/service/user-requisition.service
 import { UserSessionService } from 'src/app/service/user-session.service';
 import { Router } from '@angular/router';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
+import { User } from 'src/app/domain/user';
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
@@ -23,7 +24,7 @@ export class SignUpComponent {
   public registerData = this.formBuilder.group({
     name: ["", [
       Validators.required,
-      Validators.pattern("([a-zA-Z]{2,})"),
+      Validators.pattern("([a-zA-Záéíóúâêîôûãõ]{2,})"),
       Validators.maxLength(100)]
     ],
     email: ["", [
@@ -93,6 +94,15 @@ export class SignUpComponent {
     }
   }
 
+  private createUserToBeRegistered():User {
+
+    return new User(
+      (this.registerData.value.name as string).trim(),
+      (this.registerData.value.email as string).trim(),
+      this.registerData.value.password as string
+    );
+  }
+
   private registration() {
 
     if (this.checkForDifferentPasswords()) {
@@ -105,20 +115,21 @@ export class SignUpComponent {
 
       this.openRequisition = true;
 
-      const name = this.registerData.value.name as string;
-      const username = this.registerData.value.email as string;
-      const password = this.registerData.value.password as string;
+      const user = this.createUserToBeRegistered();
 
-      // this.userRequisitionService.signIn(username.trim(), password).subscribe({
-      //   next: httpResponse => {
+      this.userRequisitionService.signUp(user).subscribe({
+        next: httpResponse => {
 
-      //     this.successHandling(httpResponse, username, password);
-      //   },
-      //   error: (httpResponse: HttpErrorResponse) => {
+          console.log(httpResponse);
 
-      //     this.errorHandling(httpResponse);
-      //   }
-      // });
+          // this.successHandling(httpResponse, username, password);
+        },
+        error: (httpErrorResponse: HttpErrorResponse) => {
+
+          console.log(httpErrorResponse);
+          // this.errorHandling(httpErrorResponse);
+        }
+      });
     }
   }
 
