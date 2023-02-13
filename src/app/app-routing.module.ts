@@ -33,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: "signup",
-    loadChildren: () => import("./sign-up/sign-up-routing.module").then(module => module.SignUpRoutingModule)
+    loadChildren: () => import("./sign-up/sign-up.module").then(module => module.SignUpModule)
   }
 ];
 
