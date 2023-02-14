@@ -12,12 +12,12 @@
         />
         <ng-template [ngIf]="registerData.controls.name.touched">
           <p *ngIf="registerData.controls.name.errors?.['required']">
-            Por favor, insira o seu nome
+            Por favor, insira o seu nome.
           </p>
           <p
             *ngIf="!registerData.controls.name.errors?.['required'] && (registerData.controls.name.errors?.['pattern'] !== null || registerData.controls.name.errors?.['maxlength'])"
           >
-            Por favor, insira um nome válido
+            Por favor, insira um nome válido.
           </p>
         </ng-template>
       </li>
@@ -35,12 +35,12 @@
 
         <ng-template [ngIf]="registerData.controls.email.touched">
           <p *ngIf="registerData.controls.email.errors?.['required']">
-            Por favor, insira o seu e-mail
+            Por favor, insira o seu e-mail.
           </p>
           <p
             *ngIf="!registerData.controls.email.errors?.['required'] && (registerData.controls.email.errors?.['pattern'] !== null || registerData.controls.email.errors?.['maxlength'] !== null)"
           >
-            Por favor, insira um endereço de e-mail válido
+            Por favor, insira um endereço de e-mail válido.
           </p>
         </ng-template>
       </li>
@@ -58,7 +58,7 @@
 
         <ng-template [ngIf]="registerData.controls.password.touched">
           <p *ngIf="registerData.controls.password.errors?.['required']">
-            Por favor, insira a sua senha
+            Por favor, insira a sua senha.
           </p>
           <p
             *ngIf="!registerData.controls.password.errors?.['required'] && (registerData.controls.password.errors?.['minlength'] !== null || registerData.controls.password.errors?.['maxlength'] !== null)"
