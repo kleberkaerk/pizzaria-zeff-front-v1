@@ -13,12 +13,12 @@
 
         <ng-template [ngIf]="credentials.controls.email.touched">
           <p *ngIf="credentials.controls.email.errors?.['required']">
-            Por favor, insira o seu e-mail
+            Por favor, insira o seu e-mail.
           </p>
           <p
-            *ngIf="!credentials.controls.email.errors?.['required'] && (credentials.controls.email.errors?.['pattern'] !== null || credentials.controls.email.errors?.['maxlength'])"
+            *ngIf="!credentials.controls.email.errors?.['required'] && (credentials.controls.email.errors?.['pattern'] !== null || credentials.controls.email.errors?.['maxlength'] !== null)"
           >
-            Por favor, insira um endereço de e-mail válido
+            Por favor, insira um endereço de e-mail válido.
           </p>
         </ng-template>
       </li>
@@ -36,22 +36,22 @@
 
         <ng-template [ngIf]="credentials.controls.password.touched">
           <p *ngIf="credentials.controls.password.errors?.['required']">
-            Por favor, insira a sua senha
+            Por favor, insira a sua senha.
           </p>
           <p
-            *ngIf="!credentials.controls.password.errors?.['required'] && (credentials.controls.password.errors?.['minlength'] !== null || credentials.controls.password.errors?.['maxlength'])"
+            *ngIf="!credentials.controls.password.errors?.['required'] && (credentials.controls.password.errors?.['minlength'] !== null || credentials.controls.password.errors?.['maxlength'] !== null)"
           >
-            Por favor, insira uma senha válida
+            Por favor, insira uma senha válida.
           </p>
         </ng-template>
       </li>
 
       <li *ngIf="invalidUser">
-        <p>Email ou senha inválidos</p>
+        <p>Email ou senha inválidos.</p>
       </li>
 
       <li *ngIf="errorInRequest">
-        <p>Ocorreu um erro, tente novamente mais tarde</p>
+        <p>Ocorreu um erro, tente novamente mais tarde.</p>
       </li>
 
       <li>
