@@ -81,11 +81,20 @@
             >R$ {{ amount | number : "1.2-2" : "br" }}</span
           >
         </p>
-        <button
+        <!-- <button
           class="purchase-products-button"
           (click)="purchaseProducts($event)"
           (touchstart)="setInitialTouchPoint($event)"
           (touchend)="purchaseProducts($event)"
+        >
+          Finalizar pedido
+        </button> -->
+
+        <button
+          class="purchase-products-button"
+          (click)="noticeOfFunctionalityUnderDevelopment($event)"
+          (touchstart)="setInitialTouchPoint($event)"
+          (click)="noticeOfFunctionalityUnderDevelopment($event)"
         >
           Finalizar pedido
         </button>
@@ -93,3 +102,10 @@
     </div>
   </div>
 </div>
+
+<ng-template [ngIf]="functionalityUnderDevelopment">
+  <app-functionality-under-development
+    (eventEmitterForClosing)="closeFunctionalityNoticeUnderDevelopment()"
+  >
+  </app-functionality-under-development>
+</ng-template>

@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from './footer/footer.component';
 import { AddAddressComponent } from './add-address/add-address.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FunctionalityUnderDevelopmentComponent } from './functionality-under-development/functionality-under-development.component';
 
 @NgModule({
   declarations: [
     FooterComponent,
-    AddAddressComponent
+    AddAddressComponent,
+    FunctionalityUnderDevelopmentComponent
   ],
   imports: [
     CommonModule,
@@ -16,7 +18,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   exports: [
     FooterComponent,
-    AddAddressComponent
+    AddAddressComponent,
+    FunctionalityUnderDevelopmentComponent
   ]
 })
 export class SharedModule { }

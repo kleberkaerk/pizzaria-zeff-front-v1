@@ -15,6 +15,8 @@ export class ShoppingCartComponent implements OnInit {
   public amount = 0;
   readonly htmlElement = document.documentElement;
 
+  public functionalityUnderDevelopment = false;
+
   constructor(
     private shoppingCartService: ShoppingCartService,
     private touchEventHandlerService: TouchEventHandlerService
@@ -106,5 +108,15 @@ export class ShoppingCartComponent implements OnInit {
     if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
     // Lógica aqui
+  }
+
+  public noticeOfFunctionalityUnderDevelopment(e: Event) {
+
+    this.functionalityUnderDevelopment = true;
+  }
+
+  public closeFunctionalityNoticeUnderDevelopment() {
+    
+    this.functionalityUnderDevelopment = false;
   }
 }

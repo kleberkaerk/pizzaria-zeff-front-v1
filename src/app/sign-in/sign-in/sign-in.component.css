@@ -1,9 +1,61 @@
 main {
-
     min-height: calc(100vh - 56px);
-
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.grouper {
+    border: 1px solid var(--darkgrey-color);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 30px;
+}
+
+.title-login {
+    font-family: 'content-font-light', sans-serif;
+    text-align: center;
+}
+
+.form-login {
+
+}
+
+.input-grouper {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.label {
+    font-family: 'content-font-medium', sans-serif;
+    position: absolute;
+    top: 0px;
+    left: 2px;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.input {
+    flex: 1;
+    height: 25px;
+    border: none;
+    border-bottom: 1px solid var(--black-color);
+}
+
+.input:focus {
+    outline: none;
+}
+
+.input:focus+.label {
+    font-size: 0.75rem;
+    top: -14px;
+}
+
+.wrapper-input-label {
+    position: relative;
+    display: flex;
 }

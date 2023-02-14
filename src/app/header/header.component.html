@@ -159,10 +159,20 @@
         </div>
 
         <div class="account" *ngIf="!activateMobileSearch">
-          <a
+          <!-- <a
             class="login-link"
             routerLink="/signin"
             [queryParams]="{ redirect: '/' }"
+            *ngIf="!logged"
+            >Fazer login</a
+          > -->
+
+          <a
+            class="login-link"
+            style="cursor: pointer"
+            (click)="noticeOfFunctionalityUnderDevelopment($event)"
+            (touchstart)="setInitialTouchPoint($event)"
+            (click)="noticeOfFunctionalityUnderDevelopment($event)"
             *ngIf="!logged"
             >Fazer login</a
           >
@@ -319,3 +329,8 @@
     </nav>
   </div>
 </header>
+
+<ng-template [ngIf]="functionalityUnderDevelopment">
+  <app-functionality-under-development (eventEmitterForClosing)="closeFunctionalityNoticeUnderDevelopment()">
+  </app-functionality-under-development>
+</ng-template>

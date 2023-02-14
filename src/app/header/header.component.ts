@@ -24,6 +24,8 @@ export class HeaderComponent implements OnInit {
   private initialClick = { clientX: 0, clientY: 0 };
   private finalClick = { clientX: 0, clientY: 0 };
 
+  public functionalityUnderDevelopment = false;
+
   constructor(
     private userSessionService: UserSessionService,
     private touchEventHandlerService: TouchEventHandlerService,
@@ -371,5 +373,15 @@ export class HeaderComponent implements OnInit {
 
       document.documentElement.click();
     }
+  }
+
+  public noticeOfFunctionalityUnderDevelopment(e: Event) {
+
+    this.functionalityUnderDevelopment = true;
+  }
+
+  public closeFunctionalityNoticeUnderDevelopment() {
+    
+    this.functionalityUnderDevelopment = false;
   }
 }
