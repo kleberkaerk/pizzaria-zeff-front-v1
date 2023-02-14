@@ -32,12 +32,10 @@ export class UserRequisitionService {
 
   private getCSRFToken(cookie: string): string {
 
-    console.log(cookie);
-
     return cookie.split("XSRF-TOKEN=")[1].split(";")[0];
   }
 
-  public signUp(user: User): Observable<HttpResponse<number | void>> {
+  public signUp(user: User): Observable<HttpResponse<any>> {
 
     const csrfToken = this.getCSRFToken(document.cookie);
 
@@ -46,6 +44,6 @@ export class UserRequisitionService {
       "X-XSRF-TOKEN": csrfToken,
     });
 
-    return this.httpClient.put<number | void>(this.urlBase + "users/register", user, { observe: "response", headers: this.headers, withCredentials: true });
+    return this.httpClient.put<any>(this.urlBase + "users/register", user, { observe: "response", headers: this.headers, withCredentials: true });
   }
 }

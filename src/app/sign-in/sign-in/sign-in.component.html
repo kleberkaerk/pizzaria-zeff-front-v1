@@ -68,6 +68,11 @@
   </form>
 
   <div>
-    <p>Ainda não está cadastrado? <a routerLink="">Cadastre-se</a></p>
+    <p>
+      Ainda não está cadastrado?
+      <a routerLink="/signup" [queryParams]="{ redirect: redirect }"
+        >Cadastre-se</a
+      >
+    </p>
   </div>
 </main>

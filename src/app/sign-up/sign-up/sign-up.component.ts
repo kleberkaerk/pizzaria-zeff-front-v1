@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 import { UserRequisitionService } from 'src/app/service/user-requisition.service';
 import { UserSessionService } from 'src/app/service/user-session.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TouchEventHandlerService } from 'src/app/service/touch-event-handler.service';
 import { User } from 'src/app/domain/user';
 @Component({
@@ -12,13 +12,15 @@ import { User } from 'src/app/domain/user';
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css']
 })
-export class SignUpComponent {
+export class SignUpComponent implements OnInit {
 
   public redirect = "";
   // será utilizado para criar um loading no botão de fazer Criar conta. Este loading ficará visível enquanto a requisição não retornar.
   public openRequisition = false;
   public differentPasswords = false;
-  // public errorMessage = "";
+  public userToBeRegistered!: User;
+  public successInRegisteringUser = false;
+  public emailConflictMessage = "";
   public errorInRequest = false;
 
   public registerData = this.formBuilder.group({
@@ -43,11 +45,19 @@ export class SignUpComponent {
 
   constructor(
     private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
     private userRequisitionService: UserRequisitionService,
     private userSessionService: UserSessionService,
-    private router: Router,
     private touchEventHandlerService: TouchEventHandlerService
   ) { }
+
+  ngOnInit(): void {
+
+    this.activatedRoute.queryParams.subscribe(queryParam => {
+
+      this.redirect = queryParam["redirect"];
+    });
+  }
 
   public changeToNext(e: KeyboardEvent, nextElement: HTMLInputElement) {
 
@@ -56,27 +66,31 @@ export class SignUpComponent {
     nextElement.focus();
   }
 
-  private successHandling(httpResponse: HttpResponse<void>, username: string, password: string) {
+  private successHandling(httpResponse: HttpResponse<void>) {
 
     this.openRequisition = false;
 
-    if (httpResponse.status === 204) {
+    if (httpResponse.status === 201) {
 
-      this.userSessionService.setUserSession(username, password);
-      this.router.navigate([this.redirect]);
+      this.userSessionService.setUserSession(
+        this.userToBeRegistered.getUsername,
+        this.userToBeRegistered.getPassword
+      );
+
+      this.successInRegisteringUser = true;
     } else {
 
       this.errorInRequest = true;
     }
   }
 
-  private errorHandling(httpResponse: HttpErrorResponse) {
+  private errorHandling(httpErrorResponse: HttpErrorResponse) {
 
     this.openRequisition = false;
 
-    if (httpResponse.status === 401) {
+    if (httpErrorResponse.status === 409) {
 
-      // this.invalidUser = true;
+      this.emailConflictMessage = httpErrorResponse.error.message;
     } else {
 
       this.errorInRequest = true;
@@ -94,7 +108,7 @@ export class SignUpComponent {
     }
   }
 
-  private createUserToBeRegistered():User {
+  private createUserToBeRegistered(): User {
 
     return new User(
       (this.registerData.value.name as string).trim(),
@@ -115,19 +129,16 @@ export class SignUpComponent {
 
       this.openRequisition = true;
 
-      const user = this.createUserToBeRegistered();
+      this.userToBeRegistered = this.createUserToBeRegistered();
 
-      this.userRequisitionService.signUp(user).subscribe({
+      this.userRequisitionService.signUp(this.userToBeRegistered).subscribe({
         next: httpResponse => {
 
-          console.log(httpResponse);
-
-          // this.successHandling(httpResponse, username, password);
+          this.successHandling(httpResponse);
         },
         error: (httpErrorResponse: HttpErrorResponse) => {
 
-          console.log(httpErrorResponse);
-          // this.errorHandling(httpErrorResponse);
+          this.errorHandling(httpErrorResponse);
         }
       });
     }

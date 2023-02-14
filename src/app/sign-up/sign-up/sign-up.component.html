@@ -1,7 +1,6 @@
 <main>
   <form [formGroup]="registerData">
     <ul>
-
       <li>
         <label for="name">Nome </label>
         <input
@@ -80,8 +79,12 @@
           (keydown)="registrationWithKeyboard($event)"
         />
 
-        <ng-template [ngIf]="registerData.controls.passwordConfirmation.touched">
-          <p *ngIf="registerData.controls.passwordConfirmation.errors?.['required']">
+        <ng-template
+          [ngIf]="registerData.controls.passwordConfirmation.touched"
+        >
+          <p
+            *ngIf="registerData.controls.passwordConfirmation.errors?.['required']"
+          >
             Por favor, confirme sua senha.
           </p>
         </ng-template>
@@ -91,8 +94,14 @@
         Senhas diferentes. Verifique o valor digitado e tente novamente.
       </li>
 
+      <li *ngIf="emailConflictMessage !== ''">
+        {{ emailConflictMessage }}
+      </li>
+
       <li *ngIf="errorInRequest">
-        <p>Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.</p>
+        <p>
+          Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.
+        </p>
       </li>
 
       <li>
@@ -105,11 +114,22 @@
           Criar conta
         </button>
       </li>
-
     </ul>
   </form>
 
   <div>
-    <p>Já possui uma cadastro? <a routerLink="">Faça login</a></p>
+    <p>
+      Já possui uma cadastro?
+      <a routerLink="/signin" [queryParams]="{ redirect: redirect }"
+        >Faça login</a
+      >
+    </p>
+  </div>
+
+  <div *ngIf="successInRegisteringUser">
+    <div>
+      <p>Seu cadastro foi realizado com sucesso.</p>
+      <a [routerLink]="redirect">Ok</a>
+    </div>
   </div>
 </main>
