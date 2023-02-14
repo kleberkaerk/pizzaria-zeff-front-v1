@@ -1,11 +1,11 @@
 export class AddressDTO {
     
-    private id: string;
-    private number: string;
-    private road: string;
-    private district: string;
-    private city: string;
-    private state: string;
+    id: string;
+    number: string;
+    road: string;
+    district: string;
+    city: string;
+    state: string;
 
     constructor(
         id: string,

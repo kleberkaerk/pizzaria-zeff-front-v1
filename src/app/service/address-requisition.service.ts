@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { AddressDTO } from '../dto/address-dto';
 import { UserSessionService } from './user-session.service';
 
 @Injectable({
@@ -22,6 +23,7 @@ export class AddressRequisitionService {
       "Authorization": "Basic " + this.userSessionService.getUserSession()
     });
 
-    this.httpClient.get(this.urlBase + "addresses/find-by-user")
+    this.httpClient.get<Array<AddressDTO>>(this.urlBase + "addresses/find-by-user")
+    
   }
 }
