@@ -15,8 +15,8 @@ export class SignInComponent implements OnInit {
 
   public redirect = "";
   // será utilizado para criar um loading no botão de fazer login. Este loading ficará visível enquanto a requisição não retornar.
-  public openRequisition: boolean = false;
-  public invalidUser: boolean = false;
+  public openRequisition = false;
+  public invalidUser = false;
   public errorInRequest = false;
 
   public credentials = this.formBuilder.group({

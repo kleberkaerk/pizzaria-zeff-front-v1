@@ -1,6 +1,6 @@
 export class Address {
 
-    private id: string;
+    private id: number;
     private number: string;
     private road: string;
     private district: string;
@@ -8,7 +8,7 @@ export class Address {
     private state: string;
 
     constructor(
-        id: string,
+        id: number,
         number: string,
         road: string,
         district: string,

@@ -1,6 +1,6 @@
 export class AddressDTO {
     
-    id: string;
+    id: number;
     number: string;
     road: string;
     district: string;
@@ -8,7 +8,7 @@ export class AddressDTO {
     state: string;
 
     constructor(
-        id: string,
+        id: number,
         number: string,
         road: string,
         district: string,

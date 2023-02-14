@@ -44,6 +44,8 @@ export class UserRequisitionService {
       "X-XSRF-TOKEN": csrfToken
     });
 
+    document.cookie = "XSRF-TOKEN=" + csrfToken;
+
     return this.httpClient.put<any>(this.urlBase + "users/register", user, { observe: "response", headers: this.headers, withCredentials: true });
   }
 }

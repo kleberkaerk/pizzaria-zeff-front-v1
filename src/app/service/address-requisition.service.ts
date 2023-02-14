@@ -47,6 +47,8 @@ export class AddressRequisitionService {
       "X-XSRF-TOKEN": csrfToken
     });
 
-    return this.httpClient.delete<void>(this.urlBase + "addresses/" + addressId.toString(), { observe: "response", headers: this.headers });
+    document.cookie = "XSRF-TOKEN=" + csrfToken;
+
+    return this.httpClient.delete<void>(this.urlBase + "addresses/" + addressId.toString(), { observe: "response", headers: this.headers, withCredentials: true });
   }
 }
