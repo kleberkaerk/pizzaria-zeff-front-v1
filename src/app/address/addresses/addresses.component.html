@@ -1,1 +1,13 @@
-<p>addresses works!</p>
+<main>
+  <div>
+    <ul>
+      <li *ngFor="let address of addresses">
+        <p>{{ address.getNumber }}</p>
+        <p>{{ address.getRoad }}</p>
+        <p>{{ address.getDistrict }}</p>
+        <p>{{ address.getCity }}</p>
+        <p>{{ address.getState }}</p>
+      </li>
+    </ul>
+  </div>
+</main>
