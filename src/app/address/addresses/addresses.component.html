@@ -25,6 +25,6 @@
   </div>
 
   <ng-template [ngIf]="addAddress">
-    <app-add-address></app-add-address>
+    <app-add-address (closeAddingANewAddress)="cancelAddingANewAddress()"></app-add-address>
   </ng-template>
 </main>

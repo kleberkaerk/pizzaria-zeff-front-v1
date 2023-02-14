@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -7,6 +7,8 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./add-address.component.css']
 })
 export class AddAddressComponent {
+
+  @Output() public closeAddingANewAddress = new EventEmitter();
 
   public address = this.formBuilder.group({
     number: ["", [
@@ -34,4 +36,9 @@ export class AddAddressComponent {
   constructor(
     private formBuilder: FormBuilder
   ) { }
+
+  public cancelAddingANewAddress() {
+
+    this.closeAddingANewAddress.emit();
+  }
 }

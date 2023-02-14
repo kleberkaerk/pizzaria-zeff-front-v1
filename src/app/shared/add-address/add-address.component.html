@@ -1,27 +1,89 @@
 <div>
   <div>
+    <button (click)="cancelAddingANewAddress()">
+      <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
+        <path
+          d="m10.542 30.958-1.5-1.5 9.5-9.458-9.5-9.458 1.5-1.5 9.458 9.5 9.458-9.5 1.5 1.5-9.5 9.458 9.5 9.458-1.5 1.5-9.458-9.5Z"
+        />
+      </svg>
+    </button>
     <form [formGroup]="address">
       <ul>
         <li>
           <label for="number">Número </label>
           <input type="text" id="number" formControlName="number" />
+          <ng-template [ngIf]="address.controls.number.touched">
+            <p *ngIf="address.controls.number.errors?.['required']">
+              Por favor, insira o seu número.
+            </p>
+            <p
+              *ngIf="!address.controls.number.errors?.['required'] && address.controls.number.errors?.['maxlength'] !== null"
+            >
+              Por favor, insira um número válido.
+            </p>
+          </ng-template>
         </li>
+
         <li>
           <label for="road">Rua </label>
           <input type="text" id="road" formControlName="road" />
+          <ng-template [ngIf]="address.controls.road.touched">
+            <p *ngIf="address.controls.road.errors?.['required']">
+              Por favor, insira o sua rua.
+            </p>
+            <p
+              *ngIf="!address.controls.road.errors?.['required'] && address.controls.road.errors?.['maxlength'] !== null"
+            >
+              Por favor, insira uma rua válida.
+            </p>
+          </ng-template>
         </li>
+
         <li>
           <label for="district">Bairro </label>
           <input type="text" id="district" formControlName="district" />
+          <ng-template [ngIf]="address.controls.district.touched">
+            <p *ngIf="address.controls.district.errors?.['required']">
+              Por favor, insira o seu bairro.
+            </p>
+            <p
+              *ngIf="!address.controls.district.errors?.['required'] && address.controls.district.errors?.['maxlength'] !== null"
+            >
+              Por favor, insira um bairro válido.
+            </p>
+          </ng-template>
         </li>
+
         <li>
           <label for="city">Cidade </label>
           <input type="text" id="city" formControlName="city" />
+          <ng-template [ngIf]="address.controls.city.touched">
+            <p *ngIf="address.controls.city.errors?.['required']">
+              Por favor, insira o sua cidade.
+            </p>
+            <p
+              *ngIf="!address.controls.city.errors?.['required'] && address.controls.city.errors?.['maxlength'] !== null"
+            >
+              Por favor, insira uma cidade válida.
+            </p>
+          </ng-template>
         </li>
+
         <li>
           <label for="state">Estado </label>
           <input type="text" id="state" formControlName="state" />
+          <ng-template [ngIf]="address.controls.state.touched">
+            <p *ngIf="address.controls.state.errors?.['required']">
+              Por favor, insira o seu estado.
+            </p>
+            <p
+              *ngIf="!address.controls.state.errors?.['required'] && address.controls.state.errors?.['maxlength'] !== null"
+            >
+              Por favor, insira um estado válido.
+            </p>
+          </ng-template>
         </li>
+
         <li>
           <button>Adicionar endereço</button>
         </li>

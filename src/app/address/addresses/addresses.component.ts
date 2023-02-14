@@ -64,4 +64,9 @@ export class AddressesComponent implements OnInit {
 
     this.addAddress = true;
   }
+
+  public cancelAddingANewAddress() {
+
+    this.addAddress = false;
+  }
 }
