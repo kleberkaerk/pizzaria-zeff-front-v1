@@ -20,5 +20,11 @@
         <p>Ocorreu um erro, tente novamente mais tarde.</p>
       </li>
     </ul>
+
+    <button (click)="addNewAddress()">Adicionar endereço</button>
   </div>
+
+  <ng-template [ngIf]="addAddress">
+    <app-add-address></app-add-address>
+  </ng-template>
 </main>

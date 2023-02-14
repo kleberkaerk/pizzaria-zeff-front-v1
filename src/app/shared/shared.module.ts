@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { FooterComponent } from './footer/footer.component';
 import { AddAddressComponent } from './add-address/add-address.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -10,10 +11,12 @@ import { AddAddressComponent } from './add-address/add-address.component';
     AddAddressComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule
   ],
   exports: [
-    FooterComponent
+    FooterComponent,
+    AddAddressComponent
   ]
 })
 export class SharedModule { }

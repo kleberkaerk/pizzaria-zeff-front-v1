@@ -16,6 +16,7 @@ export class AddressesComponent implements OnInit {
   // será utilizado para informar ao usuário de que ele deletou um endereço
   public deletedAddress = false;
   public errorInRequest = false;
+  public addAddress = false;
 
   constructor(
     private addressRequisitionService: AddressRequisitionService,
@@ -57,5 +58,10 @@ export class AddressesComponent implements OnInit {
           this.openRequisition = false;
         }
       });
+  }
+
+  public addNewAddress() {
+
+    this.addAddress = true;
   }
 }
