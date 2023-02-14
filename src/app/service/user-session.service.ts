@@ -28,6 +28,11 @@ export class UserSessionService {
     this.userInSessionSubject.next(true);
   }
 
+  public getUserSession(): string {
+
+    return sessionStorage.getItem("credentials") as string;
+  }
+
   public signOutTheUser() {
 
     sessionStorage.removeItem("credentials");
