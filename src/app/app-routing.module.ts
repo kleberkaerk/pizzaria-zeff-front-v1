@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: "address",
     loadChildren: () => import("./address/address.module").then(module => module.AddressModule)
+  },
+  {
+    path: "**",
+    redirectTo: ""
   }
 ];
 
