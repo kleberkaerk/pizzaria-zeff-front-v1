@@ -309,15 +309,15 @@ export class HeaderComponent implements OnInit {
 
   public accountOptionAccessHandler(e: Event, accountOption: string) {
 
-    // // e.stopPropagation();
+    e.stopPropagation();
 
-    // // this.touchEventHandlerService.preventDefaultTouchend(e);
+    this.touchEventHandlerService.preventDefaultTouchend(e);
 
-    // // if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
+    if (this.touchEventHandlerService.itIsAMovingTouch(e)) return;
 
-    // // if (e.type === "touchend") { this.router.navigate([accountOption]); }
+    if (e.type === "touchend") { this.router.navigate([accountOption]); }
 
-    // // document.documentElement.click();
+    document.documentElement.click();
   }
 
   public signOutOfAccount(e: Event) {
