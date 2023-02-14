@@ -41,7 +41,7 @@ export class UserRequisitionService {
 
     this.headers = new HttpHeaders({
       "Accept-Language": "pt-BR",
-      "X-XSRF-TOKEN": csrfToken,
+      "X-XSRF-TOKEN": csrfToken
     });
 
     return this.httpClient.put<any>(this.urlBase + "users/register", user, { observe: "response", headers: this.headers, withCredentials: true });
