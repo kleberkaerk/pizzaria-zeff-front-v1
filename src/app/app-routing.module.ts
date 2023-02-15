@@ -28,18 +28,6 @@ const routes: Routes = [
     loadChildren: () => import("./product/product.module").then(module => module.ProductModule)
   },
   {
-    path: "signin",
-    loadChildren: () => import("./sign-in/sign-in.module").then(module => module.SignInModule)
-  },
-  {
-    path: "signup",
-    loadChildren: () => import("./sign-up/sign-up.module").then(module => module.SignUpModule)
-  },
-  {
-    path: "address",
-    loadChildren: () => import("./address/address.module").then(module => module.AddressModule)
-  },
-  {
     path: "**",
     redirectTo: ""
   }
