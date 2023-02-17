@@ -1,27 +1,51 @@
-# PizzariaZeffFrontV1
+# Site Pizzaria Zeff
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.0.
+[<img src="./print-site.jpg">](http://portfolio-pizzaria-zeff.com/)
 
-## Development server
+<hr>
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+![GitHub](https://img.shields.io/github/license/kleberkaerk/pizzaria-zeff-front-v1)
 
-## Code scaffolding
+# Descrição
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Esta aplicação é um site de uma pizzaria fictícia. A mesma consome o serviço web [web-service-pizzaria-zeff](https://github.com/kleberkaerk/web-service-pizzaria-zeff), para melhor atender aos usuários.
 
-## Build
+# Funcionalidades 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+* Pesquisa produto(s) pelo nome.
+* Exibe produtos encontrados na pesquisa.
+* Exibe as características de um produto.
+* Exibe slides automaticamente.
+* Altera slides por meio de botões.
+* Pausa slides.
+* Exibe produtos em promoção.
+* Adiciona produtos ao carrinho de compras.
+* Deleta produtos do carrinho de compras.
+* Exibe cardápio de produtos.
 
-## Running unit tests
+# Tecnologias utilizadas
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1. HTML
+2. CSS
+3. TypeScript
+4. Angular
 
-## Running end-to-end tests
+# Execução
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Para executar a aplicação localmente siga os seguintes passos:
 
-## Further help
+* Navegue até o diretório raiz do projeto (onde se encontra o arquivo angular.json).
+* Abra um terminal e execute o comando `ng serve`.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+A partir deste ponto, a aplicação estará disponível para ser utilizada. Para ver a mesma em funcionamento acesse `http://localhost:4200/`.
+
+# Testes Unitários
+
+Para executar os testes unitários da aplicação siga os seguintes passos:
+
+* Navegue até o diretório raiz do projeto (onde se encontra o arquivo angular.json).
+* Abra um terminal e execute o comando `ng test`.
+
+# Autor
+
+[<img src="./imagem.jpg" width=115><br><sub>Kleber Kaerk</sub>](https://github.com/kleberkaerk)
